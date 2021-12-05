@@ -15,7 +15,7 @@
 - Docker, Jenkins를 활용한 CI/CD 구축(자동화 배포)
 
 ### API 문서
-API 문서는 Spring REST Docs를 사용합니다.
+- API 문서는 Spring REST Docs를 사용합니다.
 
 ### 테스트 환경
 - BDD를 기반으로 테스트 합니다.
