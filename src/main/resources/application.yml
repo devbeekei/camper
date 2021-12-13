@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/camper?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
     username: root
-    password: mysqlroot
+    password: wordvice
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource # DataSource 연동을 위한 hikari Connection Pool 사용
     hikari:

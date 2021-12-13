@@ -1,9 +1,14 @@
 package com.ss.camper.store.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
 
     @Column(name = "zip_code", length = 20)
@@ -14,5 +19,11 @@ public class Address {
     
     @Column(name = "detail_address")
     private String detailAddress;
+
+    @Column(name = "latitude")
+    private float latitude;
+
+    @Column(name = "longitude")
+    private float longitude;
 
 }

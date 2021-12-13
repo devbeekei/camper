@@ -4,15 +4,18 @@ import com.ss.camper.common.domain.DateRecord;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
+
+@Entity
+@Table(name = "store")
+@SuperBuilder
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "store_type", columnDefinition = "VARCHAR(30)")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "store")
 public abstract class Store {
 
     @Id

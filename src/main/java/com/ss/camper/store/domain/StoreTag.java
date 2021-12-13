@@ -1,18 +1,19 @@
 package com.ss.camper.store.domain;
 
-import com.ss.camper.store.domain.StoreType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
+@Entity
+@Table(name = "store_tag", uniqueConstraints = @UniqueConstraint(columnNames = { "title" }))
+@SuperBuilder
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "store_type", columnDefinition = "VARCHAR(30)")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "store_tag", uniqueConstraints = @UniqueConstraint(columnNames = { "title" }))
 public abstract class StoreTag {
 
     @Id
