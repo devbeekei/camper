@@ -15,5 +15,4 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CampGroundTag extends StoreTag {
 
-    private 
 }
