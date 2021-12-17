@@ -48,7 +48,7 @@ public class RegisterCampGroundStorePayload {
 
         private Set<String> tags;
 
-        public CampGroundStoreDTO getCampGroundStoreDTO(long userId) {
+        public CampGroundStoreDTO getCampGroundStoreDTO() {
             HashSet<CampGroundTagDTO> saveTags = null;
             if (this.tags != null && !this.tags.isEmpty()) {
                 saveTags = new HashSet<>();
@@ -58,7 +58,6 @@ public class RegisterCampGroundStorePayload {
             }
             return new CampGroundStoreDTO(
                     null,
-                    userId,
                     storeName,
                     new Address(zipCode, defaultAddress, detailAddress, latitude, longitude),
                     tel,

@@ -18,8 +18,7 @@ import java.util.Set;
 @DiscriminatorValue("camp_supply")
 public class CampSupplyStore extends Store {
 
-    public CampSupplyStore(long userId, String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
-        this.userId = userId;
+    public CampSupplyStore(String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
         this.storeName = storeName;
         this.address = address;
         this.tel = tel;

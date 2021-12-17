@@ -20,7 +20,7 @@ public class CampGroundStoreController {
 
     @PostMapping(name = "캠핑장 등록")
     public ApiResponse registerCampGroundStore(@Valid @RequestBody RegisterCampGroundStorePayload.Request request) {
-        campGroundStoreService.register(request.getCampGroundStoreDTO(1));
+        campGroundStoreService.register(1, request.getCampGroundStoreDTO());
         return new ApiResponse();
     }
 
@@ -31,7 +31,7 @@ public class CampGroundStoreController {
 
     @GetMapping(name = "캠핑장 정보 조회", value = "{id}")
     public DataApiResponse<GetCampGroundStorePayload.Response>getCampGroundStore(@PathVariable long id) {
-        CampGroundStoreDTO campGroundStoreDTO = campGroundStoreService.getInfo(id);
+        final CampGroundStoreDTO campGroundStoreDTO = campGroundStoreService.getInfo(id);
         return new DataApiResponse<>(new GetCampGroundStorePayload.Response(campGroundStoreDTO));
     }
 

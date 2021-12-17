@@ -1,7 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.1'
+	id 'org.springframework.boot' version '2.3.12.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2' // Spring REST Docs
 }
 
 group = 'com.ss'
@@ -12,29 +13,66 @@ repositories {
 	mavenCentral()
 }
 
+ext['log4j2.version'] = '2.16.0'
+
+// ============== BEGIN Spring REST Docs ==============
+ext {
+    snippetsDir = file('build/generated-snippets')
+    docsDir = file('src/docs/asciidoc')
+}
+asciidoctor {
+    configurations 'asciidoctorExtensions'
+    inputs.dir snippetsDir
+    dependsOn test
+    attributes 'docsDir': docsDir
+}
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from "${asciidoctor.outputDir}"
+        into 'src/main/resources/static/docs'
+    }
+}
+test {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+configurations {
+    asciidoctorExtensions
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    // logback 의존성 제거
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+// ============== END Spring REST Docs ==============
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // JDBC
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    // MySQL
-    runtimeOnly 'mysql:mysql-connector-java'
-    // REST
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // Validation
+
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    runtimeOnly 'mysql:mysql-connector-java'
+
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    // JPA
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // lang3
+
     implementation 'org.apache.commons:commons-lang3:3.11'
-    // lombok
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    // ModelMapper
-    implementation 'org.modelmapper:modelmapper:2.4.4'
-}
 
-test {
-	useJUnitPlatform()
+    implementation 'org.modelmapper:modelmapper:2.4.4'
+
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 }

@@ -24,10 +24,9 @@ public class CampGroundStoreV1 implements CampGroundStoreService {
 
     @Override
     @Transactional
-    public void register(CampGroundStoreDTO campGroundStoreDTO) {
-        CampGroundStore campGroundStore = campGroundStoreRepository.save(
+    public void register(long userId, CampGroundStoreDTO campGroundStoreDTO) {
+        final CampGroundStore campGroundStore = campGroundStoreRepository.save(
                 new CampGroundStore(
-                        campGroundStoreDTO.getUserId(),
                         campGroundStoreDTO.getStoreName(),
                         campGroundStoreDTO.getAddress(),
                         campGroundStoreDTO.getTel(),
@@ -39,7 +38,7 @@ public class CampGroundStoreV1 implements CampGroundStoreService {
         Set<CampGroundTagDTO> tags = campGroundStoreDTO.getTags();
         if (tags != null && !tags.isEmpty()) {
             for (CampGroundTagDTO tag : tags) {
-                Optional<CampGroundTag> campGroundTag = campGroundTagRepository.findByTitle(tag.getTitle());
+                final Optional<CampGroundTag> campGroundTag = campGroundTagRepository.findByTitle(tag.getTitle());
                 if (campGroundTag.isPresent()) {
                     campGroundStore.addTag(campGroundTag.get());
                 } else {
@@ -52,7 +51,7 @@ public class CampGroundStoreV1 implements CampGroundStoreService {
     @Override
     @Transactional(readOnly = true)
     public CampGroundStoreDTO getInfo(long id) {
-        CampGroundStore campGroundStore = campGroundStoreRepository.findById(id).orElse(null);
+        final CampGroundStore campGroundStore = campGroundStoreRepository.findById(id).orElse(null);
         if (campGroundStore == null) {
             return null;
         } else {

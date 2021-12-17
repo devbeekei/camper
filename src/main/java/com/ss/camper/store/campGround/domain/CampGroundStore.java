@@ -2,7 +2,10 @@ package com.ss.camper.store.campGround.domain;
 
 import com.ss.camper.store.domain.Address;
 import com.ss.camper.store.domain.Store;
-import lombok.*;
+import com.ss.camper.store.domain.StoreType;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,13 +13,22 @@ import java.util.Set;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("camp_ground")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CampGroundStore extends Store {
 
-    public CampGroundStore(long userId, String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
-        this.userId = userId;
+    public CampGroundStore(long id, String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
+        this.id = id;
+        this.storeName = storeName;
+        this.storeType = StoreType.camp_ground;
+        this.address = address;
+        this.tel = tel;
+        this.homepageUrl = homepageUrl;
+        this.reservationUrl = reservationUrl;
+        this.introduction = introduction;
+    }
+
+    public CampGroundStore(String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
         this.storeName = storeName;
         this.address = address;
         this.tel = tel;
