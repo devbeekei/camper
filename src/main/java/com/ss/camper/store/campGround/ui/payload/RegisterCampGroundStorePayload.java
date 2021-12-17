@@ -1,12 +1,14 @@
-package com.ss.camper.store.campingGroundStore.ui.payload;
+package com.ss.camper.store.campGround.ui.payload;
 
-import com.ss.camper.store.campingGroundStore.application.dto.CampGroundStoreDTO;
+import com.ss.camper.store.campGround.application.dto.CampGroundStoreDTO;
+import com.ss.camper.store.campGround.application.dto.CampGroundTagDTO;
 import com.ss.camper.store.domain.Address;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.HashSet;
 import java.util.Set;
 
 public class RegisterCampGroundStorePayload {
@@ -47,6 +49,13 @@ public class RegisterCampGroundStorePayload {
         private Set<String> tags;
 
         public CampGroundStoreDTO getCampGroundStoreDTO(long userId) {
+            HashSet<CampGroundTagDTO> saveTags = null;
+            if (this.tags != null && !this.tags.isEmpty()) {
+                saveTags = new HashSet<>();
+                for (String tag : this.tags) {
+                    saveTags.add(new CampGroundTagDTO(null, tag));
+                }
+            }
             return new CampGroundStoreDTO(
                     null,
                     userId,
@@ -56,7 +65,7 @@ public class RegisterCampGroundStorePayload {
                     homepageUrl,
                     reservationUrl,
                     introduction,
-                    tags
+                    saveTags
             );
         }
     }

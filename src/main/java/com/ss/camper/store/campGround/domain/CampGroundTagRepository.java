@@ -1,4 +1,4 @@
-package com.ss.camper.store.campingGroundStore.domain;
+package com.ss.camper.store.campGround.domain;
 
 import java.util.Optional;
 

@@ -1,54 +1,48 @@
 package com.ss.camper.store.domain;
 
 import com.ss.camper.common.domain.DateRecord;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import javax.persistence.*;
 
-
+@Getter
 @Entity
 @Table(name = "store")
-@SuperBuilder
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "store_type", columnDefinition = "VARCHAR(30)")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AUTO_INCREMENT")
     @Column(name = "store_id")
-    private long id;
+    protected long id;
 
     @Column(name = "user_id")
-    private long userId;
+    protected long userId;
 
     @Column(name = "store_name", length = 100, nullable = false)
-    private String storeName;
+    protected String storeName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "store_type", length = 30, nullable = false, insertable = false, updatable = false)
-    private StoreType storeType;
+    protected StoreType storeType;
 
     @Embedded
-    private Address address;
+    protected Address address;
 
     @Column(name = "tel", length = 20)
-    private String tel;
+    protected String tel;
 
     @Column(name = "homepage_url", columnDefinition = "TEXT")
-    private String homepageUrl;
+    protected String homepageUrl;
 
     @Column(name = "reservation_url", columnDefinition = "TEXT")
-    private String reservationUrl;
+    protected String reservationUrl;
 
     @Column(name = "introduction", columnDefinition = "TEXT")
-    private String introduction;
+    protected String introduction;
 
     @Embedded
-    private DateRecord dateRecord;
+    protected DateRecord dateRecord;
 
 }

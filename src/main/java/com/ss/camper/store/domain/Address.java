@@ -1,14 +1,16 @@
 package com.ss.camper.store.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-@Embeddable
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Embeddable
 public class Address {
 
     @Column(name = "zip_code", length = 20)
