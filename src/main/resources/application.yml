@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/camper?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://52.79.107.245:3306/camper?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: wordvice
     driver-class-name: com.mysql.cj.jdbc.Driver
