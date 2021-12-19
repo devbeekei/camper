@@ -15,8 +15,10 @@ public enum ApiResponseType {
 
     // BAD_REQUEST
     REQUEST_NOT_VALID(HttpStatus.BAD_REQUEST, 100, "Request is Not valid"),
-    REQUEST_METHOD_NOT_SUPPORT(HttpStatus.BAD_REQUEST, 101, "Method Not supported");
+    REQUEST_METHOD_NOT_SUPPORT(HttpStatus.BAD_REQUEST, 101, "Method Not supported"),
 
+    // NOT_FOUND_DATA
+    NOT_FOUND_CAMP_STORE(HttpStatus.CONFLICT, 100, "Not found store");
 
     private final HttpStatus status;
     private final int code;

@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "store_type", columnDefinition = "VARCHAR(30)")
-public abstract class StoreTag {
+public class StoreTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AUTO_INCREMENT")

@@ -1,14 +1,15 @@
 package com.ss.camper.store.domain;
 
 import com.ss.camper.common.domain.DateRecord;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@ToString
 @Getter
 @SuperBuilder
 @Entity
@@ -48,5 +49,26 @@ public abstract class Store {
 
     @Embedded
     protected DateRecord dateRecord;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @JoinTable(name = "tag_of_store", joinColumns = @JoinColumn(name = "store_id"), inverseJoinColumns = @JoinColumn(name = "store_tag_id"))
+    private Set<StoreTag> tags;
+
+    public void updateInfo(String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
+        this.storeName = storeName;
+        this.address = address;
+        this.tel = tel;
+        this.homepageUrl = homepageUrl;
+        this.reservationUrl = reservationUrl;
+        this.introduction = introduction;
+    }
+
+    public void updateTags(LinkedHashSet<StoreTag> updateTags) {
+        this.tags = updateTags;
+        if (updateTags != null) {
+            StoreTag[] titles = updateTags.toArray(StoreTag[]::new);
+            tags.removeIf(tag -> !Arrays.asList(titles).contains(tag));
+        }
+    }
 
 }

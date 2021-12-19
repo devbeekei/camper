@@ -1,0 +1,5 @@
+= Wordvice SSO API Document
+
+== API 문서 목록
+
+=== link:/docs/store.html[매장 관련 API]
