@@ -5,6 +5,8 @@
 (추후엔 예약 기능도 추가할 예정)
 
 ### 개발 환경
+- Jenkins, Docker
+- AWS EC2, RDS, CodeBuilder, CodeDeploy
 - Amazon Corretto 11 JDK
 - Spring Data JPA
 - Querydsl(목록 조회 기능에만 사용)
@@ -12,7 +14,7 @@
 - Spring REST Docs(API 문서)
 
 ### CI/CD
-- Docker, Jenkins를 활용한 CI/CD 구축(자동화 배포)
+- Jenkins, Docker, CodeBuilder, CodeDeploy를 활용한 CI/CD 구축(자동화 배포)
 
 ### API 문서
 - API 문서는 Spring REST Docs를 사용합니다.
