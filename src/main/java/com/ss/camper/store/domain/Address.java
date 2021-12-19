@@ -1,6 +1,7 @@
 package com.ss.camper.store.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable

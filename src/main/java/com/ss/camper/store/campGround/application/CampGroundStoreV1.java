@@ -24,17 +24,15 @@ public class CampGroundStoreV1 implements CampGroundStoreService {
 
     @Override
     @Transactional
-    public void register(long userId, CampGroundStoreDTO campGroundStoreDTO) {
+    public CampGroundStoreDTO register(long userId, CampGroundStoreDTO campGroundStoreDTO) {
         final CampGroundStore campGroundStore = campGroundStoreRepository.save(
-                new CampGroundStore(
-                        campGroundStoreDTO.getStoreName(),
-                        campGroundStoreDTO.getAddress(),
-                        campGroundStoreDTO.getTel(),
-                        campGroundStoreDTO.getHomepageUrl(),
-                        campGroundStoreDTO.getReservationUrl(),
-                        campGroundStoreDTO.getIntroduction()
-                )
-        );
+            CampGroundStore.builder()
+                .storeName(campGroundStoreDTO.getStoreName())
+                .address(campGroundStoreDTO.getAddress())
+                .homepageUrl(campGroundStoreDTO.getHomepageUrl())
+                .reservationUrl(campGroundStoreDTO.getReservationUrl())
+                .introduction(campGroundStoreDTO.getIntroduction())
+                .build());
         Set<CampGroundTagDTO> tags = campGroundStoreDTO.getTags();
         if (tags != null && !tags.isEmpty()) {
             for (CampGroundTagDTO tag : tags) {
@@ -42,21 +40,18 @@ public class CampGroundStoreV1 implements CampGroundStoreService {
                 if (campGroundTag.isPresent()) {
                     campGroundStore.addTag(campGroundTag.get());
                 } else {
-                    campGroundStore.addTag(campGroundTagRepository.save(new CampGroundTag(tag.getTitle())));
+                    campGroundStore.addTag(campGroundTagRepository.save(CampGroundTag.builder().title(tag.getTitle()).build()));
                 }
             }
         }
+        return modelMapper.map(campGroundStore, CampGroundStoreDTO.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public CampGroundStoreDTO getInfo(long id) {
         final CampGroundStore campGroundStore = campGroundStoreRepository.findById(id).orElse(null);
-        if (campGroundStore == null) {
-            return null;
-        } else {
-            return modelMapper.map(campGroundStore, CampGroundStoreDTO.class);
-        }
+        return campGroundStore == null ? null : modelMapper.map(campGroundStore, CampGroundStoreDTO.class);
     }
 
 }

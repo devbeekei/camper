@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 
 @Getter
+@SuperBuilder
 @Entity
 @Table(name = "store")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

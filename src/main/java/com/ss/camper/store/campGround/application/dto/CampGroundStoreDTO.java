@@ -3,12 +3,14 @@ package com.ss.camper.store.campGround.application.dto;
 import com.ss.camper.store.domain.Address;
 import lombok.*;
 
-import java.util.Set;
+import java.util.LinkedHashSet;
 
+@ToString
 @Setter
 @Getter
-@AllArgsConstructor()
-@NoArgsConstructor()
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CampGroundStoreDTO {
     private Long id;
     private String storeName;
@@ -17,5 +19,5 @@ public class CampGroundStoreDTO {
     private String homepageUrl;
     private String reservationUrl;
     private String introduction;
-    private Set<CampGroundTagDTO> tags;
+    private LinkedHashSet<CampGroundTagDTO> tags;
 }

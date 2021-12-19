@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "camp-ground-store")
+@RequestMapping(value = "camp-ground/store")
 @RequiredArgsConstructor
 public class CampGroundStoreController {
 

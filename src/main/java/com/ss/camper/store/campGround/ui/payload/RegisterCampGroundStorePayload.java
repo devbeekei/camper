@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class RegisterCampGroundStorePayload {
@@ -46,26 +47,25 @@ public class RegisterCampGroundStorePayload {
 
         private String introduction;
 
-        private Set<String> tags;
+        private LinkedHashSet<String> tags;
 
         public CampGroundStoreDTO getCampGroundStoreDTO() {
-            HashSet<CampGroundTagDTO> saveTags = null;
+            LinkedHashSet<CampGroundTagDTO> saveTags = null;
             if (this.tags != null && !this.tags.isEmpty()) {
-                saveTags = new HashSet<>();
+                saveTags = new LinkedHashSet<>();
                 for (String tag : this.tags) {
-                    saveTags.add(new CampGroundTagDTO(null, tag));
+                    saveTags.add(CampGroundTagDTO.builder().title(tag).build());
                 }
             }
-            return new CampGroundStoreDTO(
-                    null,
-                    storeName,
-                    new Address(zipCode, defaultAddress, detailAddress, latitude, longitude),
-                    tel,
-                    homepageUrl,
-                    reservationUrl,
-                    introduction,
-                    saveTags
-            );
+            return CampGroundStoreDTO.builder()
+                .storeName(storeName)
+                .address(new Address(zipCode, defaultAddress, detailAddress, latitude, longitude))
+                .tel(tel)
+                .homepageUrl(homepageUrl)
+                .reservationUrl(reservationUrl)
+                .introduction(introduction)
+                .tags(saveTags)
+                .build();
         }
     }
 
