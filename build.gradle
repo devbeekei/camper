@@ -32,6 +32,9 @@ bootJar {
         from "${asciidoctor.outputDir}"
         into 'src/main/resources/static/docs'
     }
+    archivesBaseName = 'camper'
+    archiveFileName = 'camper.jar'
+    archiveVersion = "0.0.1"
 }
 test {
     outputs.dir snippetsDir
