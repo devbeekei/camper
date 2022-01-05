@@ -14,20 +14,22 @@ import javax.persistence.*;
 @Table(name = "store_tag", uniqueConstraints = @UniqueConstraint(columnNames = { "title" }))
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "store_type", columnDefinition = "VARCHAR(30)")
+@SecondaryTable(name = "tag_of_store", pkJoinColumns = @PrimaryKeyJoinColumn(name = "store_tag_id"))
 public class StoreTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AUTO_INCREMENT")
     @Column(name = "store_tag_id")
-    protected long id;
+    private long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "store_type", length = 30, nullable = false, insertable = false, updatable = false)
-    protected StoreType storeType;
+    @Column(name = "store_type", length = 30, nullable = false, updatable = false)
+    private StoreType storeType;
 
     @Column(name = "title", length = 100, nullable = false)
-    protected String title;
+    private String title;
+
+    @Column(table = "tag_of_store", name = "store_id")
+    private Long storeId;
 
 }

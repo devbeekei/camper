@@ -2,16 +2,13 @@ package com.ss.camper.store;
 
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
-import com.ss.camper.store.domain.Address;
-import com.ss.camper.store.domain.Store;
-import com.ss.camper.store.domain.StoreTag;
-import com.ss.camper.store.domain.StoreType;
+import com.ss.camper.store.domain.*;
 
 import java.util.LinkedHashSet;
 
 public class StoreMockData {
 
-    public static final StoreType storeType = StoreType.camp_ground;
+    public static final StoreType storeType = StoreType.campGround;
     public static final String storeName = "하늘 캠핑장";
     public static final Address address = new Address("11516", "경기 양주시 백석읍 양주산성로737번길", "114", 111.11f, 222.22f);
     public static final String tel = "0507-1471-2078";
@@ -45,8 +42,8 @@ public class StoreMockData {
             .build();
     }
 
-    public static Store initStore(long id, StoreType storeType, LinkedHashSet<StoreTag> tags) {
-        return storeType.getBuilder()
+    public static CampGroundStore initStore(long id, StoreType storeType, LinkedHashSet<StoreTag> tags) {
+        return CampGroundStore.builder()
             .id(id)
             .storeType(storeType)
             .storeName(storeName)

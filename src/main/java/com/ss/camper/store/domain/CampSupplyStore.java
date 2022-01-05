@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @Getter
 @SuperBuilder
 @Entity
-@DiscriminatorValue("camp_supply")
+@DiscriminatorValue("campSupply")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CampSupplyStore extends Store {
 

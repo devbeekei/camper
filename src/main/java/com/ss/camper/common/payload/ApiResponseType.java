@@ -18,7 +18,8 @@ public enum ApiResponseType {
     REQUEST_METHOD_NOT_SUPPORT(HttpStatus.BAD_REQUEST, 101, "Method Not supported"),
 
     // NOT_FOUND_DATA
-    NOT_FOUND_CAMP_STORE(HttpStatus.CONFLICT, 100, "Not found store");
+    NOT_FOUND_STORE(HttpStatus.CONFLICT, 100, "Not found store"),
+    NOT_SUPPLY_STORE_TYPE(HttpStatus.CONFLICT, 101, "Not supply Store type");
 
     private final HttpStatus status;
     private final int code;

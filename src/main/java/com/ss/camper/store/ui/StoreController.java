@@ -8,6 +8,7 @@ import com.ss.camper.store.ui.payload.GetStorePayload;
 import com.ss.camper.store.ui.payload.ModifyStorePayload;
 import com.ss.camper.store.ui.payload.RegisterStorePayload;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,7 +40,9 @@ public class StoreController {
 
     @GetMapping(name = "매장 목록 조회")
     public void getStoreList() {
-
+        final Page<StoreDTO> storeDTO = storeService.getPageList(10, 1);
+        System.out.println("storeDTO : " + storeDTO);
+//        return new DataApiResponse<>(new GetStorePayload.Response(storeDTO));
     }
 
 }

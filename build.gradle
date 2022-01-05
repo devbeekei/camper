@@ -1,3 +1,14 @@
+buildscript {
+    ext {
+        // Querydsl Plugin 버전
+        querydslPluginVersion = '1.0.10'
+    }
+    dependencies {
+        // Querydsl Plugin 의존성 등록
+        classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+    }
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.3.12.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -78,4 +89,23 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+    implementation 'com.querydsl:querydsl-jpa'
+    implementation 'com.querydsl:querydsl-apt'
+    annotationProcessor 'com.querydsl:querydsl-apt'
 }
+
+// Querydsl Plugin 설정
+apply plugin: 'com.ewerk.gradle.plugins.querydsl'
+// Q파일 생성 위치
+def querydslSrcDir = "src/main/generated"
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = querydslSrcDir
+}
+sourceSets { main.java.srcDirs = ['src/main/java', querydslSrcDir] }
+configurations { querydsl.extendsFrom compileClasspath }
+clean { delete file(querydslSrcDir) } // gradle clean시 Q파일 삭제
+compileQuerydsl { options.annotationProcessorPath = configurations.querydsl }
+tasks.withType(JavaCompile) { options.annotationProcessorGeneratedSourcesDirectory = file(querydslSrcDir) }

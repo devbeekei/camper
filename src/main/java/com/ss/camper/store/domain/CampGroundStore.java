@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Getter
 @SuperBuilder
 @Entity
-@DiscriminatorValue("camp_ground")
+@DiscriminatorValue("campGround")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CampGroundStore extends Store {
 

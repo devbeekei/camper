@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum StoreType {
 
-    camp_ground(1, "캠핑장", CampGroundStore.builder()),
-    camp_supply(2, "캠핑용품점", CampGroundStore.builder());
+    campGround(1, "캠핑장", CampGroundStore.class),
+    campSupply(2, "캠핑용품점", CampSupplyStore.class);
 
     private int id;
     private String name;
-    private Store.StoreBuilder<?,?> builder;
+    private Class<?> domain;
 
 }
