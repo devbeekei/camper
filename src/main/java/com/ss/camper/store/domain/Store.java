@@ -2,7 +2,6 @@ package com.ss.camper.store.domain;
 
 import com.ss.camper.common.domain.DateRecord;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -11,14 +10,14 @@ import java.util.Set;
 
 @ToString
 @Getter
-@SuperBuilder
+@Builder
 @Entity
 @Table(name = "store")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "store_type", columnDefinition = "VARCHAR(30)")
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name = "store_type", columnDefinition = "VARCHAR(30)")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Store {
+public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AUTO_INCREMENT")
@@ -29,7 +28,7 @@ public abstract class Store {
     protected String storeName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "store_type", length = 30, nullable = false, insertable = false, updatable = false)
+    @Column(name = "store_type", length = 30, nullable = false)
     protected StoreType storeType;
 
     @Embedded

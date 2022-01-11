@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 
 import static com.ss.camper.common.ApiDocumentUtil.*;
 import static com.ss.camper.store.StoreMockData.*;
@@ -33,9 +33,9 @@ public class StoreControllerTest extends ControllerTest {
     @DisplayName("매장 등록")
     public void registerStore() throws Exception {
         // Given
-        final StoreDTO storeDTO = initStoreDTO(1L, storeType, new LinkedHashSet<>(){{
-            add(initStoreTagDTO(1L, storeType, tagTitle1));
-            add(initStoreTagDTO(2L, storeType, tagTitle2));
+        final StoreDTO storeDTO = initStoreDTO(1L, new ArrayList<>(){{
+            add(initStoreTagDTO(1L, tagTitle1));
+            add(initStoreTagDTO(2L, tagTitle2));
         }});
         given(storeService.register(any(StoreDTO.class))).willReturn(storeDTO);
 
@@ -52,7 +52,7 @@ public class StoreControllerTest extends ControllerTest {
             .homepageUrl(homepageUrl)
             .reservationUrl(reservationUrl)
             .introduction(introduction)
-            .tags(new LinkedHashSet<>(){{
+            .tags(new ArrayList<>(){{
                 add(tagTitle1);
                 add(tagTitle2);
             }})

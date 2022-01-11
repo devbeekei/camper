@@ -5,10 +5,11 @@ import com.ss.camper.store.application.dto.StoreTagDTO;
 import com.ss.camper.store.domain.*;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 
 public class StoreMockData {
 
-    public static final StoreType storeType = StoreType.campGround;
+    public static final StoreType storeType = StoreType.CAMP_GROUND;
     public static final String storeName = "하늘 캠핑장";
     public static final Address address = new Address("11516", "경기 양주시 백석읍 양주산성로737번길", "114", 111.11f, 222.22f);
     public static final String tel = "0507-1471-2078";
@@ -20,15 +21,15 @@ public class StoreMockData {
     public static final String tagTitle3 = "솔로캠핑";
     public static final String tagTitle4 = "당일캠핑";
 
-    public static StoreTagDTO initStoreTagDTO(Long id, StoreType storeType, String title) {
+    public static StoreTagDTO initStoreTagDTO(Long id, String title) {
         return StoreTagDTO.builder().id(id).storeType(storeType).title(title).build();
     }
 
-    public static StoreTag initStoreTag(long id, StoreType storeType, String title) {
+    public static StoreTag initStoreTag(long id, String title) {
         return StoreTag.builder().id(id).storeType(storeType).title(title).build();
     }
 
-    public static StoreDTO initStoreDTO(Long id, StoreType storeType, LinkedHashSet<StoreTagDTO> tags) {
+    public static StoreDTO initStoreDTO(Long id, List<StoreTagDTO> tags) {
         return StoreDTO.builder()
             .id(id)
             .storeType(storeType)
@@ -42,8 +43,8 @@ public class StoreMockData {
             .build();
     }
 
-    public static CampGroundStore initStore(long id, StoreType storeType, LinkedHashSet<StoreTag> tags) {
-        return CampGroundStore.builder()
+    public static Store initStore(long id, LinkedHashSet<StoreTag> tags) {
+        return Store.builder()
             .id(id)
             .storeType(storeType)
             .storeName(storeName)

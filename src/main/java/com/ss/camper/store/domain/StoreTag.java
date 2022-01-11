@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @SuperBuilder
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "store_tag", uniqueConstraints = @UniqueConstraint(columnNames = { "title" }))
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SecondaryTable(name = "tag_of_store", pkJoinColumns = @PrimaryKeyJoinColumn(name = "store_tag_id"))
+@SecondaryTable(name = "tag_of_store", pkJoinColumns = @PrimaryKeyJoinColumn(name = "store_tag_id", referencedColumnName = "store_tag_id"))
 public class StoreTag {
 
     @Id
@@ -29,7 +30,7 @@ public class StoreTag {
     @Column(name = "title", length = 100, nullable = false)
     private String title;
 
-    @Column(table = "tag_of_store", name = "store_id")
-    private Long storeId;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
+    private List<Store> store;
 
 }

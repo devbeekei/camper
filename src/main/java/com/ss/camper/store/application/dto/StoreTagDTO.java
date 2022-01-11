@@ -11,6 +11,5 @@ import lombok.*;
 @NoArgsConstructor
 public class StoreTagDTO {
     private Long id;
-    private StoreType storeType;
     private String title;
 }

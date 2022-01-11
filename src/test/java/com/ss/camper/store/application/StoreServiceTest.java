@@ -3,6 +3,7 @@ package com.ss.camper.store.application;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.domain.*;
 import com.ss.camper.store.application.exception.NotFoundStoreException;
+import com.ss.camper.store.domain.StoreRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 
@@ -22,7 +24,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class StoreServiceV1Test {
+class StoreServiceTest {
 
     @Spy
     private ModelMapper modelMapper;
@@ -34,28 +36,28 @@ class StoreServiceV1Test {
     private StoreTagRepository storeTagRepository;
 
     @InjectMocks
-    private StoreServiceV1 storeServiceV1;
+    private StoreService storeService;
 
     @Test
     @DisplayName("매장 등록")
     void register() {
         // Given
-        final Store store = initStore(1, storeType, null);
+        final Store store = initStore(1, null);
         given(storeRepository.save(any(Store.class))).willReturn(store);
 
-        final StoreTag storeTag1 = initStoreTag(1, storeType, tagTitle1);
-        final StoreTag storeTag2 = initStoreTag(2, storeType, tagTitle2);
-        final StoreTag storeTag3 = initStoreTag(3, storeType, tagTitle3);
+        final StoreTag storeTag1 = initStoreTag(1, tagTitle1);
+        final StoreTag storeTag2 = initStoreTag(2, tagTitle2);
+        final StoreTag storeTag3 = initStoreTag(3, tagTitle3);
         given(storeTagRepository.findByStoreTypeAndTitle(any(StoreType.class), anyString())).willReturn(Optional.empty());
         given(storeTagRepository.save(any(StoreTag.class))).willReturn(storeTag1, storeTag2, storeTag3);
 
         // When
-        final StoreDTO storeDTO = initStoreDTO(null, storeType, new LinkedHashSet<>(){{
-            add(initStoreTagDTO(null, storeType, tagTitle1));
-            add(initStoreTagDTO(null, storeType, tagTitle2));
-            add(initStoreTagDTO(null, storeType, tagTitle3));
+        final StoreDTO storeDTO = initStoreDTO(null, new ArrayList<>(){{
+            add(initStoreTagDTO(null, tagTitle1));
+            add(initStoreTagDTO(null, tagTitle2));
+            add(initStoreTagDTO(null, tagTitle3));
         }});
-        final StoreDTO result = storeServiceV1.register(storeDTO);
+        final StoreDTO result = storeService.register(storeDTO);
 
         // Then
         assertThat(result.getId()).isEqualTo(store.getId());
@@ -75,22 +77,22 @@ class StoreServiceV1Test {
     void modify() {
         // Given
         final long storeId = 1;
-        final Store store = initStore(storeId, storeType, null);
+        final Store store = initStore(storeId, null);
         given(storeRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(store));
 
-        final StoreTag storeTag1 = initStoreTag(1, storeType, tagTitle1);
-        final StoreTag storeTag2 = initStoreTag(2, storeType, tagTitle2);
-        final StoreTag storeTag3 = initStoreTag(3, storeType, tagTitle3);
+        final StoreTag storeTag1 = initStoreTag(1, tagTitle1);
+        final StoreTag storeTag2 = initStoreTag(2, tagTitle2);
+        final StoreTag storeTag3 = initStoreTag(3, tagTitle3);
         given(storeTagRepository.findByStoreTypeAndTitle(any(StoreType.class), anyString())).willReturn(Optional.empty());
         given(storeTagRepository.save(any(StoreTag.class))).willReturn(storeTag1, storeTag2, storeTag3);
 
         // When
-        final StoreDTO storeDTO = initStoreDTO(null, storeType, new LinkedHashSet<>(){{
-            add(initStoreTagDTO(null, storeType, tagTitle1));
-            add(initStoreTagDTO(null, storeType, tagTitle2));
-            add(initStoreTagDTO(null, storeType, tagTitle3));
+        final StoreDTO storeDTO = initStoreDTO(null, new ArrayList<>(){{
+            add(initStoreTagDTO(null, tagTitle1));
+            add(initStoreTagDTO(null, tagTitle2));
+            add(initStoreTagDTO(null, tagTitle3));
         }});
-        final StoreDTO result = storeServiceV1.modify(storeId, storeDTO);
+        final StoreDTO result = storeService.modify(storeId, storeDTO);
 
         // Then
         assertThat(result.getId()).isEqualTo(storeId);
@@ -113,8 +115,8 @@ class StoreServiceV1Test {
 
         // When, Then
         final long storeId = 1;
-        final StoreDTO storeDTO = initStoreDTO(null, storeType, null);
-        assertThrows(NotFoundStoreException.class, () -> storeServiceV1.modify(storeId, storeDTO));
+        final StoreDTO storeDTO = initStoreDTO(null, null);
+        assertThrows(NotFoundStoreException.class, () -> storeService.modify(storeId, storeDTO));
     }
 
     @Test
@@ -122,15 +124,15 @@ class StoreServiceV1Test {
     void getInfo() {
         // Given
         final long storeId = 1;
-        final Store store = initStore(storeId, storeType, new LinkedHashSet<>(){{
-            add(initStoreTag(1, storeType, tagTitle1));
-            add(initStoreTag(2, storeType, tagTitle2));
-            add(initStoreTag(3, storeType, tagTitle3));
+        final Store store = initStore(storeId, new LinkedHashSet<>(){{
+            add(initStoreTag(1, tagTitle1));
+            add(initStoreTag(2, tagTitle2));
+            add(initStoreTag(3, tagTitle3));
         }});
         given(storeRepository.findById(anyLong())).willReturn(Optional.ofNullable(store));
 
         // When
-        final StoreDTO result = storeServiceV1.getInfo(storeId);
+        final StoreDTO result = storeService.getInfo(storeId);
 
         // Then
         assertThat(result.getId()).isEqualTo(storeId);
@@ -153,7 +155,7 @@ class StoreServiceV1Test {
 
         // When
         final long storeId = 1;
-        final StoreDTO result = storeServiceV1.getInfo(storeId);
+        final StoreDTO result = storeService.getInfo(storeId);
 
         // Then
         assertThat(result).isNull();

@@ -11,7 +11,9 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 public class ModifyStorePayload {
 
@@ -48,12 +50,12 @@ public class ModifyStorePayload {
 
         private String introduction;
 
-        private LinkedHashSet<String> tags;
+        private List<String> tags;
 
         public StoreDTO convertStoreDTO() {
-            LinkedHashSet<StoreTagDTO> tags = null;
+            List<StoreTagDTO> tags = null;
             if (this.tags != null && !this.tags.isEmpty()) {
-                tags = new LinkedHashSet<>();
+                tags = new ArrayList<>();
                 for (String tag : this.tags) {
                     tags.add(StoreTagDTO.builder().title(tag).build());
                 }

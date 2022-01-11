@@ -5,6 +5,7 @@ import com.ss.camper.store.domain.StoreType;
 import lombok.*;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 
 @ToString
 @Setter
@@ -21,5 +22,5 @@ public class StoreDTO {
     private String homepageUrl;
     private String reservationUrl;
     private String introduction;
-    private LinkedHashSet<StoreTagDTO> tags;
+    private List<StoreTagDTO> tags;
 }

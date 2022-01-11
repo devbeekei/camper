@@ -1,13 +1,11 @@
 package com.ss.camper.store.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+@ToString
 @Getter
 @Builder
 @AllArgsConstructor
