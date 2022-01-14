@@ -34,7 +34,7 @@ public class ApiDocumentUtil {
         FieldDescriptor[] responseFields = defaultResponseFields();
         if (fieldDescriptors.length > 0) {
             FieldDescriptor[] newResponseFields = Arrays.copyOf(responseFields, (responseFields.length + 1 + fieldDescriptors.length));
-            newResponseFields[responseFields.length] = fieldWithPath("result").type(JsonFieldType.OBJECT).description("결과 데이터");
+            newResponseFields[responseFields.length] = fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터");
             int idx = responseFields.length + 1;
             for (FieldDescriptor descriptor : fieldDescriptors) {
                 newResponseFields[idx] = descriptor;

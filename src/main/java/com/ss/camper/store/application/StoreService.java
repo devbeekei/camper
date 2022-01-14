@@ -25,8 +25,7 @@ public class StoreService {
 
     @Transactional
     public StoreDTO register(StoreDTO storeDTO) {
-        System.out.println("storeDTO : " + storeDTO);
-        Store store = storeRepository.save(Store.builder()
+        final Store store = storeRepository.save(Store.builder()
                 .storeType(storeDTO.getStoreType())
                 .storeName(storeDTO.getStoreName())
                 .address(storeDTO.getAddress())
@@ -58,11 +57,6 @@ public class StoreService {
     public StoreDTO getInfo(long id) {
         final Store store = storeRepository.findById(id).orElse(null);
         return store == null ? null : modelMapper.map(store, StoreDTO.class);
-    }
-
-    public Page<StoreDTO> getPageList(int size, int page) {
-//        return storeRepositorySupport.findPageListBySearch(size, page);
-        return null;
     }
 
     private void updateTags(Store store, Set<StoreTagDTO> tagsDTO) {

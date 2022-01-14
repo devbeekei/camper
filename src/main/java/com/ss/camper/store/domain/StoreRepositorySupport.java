@@ -2,20 +2,16 @@ package com.ss.camper.store.domain;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ss.camper.common.payload.PagingRequest;
 import com.ss.camper.store.application.dto.StoreDTO;
-import com.ss.camper.store.application.dto.StoreTagDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
-import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.ss.camper.store.domain.QStore.store;
-import static com.ss.camper.store.domain.QStoreTag.storeTag;
 
 @Repository
 public class StoreRepositorySupport extends QuerydslRepositorySupport {

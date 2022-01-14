@@ -1,15 +1,34 @@
 package com.ss.camper.common.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @ToString
 @Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class DataPagingApiResponse<T> {
-    private List<T> data = new ArrayList<>();
+
+    @JsonProperty("data")
+    private List<T> content;
+
+    @JsonProperty("count")
+    private int totalElements;
+
+    @JsonProperty("size")
+    private int size;
+
+    @JsonProperty("currentPage")
+    private int number;
+
+    @JsonProperty("totalPage")
+    private int numberOfElements;
+
+    public int getNumber() {
+        return number + 1;
+    }
+
 }

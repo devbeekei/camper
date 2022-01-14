@@ -33,7 +33,7 @@ public class PagingRequest {
     }
 
     public PageRequest getPageable() {
-        return PageRequest.of(page, size);
+        return PageRequest.of(page - 1, size);
     }
 
 }

@@ -3,10 +3,7 @@ package com.ss.camper.store.ui.payload;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
 import com.ss.camper.store.domain.Address;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,6 +16,7 @@ public class ModifyStorePayload {
 
     @ToString
     @Getter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Request {

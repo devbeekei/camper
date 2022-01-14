@@ -22,7 +22,7 @@ public class StoreMockData {
     public static final String tagTitle4 = "당일캠핑";
 
     public static StoreTagDTO initStoreTagDTO(Long id, String title) {
-        return StoreTagDTO.builder().id(id).storeType(storeType).title(title).build();
+        return StoreTagDTO.builder().id(id).title(title).build();
     }
 
     public static StoreTag initStoreTag(long id, String title) {

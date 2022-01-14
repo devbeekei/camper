@@ -2,6 +2,7 @@ package com.ss.camper.store.ui;
 
 import com.ss.camper.common.payload.ApiResponse;
 import com.ss.camper.common.payload.DataApiResponse;
+import com.ss.camper.common.payload.DataPagingApiResponse;
 import com.ss.camper.common.payload.PagingRequest;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
@@ -10,17 +11,18 @@ import com.ss.camper.store.ui.payload.GetStorePayload;
 import com.ss.camper.store.ui.payload.ModifyStorePayload;
 import com.ss.camper.store.ui.payload.RegisterStorePayload;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "store")
 @RequiredArgsConstructor
 public class StoreController {
 
+    private final ModelMapper modelMapper;
     private final StoreService storeService;
     private final StoreRepositorySupport storeRepositorySupport;
 
@@ -43,10 +45,10 @@ public class StoreController {
     }
 
     @GetMapping(name = "매장 목록 조회")
-    public void getStoreList() {
+    public DataPagingApiResponse getStoreList() {
         PagingRequest pagingRequest = new PagingRequest();
         Page<StoreDTO> storeList = storeRepositorySupport.getStorePage(pagingRequest);
-//        return new DataApiResponse<>(new GetStorePayload.Response(storeDTO));
+        return modelMapper.map(storeList, DataPagingApiResponse.class);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.ss.camper.store.application.dto;
 
-import com.ss.camper.store.domain.StoreType;
 import lombok.*;
 
 @ToString
