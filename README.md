@@ -15,6 +15,7 @@
 
 ### CI/CD
 - Jenkins, Docker, CodeBuilder, CodeDeploy를 활용한 CI/CD 구축(자동화 배포)
+- 빌드 시 clean build test
 
 ### API 문서
 - API 문서는 Spring REST Docs를 사용합니다.
@@ -23,6 +24,6 @@
 ### 테스트 환경
 - BDD를 기반으로 테스트 합니다.
 - Test Case는 성공, 프로세스 별, 유효성 검증 실패에 관한 테스트를 진행합니다.
-- Domain, Service, Controller Layer 테스트를 진행합니다.
+- Domain, QueryDSL Repository, Service, Controller Layer 테스트를 진행합니다.
 
 
