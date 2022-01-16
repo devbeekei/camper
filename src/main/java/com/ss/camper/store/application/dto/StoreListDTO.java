@@ -3,7 +3,10 @@ package com.ss.camper.store.application.dto;
 import com.ss.camper.store.domain.Address;
 import com.ss.camper.store.domain.StoreType;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 @ToString
@@ -12,7 +15,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreDTO {
+public class StoreListDTO {
     private Long id;
     private StoreType storeType;
     private String storeName;
@@ -21,5 +24,9 @@ public class StoreDTO {
     private String homepageUrl;
     private String reservationUrl;
     private String introduction;
-    private Set<StoreTagDTO> tags;
+    private String tags;
+    public Set<String> getTags() {
+        if (StringUtils.isBlank(this.tags)) return new HashSet<>();
+        return new HashSet<>(Arrays.asList(this.tags.split(",")));
+    }
 }

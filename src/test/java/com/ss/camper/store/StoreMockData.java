@@ -1,11 +1,14 @@
 package com.ss.camper.store;
 
 import com.ss.camper.store.application.dto.StoreDTO;
+import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
-import com.ss.camper.store.domain.*;
+import com.ss.camper.store.domain.Address;
+import com.ss.camper.store.domain.Store;
+import com.ss.camper.store.domain.StoreTag;
+import com.ss.camper.store.domain.StoreType;
 
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.Set;
 
 public class StoreMockData {
 
@@ -16,20 +19,24 @@ public class StoreMockData {
     public static final String homepageUrl = "https://cafe.naver.com/skycp2004";
     public static final String reservationUrl = "http://r.camperstory.com/resMain.hbb?reserve_path=RP&campseq=3658";
     public static final String introduction = "안녕하세요. 하늘 캠핑장입니다..";
-    public static final String tagTitle1 = "가족캠핑";
-    public static final String tagTitle2 = "연인캠핑";
-    public static final String tagTitle3 = "솔로캠핑";
-    public static final String tagTitle4 = "당일캠핑";
+    public static final String tagTitle1 = "TEST_가족캠핑";
+    public static final String tagTitle2 = "TEST_연인캠핑";
+    public static final String tagTitle3 = "TEST_솔로캠핑";
+    public static final String tagTitle4 = "TEST_당일캠핑";
 
     public static StoreTagDTO initStoreTagDTO(Long id, String title) {
         return StoreTagDTO.builder().id(id).title(title).build();
     }
 
-    public static StoreTag initStoreTag(long id, String title) {
-        return StoreTag.builder().id(id).storeType(storeType).title(title).build();
+    public static StoreTag initStoreTag(Long id, String title) {
+        if (id == null) {
+            return StoreTag.builder().storeType(storeType).title(title).build();
+        } else {
+            return StoreTag.builder().id(id).storeType(storeType).title(title).build();
+        }
     }
 
-    public static StoreDTO initStoreDTO(Long id, List<StoreTagDTO> tags) {
+    public static StoreDTO initStoreDTO(Long id, Set<StoreTagDTO> tags) {
         return StoreDTO.builder()
             .id(id)
             .storeType(storeType)
@@ -43,8 +50,8 @@ public class StoreMockData {
             .build();
     }
 
-    public static Store initStore(long id, LinkedHashSet<StoreTag> tags) {
-        return Store.builder()
+    public static StoreListDTO initStoreListDTO(Long id, String[] tags) {
+        return StoreListDTO.builder()
             .id(id)
             .storeType(storeType)
             .storeName(storeName)
@@ -53,8 +60,35 @@ public class StoreMockData {
             .homepageUrl(homepageUrl)
             .reservationUrl(reservationUrl)
             .introduction(introduction)
-            .tags(tags)
+            .tags(String.join(",", tags))
             .build();
+    }
+
+    public static Store initStore(Long id, Set<StoreTag> tags) {
+        if (id == null) {
+            return Store.builder()
+                .storeType(storeType)
+                .storeName(storeName)
+                .address(address)
+                .tel(tel)
+                .homepageUrl(homepageUrl)
+                .reservationUrl(reservationUrl)
+                .introduction(introduction)
+                .tags(tags)
+                .build();
+        } else {
+            return Store.builder()
+                .id(id)
+                .storeType(storeType)
+                .storeName(storeName)
+                .address(address)
+                .tel(tel)
+                .homepageUrl(homepageUrl)
+                .reservationUrl(reservationUrl)
+                .introduction(introduction)
+                .tags(tags)
+                .build();
+        }
     }
 
 }

@@ -26,7 +26,7 @@ spring:
 
   jpa:
     database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: com.ss.camper.config.CustomMySQL57Dialect
     generate-ddl: false
     open-in-view: false
     hibernate:

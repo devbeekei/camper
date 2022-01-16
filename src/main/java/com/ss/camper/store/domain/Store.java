@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @ToString
@@ -13,8 +12,6 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "store")
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-//@DiscriminatorColumn(name = "store_type", columnDefinition = "VARCHAR(30)")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store {
@@ -62,7 +59,7 @@ public class Store {
         this.introduction = introduction;
     }
 
-    public void updateTags(LinkedHashSet<StoreTag> updateTags) {
+    public void updateTags(Set<StoreTag> updateTags) {
         this.tags = updateTags;
         if (updateTags != null) {
             StoreTag[] titles = updateTags.toArray(StoreTag[]::new);

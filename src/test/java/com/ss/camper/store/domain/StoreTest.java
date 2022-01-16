@@ -36,17 +36,17 @@ public class StoreTest {
     public void updateTags() {
         // Given
         final Store store = initStore(1L, new LinkedHashSet<>(){{
-            add(initStoreTag(1, tagTitle1));
-            add(initStoreTag(2, tagTitle2));
-            add(initStoreTag(3, tagTitle3));
-            add(initStoreTag(4, tagTitle4));
+            add(initStoreTag(1L, tagTitle1));
+            add(initStoreTag(2L, tagTitle2));
+            add(initStoreTag(3L, tagTitle3));
+            add(initStoreTag(4L, tagTitle4));
         }});
 
         // When
         final LinkedHashSet<StoreTag> updateTags = new LinkedHashSet<>(){{
-            add(initStoreTag(1, tagTitle1));
-            add(initStoreTag(2, tagTitle2));
-            add(initStoreTag(3, tagTitle3));
+            add(initStoreTag(1L, tagTitle1));
+            add(initStoreTag(2L, tagTitle2));
+            add(initStoreTag(3L, tagTitle3));
         }};
         store.updateTags(updateTags);
 

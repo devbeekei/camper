@@ -1,21 +1,16 @@
 package com.ss.camper.store.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
+@ToString
 @Getter
-@SuperBuilder
+@Builder
 @Entity
 @Table(name = "store_tag", uniqueConstraints = @UniqueConstraint(columnNames = { "title" }))
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SecondaryTable(name = "tag_of_store", pkJoinColumns = @PrimaryKeyJoinColumn(name = "store_tag_id", referencedColumnName = "store_tag_id"))
 public class StoreTag {
 
     @Id
@@ -29,8 +24,5 @@ public class StoreTag {
 
     @Column(name = "title", length = 100, nullable = false)
     private String title;
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
-    private List<Store> store;
 
 }

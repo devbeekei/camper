@@ -1,10 +1,11 @@
 package com.ss.camper.store.application;
 
+import com.ss.camper.common.payload.PagingRequest;
 import com.ss.camper.store.application.dto.StoreDTO;
+import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
 import com.ss.camper.store.application.exception.NotFoundStoreException;
 import com.ss.camper.store.domain.*;
-import com.ss.camper.store.domain.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -22,9 +23,10 @@ public class StoreService {
     private final ModelMapper modelMapper;
     private final StoreRepository storeRepository;
     private final StoreTagRepository storeTagRepository;
+    private final StoreRepositorySupport storeRepositorySupport;
 
     @Transactional
-    public StoreDTO register(StoreDTO storeDTO) {
+    public StoreDTO registerStore(StoreDTO storeDTO) {
         final Store store = storeRepository.save(Store.builder()
                 .storeType(storeDTO.getStoreType())
                 .storeName(storeDTO.getStoreName())
@@ -39,7 +41,7 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreDTO modify(long storeId, StoreDTO storeDTO) {
+    public StoreDTO modifyStore(long storeId, StoreDTO storeDTO) {
         final Store store = storeRepository.findById(storeId).orElseThrow(NotFoundStoreException::new);
         store.updateInfo(
             storeDTO.getStoreName(),
@@ -54,9 +56,15 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public StoreDTO getInfo(long id) {
+    public StoreDTO getStoreInfo(long id) {
         final Store store = storeRepository.findById(id).orElse(null);
         return store == null ? null : modelMapper.map(store, StoreDTO.class);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StoreListDTO> getStoreListPage(int size, int page) {
+        final PagingRequest pagingRequest = new PagingRequest(size, page);
+        return storeRepositorySupport.getStoreListPage(pagingRequest);
     }
 
     private void updateTags(Store store, Set<StoreTagDTO> tagsDTO) {

@@ -10,6 +10,7 @@ public class PagingRequest {
 
     private final static int DEFAULT_SIZE = 10;
     private final static int MAX_SIZE = 50;
+    private final static int DEFAULT_PAGE = 1;
 
     private int size;
     private int page;
@@ -19,16 +20,13 @@ public class PagingRequest {
         this.setPage(page);
     }
 
-    public PagingRequest() {
-        this.size = DEFAULT_SIZE;
-        this.page = 1;
-    }
-
     public void setSize(int size) {
+        size = size <= 0 ? DEFAULT_SIZE : size;
         this.size = Math.min(size, MAX_SIZE);
     }
 
     public void setPage(int page) {
+        page = page <= 0 ? DEFAULT_PAGE : page;
         this.page = page <= 0 ? 1 : page;
     }
 

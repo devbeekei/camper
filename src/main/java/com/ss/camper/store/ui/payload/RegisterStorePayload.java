@@ -9,9 +9,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 public class RegisterStorePayload {
 
@@ -52,12 +50,11 @@ public class RegisterStorePayload {
 
         private String introduction;
 
-        private List<String> tags;
+        private Set<String> tags;
 
         public StoreDTO convertStoreDTO() {
-            List<StoreTagDTO> tags = null;
+            Set<StoreTagDTO> tags = new HashSet<>();
             if (this.tags != null && !this.tags.isEmpty()) {
-                tags = new ArrayList<>();
                 for (String tag : this.tags) {
                     tags.add(StoreTagDTO.builder().title(tag).build());
                 }

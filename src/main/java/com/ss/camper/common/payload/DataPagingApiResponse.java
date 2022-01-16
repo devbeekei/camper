@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataPagingApiResponse<T> {
+public class DataPagingApiResponse<T> extends ApiResponse {
 
     @JsonProperty("data")
     private List<T> content;
@@ -25,7 +25,7 @@ public class DataPagingApiResponse<T> {
     private int number;
 
     @JsonProperty("totalPage")
-    private int numberOfElements;
+    private int totalPages;
 
     public int getNumber() {
         return number + 1;
