@@ -10,24 +10,23 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataPagingApiResponse<T> extends ApiResponse {
+public class PageDTO<T> {
 
-    @JsonProperty("data")
     private List<T> content;
 
     @JsonProperty("count")
-    private int totalElements;
+    private long totalElements;
 
     @JsonProperty("size")
-    private int size;
+    private long size;
 
     @JsonProperty("currentPage")
-    private int number;
+    private long number;
 
     @JsonProperty("totalPage")
-    private int totalPages;
+    private long totalPages;
 
-    public int getNumber() {
+    public long getNumber() {
         return number + 1;
     }
 

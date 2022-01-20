@@ -2,4 +2,7 @@
 
 == API 문서 목록
 
+=== link:/docs/blog.html[블로그 관련 API]
 === link:/docs/store.html[매장 관련 API]
+
+

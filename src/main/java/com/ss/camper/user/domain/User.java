@@ -4,16 +4,18 @@ import com.ss.camper.common.domain.DateRecord;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", columnDefinition = "VARCHAR(30)")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "email" }))
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", columnDefinition = "VARCHAR(30)")
+@AllArgsConstructor()
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class User {
 
     @Id

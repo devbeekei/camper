@@ -3,17 +3,17 @@ package com.ss.camper.blog.domain;
 import com.ss.camper.common.domain.DateRecord;
 import com.ss.camper.user.clientUser.domain.ClientUser;
 import com.ss.camper.user.domain.User;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Builder
 @Entity
 @Table(name = "blog")
+@AllArgsConstructor()
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Blog {
 
     @Id
@@ -27,8 +27,8 @@ public class Blog {
     @Column(name = "introduction", length = 200)
     private String introduction;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private ClientUser user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog")

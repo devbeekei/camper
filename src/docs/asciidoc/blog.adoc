@@ -1,0 +1,13 @@
+= 블로그 관련 API
+:toc: left
+:toclevels: 1
+:sectlinks:
+
+include::{docsDir}/include.adoc[]
+
+[[register-blog]]
+== 블로그 개설
+include::{snippets}/blog/register/http-request.adoc[]
+include::{snippets}/blog/register/request-fields.adoc[]
+include::{snippets}/blog/register/response-body.adoc[]
+include::{snippets}/blog/register/response-fields.adoc[]

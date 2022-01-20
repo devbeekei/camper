@@ -16,13 +16,13 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiResponse {
+public class DefaultApiResponse {
 
     private int code = ApiResponseType.SUCCESS.getCode();
     private String message = ApiResponseType.SUCCESS.getMessage();
 
-    public static ApiResponse error(ApiResponseType apiResponseType) {
-        return new ApiResponse(apiResponseType.getCode(), apiResponseType.getMessage());
+    public static DefaultApiResponse error(ApiResponseType apiResponseType) {
+        return new DefaultApiResponse(apiResponseType.getCode(), apiResponseType.getMessage());
     }
 
     public static void response(ApiResponseType apiResponseType) {
@@ -31,7 +31,7 @@ public class ApiResponse {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
             response.setStatus(apiResponseType.getStatus().value());
-            response.getWriter().write(Objects.requireNonNull(ParsingUtil.writeValueAsString(ApiResponse.error(apiResponseType))));
+            response.getWriter().write(Objects.requireNonNull(ParsingUtil.writeValueAsString(DefaultApiResponse.error(apiResponseType))));
         } catch (IOException e) {
             e.printStackTrace();
         }

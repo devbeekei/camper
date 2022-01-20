@@ -7,7 +7,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.LinkedHashSet;
 
-import static com.ss.camper.store.StoreMockData.*;
+import static com.ss.camper.store.StoreMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -20,15 +20,15 @@ public class StoreTest {
         final Store store = initStore(1L, null);
 
         // When
-        store.updateInfo(storeName, address, tel, homepageUrl, reservationUrl, introduction);
+        store.updateInfo(STORE_NAME, ADDRESS, TEL, HOMEPAGE_URL, RESERVATION_URL, INTRODUCTION);
 
         // Then
-        assertThat(store.getStoreName()).isEqualTo(storeName);
-        assertThat(store.getAddress()).isEqualTo(address);
-        assertThat(store.getTel()).isEqualTo(tel);
-        assertThat(store.getHomepageUrl()).isEqualTo(homepageUrl);
-        assertThat(store.getReservationUrl()).isEqualTo(reservationUrl);
-        assertThat(store.getIntroduction()).isEqualTo(introduction);
+        assertThat(store.getStoreName()).isEqualTo(STORE_NAME);
+        assertThat(store.getAddress()).isEqualTo(ADDRESS);
+        assertThat(store.getTel()).isEqualTo(TEL);
+        assertThat(store.getHomepageUrl()).isEqualTo(HOMEPAGE_URL);
+        assertThat(store.getReservationUrl()).isEqualTo(RESERVATION_URL);
+        assertThat(store.getIntroduction()).isEqualTo(INTRODUCTION);
     }
 
     @Test
@@ -36,17 +36,17 @@ public class StoreTest {
     public void updateTags() {
         // Given
         final Store store = initStore(1L, new LinkedHashSet<>(){{
-            add(initStoreTag(1L, tagTitle1));
-            add(initStoreTag(2L, tagTitle2));
-            add(initStoreTag(3L, tagTitle3));
-            add(initStoreTag(4L, tagTitle4));
+            add(initStoreTag(1L, TAG_TITLE1));
+            add(initStoreTag(2L, TAG_TITLE2));
+            add(initStoreTag(3L, TAG_TITLE3));
+            add(initStoreTag(4L, TAG_TITLE4));
         }});
 
         // When
         final LinkedHashSet<StoreTag> updateTags = new LinkedHashSet<>(){{
-            add(initStoreTag(1L, tagTitle1));
-            add(initStoreTag(2L, tagTitle2));
-            add(initStoreTag(3L, tagTitle3));
+            add(initStoreTag(1L, TAG_TITLE1));
+            add(initStoreTag(2L, TAG_TITLE2));
+            add(initStoreTag(3L, TAG_TITLE3));
         }};
         store.updateTags(updateTags);
 

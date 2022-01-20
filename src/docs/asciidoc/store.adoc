@@ -1,4 +1,4 @@
-= 인증 관련 API
+= 매장 관련 API
 :toc: left
 :toclevels: 1
 :sectlinks:

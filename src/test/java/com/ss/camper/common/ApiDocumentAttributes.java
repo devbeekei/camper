@@ -11,7 +11,7 @@ public class ApiDocumentAttributes {
         return key("attribute").value(value);
     }
 
-    public static Attributes.Attribute storeType() {
+    public static Attributes.Attribute storeTypeAttribute() {
         StringBuilder value = new StringBuilder();
         for (StoreType storeType : StoreType.values()) {
             value.append(storeType).append(" : ").append(storeType.getName()).append(" / ");

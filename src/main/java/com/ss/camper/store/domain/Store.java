@@ -19,7 +19,7 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AUTO_INCREMENT")
     @Column(name = "store_id")
-    protected long id;
+    protected Long id;
 
     @Column(name = "store_name", length = 100, nullable = false)
     protected String storeName;

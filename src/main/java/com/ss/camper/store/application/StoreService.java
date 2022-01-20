@@ -1,5 +1,6 @@
 package com.ss.camper.store.application;
 
+import com.ss.camper.common.payload.PageDTO;
 import com.ss.camper.common.payload.PagingRequest;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
@@ -62,9 +63,10 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StoreListDTO> getStoreListPage(int size, int page) {
+    public PageDTO<StoreListDTO> getStoreListPage(int size, int page) {
         final PagingRequest pagingRequest = new PagingRequest(size, page);
-        return storeRepositorySupport.getStoreListPage(pagingRequest);
+        Page<StoreListDTO> storeList = storeRepositorySupport.getStoreListPage(pagingRequest);
+        return modelMapper.map(storeList, PageDTO.class);
     }
 
     private void updateTags(Store store, Set<StoreTagDTO> tagsDTO) {

@@ -1,5 +1,6 @@
 package com.ss.camper.store.application;
 
+import com.ss.camper.common.payload.PageDTO;
 import com.ss.camper.common.payload.PagingRequest;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
@@ -19,7 +20,7 @@ import org.springframework.data.domain.PageImpl;
 
 import java.util.*;
 
-import static com.ss.camper.store.StoreMockData.*;
+import static com.ss.camper.store.StoreMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
@@ -44,23 +45,22 @@ class StoreServiceTest {
     private StoreService storeService;
 
     @Test
-    @DisplayName("매장 등록")
-    void registerStore() {
+    void 매장_등록() {
         // Given
         final Store store = initStore(1L, null);
         given(storeRepository.save(any(Store.class))).willReturn(store);
 
-        final StoreTag storeTag1 = initStoreTag(1L, tagTitle1);
-        final StoreTag storeTag2 = initStoreTag(2L, tagTitle2);
-        final StoreTag storeTag3 = initStoreTag(3L, tagTitle3);
+        final StoreTag storeTag1 = initStoreTag(1L, TAG_TITLE1);
+        final StoreTag storeTag2 = initStoreTag(2L, TAG_TITLE2);
+        final StoreTag storeTag3 = initStoreTag(3L, TAG_TITLE3);
         given(storeTagRepository.findByStoreTypeAndTitle(any(StoreType.class), anyString())).willReturn(Optional.empty());
         given(storeTagRepository.save(any(StoreTag.class))).willReturn(storeTag1, storeTag2, storeTag3);
 
         // When
         final StoreDTO storeDTO = initStoreDTO(null, new HashSet<>(){{
-            add(initStoreTagDTO(null, tagTitle1));
-            add(initStoreTagDTO(null, tagTitle2));
-            add(initStoreTagDTO(null, tagTitle3));
+            add(initStoreTagDTO(null, TAG_TITLE1));
+            add(initStoreTagDTO(null, TAG_TITLE2));
+            add(initStoreTagDTO(null, TAG_TITLE3));
         }});
         final StoreDTO result = storeService.registerStore(storeDTO);
 
@@ -78,24 +78,23 @@ class StoreServiceTest {
     }
 
     @Test
-    @DisplayName("매장 정보 수정")
-    void modifyStore() {
+    void 매장_정보_수정() {
         // Given
         final long storeId = 1;
         final Store store = initStore(storeId, null);
         given(storeRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(store));
 
-        final StoreTag storeTag1 = initStoreTag(1L, tagTitle1);
-        final StoreTag storeTag2 = initStoreTag(2L, tagTitle2);
-        final StoreTag storeTag3 = initStoreTag(3L, tagTitle3);
+        final StoreTag storeTag1 = initStoreTag(1L, TAG_TITLE1);
+        final StoreTag storeTag2 = initStoreTag(2L, TAG_TITLE2);
+        final StoreTag storeTag3 = initStoreTag(3L, TAG_TITLE3);
         given(storeTagRepository.findByStoreTypeAndTitle(any(StoreType.class), anyString())).willReturn(Optional.empty());
         given(storeTagRepository.save(any(StoreTag.class))).willReturn(storeTag1, storeTag2, storeTag3);
 
         // When
         final StoreDTO storeDTO = initStoreDTO(null, new HashSet<>(){{
-            add(initStoreTagDTO(null, tagTitle1));
-            add(initStoreTagDTO(null, tagTitle2));
-            add(initStoreTagDTO(null, tagTitle3));
+            add(initStoreTagDTO(null, TAG_TITLE1));
+            add(initStoreTagDTO(null, TAG_TITLE2));
+            add(initStoreTagDTO(null, TAG_TITLE3));
         }});
         final StoreDTO result = storeService.modifyStore(storeId, storeDTO);
 
@@ -113,8 +112,7 @@ class StoreServiceTest {
     }
 
     @Test()
-    @DisplayName("매장 정보 수정 (존재하지 않는 매장 정보)")
-    void modifyStore_empty() {
+    void 존재하지_않는_매장_정보_수정() {
         // Given
         given(storeRepository.findById(any(Long.class))).willReturn(Optional.empty());
 
@@ -125,14 +123,13 @@ class StoreServiceTest {
     }
 
     @Test
-    @DisplayName("매장 정보 조회")
-    void getStoreInfo() {
+    void 매장_정보_조회() {
         // Given
         final long storeId = 1;
         final Store store = initStore(storeId, new LinkedHashSet<>(){{
-            add(initStoreTag(1L, tagTitle1));
-            add(initStoreTag(2L, tagTitle2));
-            add(initStoreTag(3L, tagTitle3));
+            add(initStoreTag(1L, TAG_TITLE1));
+            add(initStoreTag(2L, TAG_TITLE2));
+            add(initStoreTag(3L, TAG_TITLE3));
         }});
         given(storeRepository.findById(anyLong())).willReturn(Optional.ofNullable(store));
 
@@ -153,8 +150,7 @@ class StoreServiceTest {
     }
 
     @Test
-    @DisplayName("매장 정보 조회 (존재하지 않는 매장 정보)")
-    void getStoreInfo_empty() {
+    void 존재하지_않는_매장_정보_조회() {
         // Given
         given(storeRepository.findById(anyLong())).willReturn(Optional.empty());
 
@@ -167,12 +163,11 @@ class StoreServiceTest {
     }
 
     @Test
-    @DisplayName("매장 목록 조회")
-    void getStoreListPage() {
+    void 매장_목록_조회() {
         // Given
         List<StoreListDTO> storeList = new ArrayList<>(){{
-            add(initStoreListDTO(1L, new String[]{tagTitle1, tagTitle2}));
-            add(initStoreListDTO(2L, new String[]{tagTitle1, tagTitle2}));
+            add(initStoreListDTO(1L, new String[]{TAG_TITLE1, TAG_TITLE2}));
+            add(initStoreListDTO(2L, new String[]{TAG_TITLE1, TAG_TITLE2}));
         }};
         Page<StoreListDTO> storeListPage = new PageImpl<>(storeList);
         given(storeRepositorySupport.getStoreListPage(any(PagingRequest.class))).willReturn(storeListPage);
@@ -180,7 +175,7 @@ class StoreServiceTest {
         // When
         final int size = 10;
         final int page = 1;
-        final Page<StoreListDTO> result = storeService.getStoreListPage(size, page);
+        final PageDTO<StoreListDTO> result = storeService.getStoreListPage(size, page);
 
         // Then
         assertThat(result.getContent()).isEqualTo(storeListPage.getContent());

@@ -16,7 +16,7 @@ public class StoreTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AUTO_INCREMENT")
     @Column(name = "store_tag_id")
-    private long id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "store_type", length = 30, nullable = false, updatable = false)

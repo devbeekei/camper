@@ -17,9 +17,11 @@ public enum ApiResponseType {
     REQUEST_NOT_VALID(HttpStatus.BAD_REQUEST, 100, "Request is Not valid"),
     REQUEST_METHOD_NOT_SUPPORT(HttpStatus.BAD_REQUEST, 101, "Method Not supported"),
 
-    // NOT_FOUND_DATA
-    NOT_FOUND_STORE(HttpStatus.CONFLICT, 100, "Not found store"),
-    NOT_SUPPLY_STORE_TYPE(HttpStatus.CONFLICT, 101, "Not supply Store type");
+    // CONFLICT
+    NOT_FOUND_USER(HttpStatus.CONFLICT, 100, "Not found user"),
+    ALREADY_BLOG_REGISTERED(HttpStatus.CONFLICT, 200, "Already blog registered"),
+    NOT_FOUND_STORE(HttpStatus.CONFLICT, 300, "Not found store"),
+    NOT_SUPPLY_STORE_TYPE(HttpStatus.CONFLICT, 301, "Not supply Store type");
 
     private final HttpStatus status;
     private final int code;
