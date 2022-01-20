@@ -20,18 +20,6 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    @PostMapping(name = "매장 등록")
-    public DefaultApiResponse registerStore(@Valid @RequestBody RegisterStorePayload.Request request) {
-        storeService.registerStore(request.convertStoreDTO());
-        return new DefaultApiResponse();
-    }
-
-    @PutMapping(name = "매장 정보 수정", value = "{storeId}")
-    public DefaultApiResponse modifyStore(@PathVariable long storeId, @Valid @RequestBody ModifyStorePayload.Request request) {
-        storeService.modifyStore(storeId, request.convertStoreDTO());
-        return new DefaultApiResponse();
-    }
-
     @GetMapping(name = "매장 정보 조회", value = "{storeId}")
     public DataApiResponse<StoreDTO> getStoreInfo(@PathVariable long storeId) {
         final StoreDTO storeDTO = storeService.getStoreInfo(storeId);
@@ -42,6 +30,18 @@ public class StoreController {
     public DataApiResponse<PageDTO<StoreListDTO>> getStoreListPage(@RequestParam int size, @RequestParam int page) {
         final PageDTO<StoreListDTO> storeList = storeService.getStoreListPage(size, page);
         return new DataApiResponse<>(storeList);
+    }
+
+    @PostMapping(name = "매장 등록")
+    public DefaultApiResponse registerStore(@Valid @RequestBody RegisterStorePayload.Request request) {
+        storeService.registerStore(request.convertStoreDTO());
+        return new DefaultApiResponse();
+    }
+
+    @PutMapping(name = "매장 정보 수정", value = "{storeId}")
+    public DefaultApiResponse modifyStore(@PathVariable long storeId, @Valid @RequestBody ModifyStorePayload.Request request) {
+        storeService.modifyStore(storeId, request.convertStoreDTO());
+        return new DefaultApiResponse();
     }
 
 }

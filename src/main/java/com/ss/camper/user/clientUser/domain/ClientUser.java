@@ -1,7 +1,6 @@
 package com.ss.camper.user.clientUser.domain;
 
 import com.ss.camper.blog.domain.Blog;
-import com.ss.camper.blog.domain.Post;
 import com.ss.camper.user.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,8 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 
 
 @Getter

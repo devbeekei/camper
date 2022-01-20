@@ -3,12 +3,14 @@ package com.ss.camper.user.domain;
 import com.ss.camper.common.domain.DateRecord;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Getter
 @SuperBuilder
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "email" }))

@@ -27,7 +27,7 @@ public class Blog {
     @Column(name = "introduction", length = 200)
     private String introduction;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private ClientUser user;
 
@@ -36,5 +36,10 @@ public class Blog {
 
     @Embedded
     private DateRecord dateRecord;
+
+    public void updateInfo(String title, String introduction) {
+        this.title = title;
+        this.introduction = introduction;
+    }
 
 }

@@ -27,7 +27,7 @@ public class StoreService {
     private final StoreRepositorySupport storeRepositorySupport;
 
     @Transactional
-    public StoreDTO registerStore(StoreDTO storeDTO) {
+    public StoreDTO registerStore(final StoreDTO storeDTO) {
         final Store store = storeRepository.save(Store.builder()
                 .storeType(storeDTO.getStoreType())
                 .storeName(storeDTO.getStoreName())
@@ -42,7 +42,7 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreDTO modifyStore(long storeId, StoreDTO storeDTO) {
+    public StoreDTO modifyStore(final long storeId, final StoreDTO storeDTO) {
         final Store store = storeRepository.findById(storeId).orElseThrow(NotFoundStoreException::new);
         store.updateInfo(
             storeDTO.getStoreName(),
@@ -57,19 +57,19 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public StoreDTO getStoreInfo(long id) {
+    public StoreDTO getStoreInfo(final long id) {
         final Store store = storeRepository.findById(id).orElse(null);
         return store == null ? null : modelMapper.map(store, StoreDTO.class);
     }
 
     @Transactional(readOnly = true)
-    public PageDTO<StoreListDTO> getStoreListPage(int size, int page) {
+    public PageDTO<StoreListDTO> getStoreListPage(final int size, final int page) {
         final PagingRequest pagingRequest = new PagingRequest(size, page);
-        Page<StoreListDTO> storeList = storeRepositorySupport.getStoreListPage(pagingRequest);
+        final Page<StoreListDTO> storeList = storeRepositorySupport.getStoreListPage(pagingRequest);
         return modelMapper.map(storeList, PageDTO.class);
     }
 
-    private void updateTags(Store store, Set<StoreTagDTO> tagsDTO) {
+    private void updateTags(final Store store, final Set<StoreTagDTO> tagsDTO) {
         LinkedHashSet<StoreTag> tags = null;
         if (tagsDTO != null && !tagsDTO.isEmpty()) {
             tags = new LinkedHashSet<>();

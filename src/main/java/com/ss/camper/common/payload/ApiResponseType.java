@@ -19,7 +19,10 @@ public enum ApiResponseType {
 
     // CONFLICT
     NOT_FOUND_USER(HttpStatus.CONFLICT, 100, "Not found user"),
-    ALREADY_BLOG_REGISTERED(HttpStatus.CONFLICT, 200, "Already blog registered"),
+
+    NOT_FOUND_BLOG(HttpStatus.CONFLICT, 200, "Not found blog"),
+    ALREADY_BLOG_REGISTERED(HttpStatus.CONFLICT, 201, "Already blog registered"),
+
     NOT_FOUND_STORE(HttpStatus.CONFLICT, 300, "Not found store"),
     NOT_SUPPLY_STORE_TYPE(HttpStatus.CONFLICT, 301, "Not supply Store type");
 

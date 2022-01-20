@@ -5,20 +5,6 @@
 
 include::{docsDir}/include.adoc[]
 
-[[register-store]]
-== 매장 등록
-include::{snippets}/store/register/http-request.adoc[]
-include::{snippets}/store/register/request-fields.adoc[]
-include::{snippets}/store/register/response-body.adoc[]
-include::{snippets}/store/register/response-fields.adoc[]
-
-[[modify-store]]
-== 매장 정보 수정
-include::{snippets}/store/modify/http-request.adoc[]
-include::{snippets}/store/modify/request-fields.adoc[]
-include::{snippets}/store/modify/response-body.adoc[]
-include::{snippets}/store/modify/response-fields.adoc[]
-
 [[store-info]]
 == 매장 정보 조회
 include::{snippets}/store/info/http-request.adoc[]
@@ -32,3 +18,17 @@ include::{snippets}/store/list/http-request.adoc[]
 include::{snippets}/store/list/request-parameters.adoc[]
 include::{snippets}/store/list/response-body.adoc[]
 include::{snippets}/store/list/response-fields.adoc[]
+
+[[register-store]]
+== 매장 등록
+include::{snippets}/store/register/http-request.adoc[]
+include::{snippets}/store/register/request-fields.adoc[]
+include::{snippets}/store/register/response-body.adoc[]
+include::{snippets}/store/register/response-fields.adoc[]
+
+[[modify-store]]
+== 매장 정보 수정
+include::{snippets}/store/modify/http-request.adoc[]
+include::{snippets}/store/modify/request-fields.adoc[]
+include::{snippets}/store/modify/response-body.adoc[]
+include::{snippets}/store/modify/response-fields.adoc[]

@@ -5,9 +5,23 @@
 
 include::{docsDir}/include.adoc[]
 
+[[blog-info]]
+== 블로그 정보 조회
+include::{snippets}/blog/info/http-request.adoc[]
+include::{snippets}/blog/info/path-parameters.adoc[]
+include::{snippets}/blog/info/response-body.adoc[]
+include::{snippets}/blog/info/response-fields.adoc[]
+
 [[register-blog]]
 == 블로그 개설
 include::{snippets}/blog/register/http-request.adoc[]
 include::{snippets}/blog/register/request-fields.adoc[]
 include::{snippets}/blog/register/response-body.adoc[]
 include::{snippets}/blog/register/response-fields.adoc[]
+
+[[modify-blog]]
+== 블로그 정보 수정
+include::{snippets}/blog/modify/http-request.adoc[]
+include::{snippets}/blog/modify/request-fields.adoc[]
+include::{snippets}/blog/modify/response-body.adoc[]
+include::{snippets}/blog/modify/response-fields.adoc[]

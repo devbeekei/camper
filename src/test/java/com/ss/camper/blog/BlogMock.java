@@ -1,6 +1,7 @@
 package com.ss.camper.blog;
 
 import com.ss.camper.blog.application.dto.BlogDTO;
+import com.ss.camper.blog.application.dto.BlogInfoDTO;
 import com.ss.camper.blog.domain.Blog;
 import com.ss.camper.user.clientUser.domain.ClientUser;
 
@@ -11,6 +12,17 @@ public class BlogMock {
 
     public static BlogDTO initBlogDTO(Long id) {
         return BlogDTO.builder().id(id).title(TITLE).introduction(INTRODUCTION).build();
+    }
+
+    public static BlogInfoDTO initBlogInfoDTO(Long userId, Long blogId) {
+        return BlogInfoDTO.builder()
+                .userId(userId)
+                .userEmail("devbeekei.shin@gmail.com")
+                .userNickname("devbeekei")
+                .id(blogId)
+                .title(TITLE)
+                .introduction(INTRODUCTION)
+                .build();
     }
 
     public static Blog initBlog(Long userId, Long id) {
