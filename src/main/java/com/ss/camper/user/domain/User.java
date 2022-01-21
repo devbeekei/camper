@@ -23,7 +23,7 @@ public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AUTO_INCREMENT")
     @Column(name = "user_id")
-    private long id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", length = 30, nullable = false, insertable = false, updatable = false)
@@ -37,6 +37,13 @@ public abstract class User {
 
     @Column(name = "nickname", length = 100, nullable = false)
     private String nickname;
+
+    @Column(name = "phone", length = 50)
+    private String phone;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private SocialAuth socialAuth;
 
     @Embedded
     private DateRecord dateRecord;

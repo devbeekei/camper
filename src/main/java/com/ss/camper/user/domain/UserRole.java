@@ -5,12 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum UserType {
+public enum UserRole {
+    ADMIN("관리자 회원"),
+    SUB_ADMIN("서브 관리자 회원"),
+    USER("사용자 회원");
 
-    CLIENT(1, "사용자 회원"),
-    BUSINESS(1, "사업자 회원");
-
-    private int id;
     private String name;
-
 }

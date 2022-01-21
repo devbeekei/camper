@@ -5,12 +5,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum UserType {
+public enum SocialProvider {
 
-    CLIENT(1, "사용자 회원"),
-    BUSINESS(1, "사업자 회원");
+    GOOGLE( "Google"),
+    KAKAO( "Kakao"),
+    NAVER( "Naver");
 
-    private int id;
     private String name;
 
 }
+

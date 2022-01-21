@@ -1,11 +1,6 @@
 buildscript {
-    ext {
-        // Querydsl Plugin 버전
-        querydslPluginVersion = '1.0.10'
-    }
     dependencies {
-        // Querydsl Plugin 의존성 등록
-        classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+        classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
     }
 }
 
@@ -13,7 +8,7 @@ plugins {
 	id 'org.springframework.boot' version '2.3.12.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-    id 'org.asciidoctor.jvm.convert' version '3.3.2' // Spring REST Docs
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 group = 'com.ss'
@@ -24,9 +19,7 @@ repositories {
 	mavenCentral()
 }
 
-ext['log4j2.version'] = '2.16.0'
-
-// ============== BEGIN Spring REST Docs ==============
+// Spring REST Docs Setting
 ext {
     snippetsDir = file('build/generated-snippets')
     docsDir = file('src/docs/asciidoc')
@@ -57,39 +50,48 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-    // logback 의존성 제거
-    all {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
 }
-// ============== END Spring REST Docs ==============
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-
-    runtimeOnly 'mysql:mysql-connector-java'
-
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // JDBC
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    // MySQL
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // OAuth2
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+
+    // Spring Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    // Lang
     implementation 'org.apache.commons:commons-lang3:3.11'
 
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // ModelMappder
     implementation 'org.modelmapper:modelmapper:2.4.4'
 
+    // Spring REST Docs
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-
+    // QueryDSL
     implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.querydsl:querydsl-apt'
     annotationProcessor 'com.querydsl:querydsl-apt'
@@ -106,6 +108,6 @@ querydsl {
 }
 sourceSets { main.java.srcDirs = ['src/main/java', querydslSrcDir] }
 configurations { querydsl.extendsFrom compileClasspath }
-clean { delete file(querydslSrcDir) } // gradle clean시 Q파일 삭제
+clean { delete file(querydslSrcDir) } // gradle clean Q파일 삭제
 compileQuerydsl { options.annotationProcessorPath = configurations.querydsl }
 tasks.withType(JavaCompile) { options.annotationProcessorGeneratedSourcesDirectory = file(querydslSrcDir) }

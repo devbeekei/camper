@@ -4,15 +4,19 @@ import com.ss.camper.store.domain.Store;
 import com.ss.camper.user.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@DiscriminatorValue("business")
+@Getter
+@SuperBuilder
 @Entity
+@DiscriminatorValue("BUSINESS")
+@AllArgsConstructor()
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BusinessUser extends User {
 
     @OneToMany(fetch = FetchType.LAZY)

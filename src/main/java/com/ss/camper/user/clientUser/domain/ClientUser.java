@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 @Getter
 @SuperBuilder
 @Entity
-@DiscriminatorValue("client")
+@DiscriminatorValue("CLIENT")
 @AllArgsConstructor()
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ClientUser extends User {
