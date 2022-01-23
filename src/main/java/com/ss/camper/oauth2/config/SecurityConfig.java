@@ -38,11 +38,13 @@ import static com.ss.camper.config.WebMvcConfig.STATIC_PATH;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String[] GET_WHITELIST = {
-            "/auth/**",
+        "/auth/**",
     };
 
     public static final String[] POST_WHITELIST = {
-
+        "/auth/**",
+        "/user/client",
+        "/user/business"
     };
 
     private final CustomUserDetailsService customUserDetailsService;

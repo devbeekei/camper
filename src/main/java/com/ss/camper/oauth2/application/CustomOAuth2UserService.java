@@ -1,18 +1,20 @@
 package com.ss.camper.oauth2.application;
 
+import com.ss.camper.auth.application.exception.SignInFailedException;
+import com.ss.camper.common.payload.ApiResponseType;
 import com.ss.camper.common.util.CookieUtil;
 import com.ss.camper.oauth2.config.AuthProperties;
 import com.ss.camper.oauth2.dto.OAuth2UserInfo;
 import com.ss.camper.oauth2.dto.OAuth2UserInfoFactory;
 import com.ss.camper.oauth2.dto.UserPrincipal;
-import com.ss.camper.oauth2.exception.AlreadySignUpOtherProviderException;
+import com.ss.camper.oauth2.exception.AlreadySignUpSocialEmailException;
 import com.ss.camper.oauth2.exception.EmptySocialEmailException;
 import com.ss.camper.oauth2.exception.UnsupportedRedirectUriException;
 import com.ss.camper.oauth2.exception.UnsupportedUserTypeException;
-import com.ss.camper.user.businessUser.domain.BusinessUser;
-import com.ss.camper.user.businessUser.domain.BusinessUserRepository;
-import com.ss.camper.user.clientUser.domain.ClientUser;
-import com.ss.camper.user.clientUser.domain.ClientUserRepository;
+import com.ss.camper.user.domain.BusinessUser;
+import com.ss.camper.user.domain.BusinessUserRepository;
+import com.ss.camper.user.domain.ClientUser;
+import com.ss.camper.user.domain.ClientUserRepository;
 import com.ss.camper.user.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -77,7 +79,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (user.isPresent()) { // 회원이 존재할때
             // 다른 소셜로 가입했으면 AlreadySignUpOtherProviderException
             if (user.get().getSocialAuth() == null || !user.get().getSocialAuth().getProvider().equals(loginProvider))
-                throw new AlreadySignUpOtherProviderException();
+                throw new AlreadySignUpSocialEmailException();
+            // 탈퇴한 회원
+            if (user.get().isWithdraw())
+                throw new SignInFailedException(ApiResponseType.WITHDRAW_USER);
+
             loginUser = this.updateUser(user.get(), oAuth2UserInfo);
         } else { // 회원 가입
             // user_type 확인

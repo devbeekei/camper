@@ -7,10 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserType {
 
-    CLIENT(1, "사용자 회원"),
-    BUSINESS(1, "사업자 회원");
+    ADMIN("관리자 회원"),
+    CLIENT("사용자 회원"),
+    BUSINESS("사업자 회원");
 
-    private int id;
     private String name;
 
 }

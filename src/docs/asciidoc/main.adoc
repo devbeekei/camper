@@ -1,8 +1,6 @@
-= Wordvice SSO API Document
+= API Document
 
-== API 문서 목록
-
-=== link:/docs/blog.html[블로그 관련 API]
-=== link:/docs/store.html[매장 관련 API]
-
-
+== link:/docs/auth.html[인증 관련 API]
+== link:/docs/user.html[회원 관련 API]
+== link:/docs/blog.html[블로그 관련 API]
+== link:/docs/store.html[매장 관련 API]

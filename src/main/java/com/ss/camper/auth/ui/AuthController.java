@@ -38,9 +38,11 @@ public class AuthController {
     }
 
     @PostMapping(name = "로그인", value = "/authorization")
-    public DataApiResponse<UserDTO> signIn(final @Valid @RequestBody SignInPayload.Request request) throws AuthenticationException {
-        UserDTO userDTO = authService.signIn(request.getEmail().trim(), request.getPassword().trim());
-        return new DataApiResponse<>(userDTO);
+    public DataApiResponse<SignInPayload.Response> signIn(final @Valid @RequestBody SignInPayload.Request request) throws AuthenticationException {
+        final UserDTO userDTO = authService.signIn(request.getEmail().trim(), request.getPassword().trim());
+        final String code = authCodeService.issueAuthCode(userDTO);
+        final String token = authCodeService.issueAuthToken(code);
+        return new DataApiResponse<>(new SignInPayload.Response(userDTO, token));
     }
 
 }

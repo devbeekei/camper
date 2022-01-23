@@ -2,8 +2,10 @@ package com.ss.camper.common.exception;
 
 import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.payload.ApiResponseType;
+import com.ss.camper.oauth2.exception.CustomAuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;

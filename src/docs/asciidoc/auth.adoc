@@ -1,0 +1,33 @@
+= 인증 관련 API
+:toc: left
+:toclevels: 1
+:sectlinks:
+
+include::{docsDir}/include.adoc[]
+
+== Google 로그인
+----
+/auth/social/authorization/google?user_type={user_type}redirect_uri={redirect_uri}
+----
+
+== Naver 로그인
+----
+/auth/social/authorization/naver?user_type={user_type}redirect_uri={redirect_uri}
+----
+
+== Kakao 로그인
+----
+/auth/social/authorization/kakao?user_type={user_type}redirect_uri={redirect_uri}
+----
+
+|===
+|Parameter|Not Null|Description|Attribute
+|user_type|true|가입 시 가입할 회원 유형|CLIENT : 사용자 회원 / BUSINESS : 비지니스 회원
+|redirect_uri|true|인증 후 이동할 URI|인증된 URI만 접근 가능
+|===
+- Local 환경에서 redirect_uri은 http://localhost:{port}/auth/code 만 가능
+
+== 이메일 로그인
+
+== 인증 토큰 발급
+

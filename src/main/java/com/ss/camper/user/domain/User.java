@@ -41,6 +41,9 @@ public abstract class User {
     @Column(name = "phone", length = 50)
     private String phone;
 
+    @Column(name = "withdraw", columnDefinition = "TINYINT DEFAULT 0", nullable = false)
+    private boolean withdraw;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private SocialAuth socialAuth;
