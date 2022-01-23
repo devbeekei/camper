@@ -1,6 +1,6 @@
 package com.ss.camper.oauth2.handler;
 
-import com.ss.camper.oauth2.config.OAuth2Properties;
+import com.ss.camper.oauth2.config.AuthProperties;
 import com.ss.camper.oauth2.application.HttpCookieOAuth2AuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
@@ -16,14 +16,14 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private final OAuth2Properties OAuth2Properties;
+    private final AuthProperties AuthProperties;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws  IOException {
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
 
-        String targetUrl = OAuth2Properties.getUris().getAuthorizedFailureRedirectUri();
+        String targetUrl = AuthProperties.getUris().getAuthorizedFailureRedirectUri();
         targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
             .queryParam("message", exception.getLocalizedMessage().replace("[", "").replace("]", "_"))
             .build().toUriString();

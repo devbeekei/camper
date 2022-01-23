@@ -109,7 +109,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizationEndpoint().baseUri("/auth/social/authorization") // 소셜 로그인 Url
                 .authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository()) // 인증 요청을 쿠키에 저장하고 검색
                 .and()
-                .redirectionEndpoint().baseUri("/auth/callback/*") // 소셜 인증 후 Redirect Url
+                .redirectionEndpoint().baseUri("/auth/social/callback/*") // 소셜 인증 후 Redirect Url
                 .and()
                 .userInfoEndpoint().userService(customOAuth2UserService) // 소셜의 회원 정보를 받아와 가공처리
                 .and()

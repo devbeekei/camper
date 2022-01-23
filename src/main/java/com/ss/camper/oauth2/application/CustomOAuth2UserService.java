@@ -1,7 +1,7 @@
 package com.ss.camper.oauth2.application;
 
 import com.ss.camper.common.util.CookieUtil;
-import com.ss.camper.oauth2.config.OAuth2Properties;
+import com.ss.camper.oauth2.config.AuthProperties;
 import com.ss.camper.oauth2.dto.OAuth2UserInfo;
 import com.ss.camper.oauth2.dto.OAuth2UserInfoFactory;
 import com.ss.camper.oauth2.dto.UserPrincipal;
@@ -34,7 +34,7 @@ import static com.ss.camper.oauth2.application.HttpCookieOAuth2AuthorizationRequ
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final OAuth2Properties OAuth2Properties;
+    private final AuthProperties AuthProperties;
     private final UserRepository userRepository;
     private final ClientUserRepository clientUserRepository;
     private final BusinessUserRepository businessUserRepository;
@@ -83,7 +83,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             // user_type 확인
             Optional<Cookie> userTypeCookie = CookieUtil.getCookie(USER_TYPE_COOKIE_NAME);
             if (userTypeCookie.isEmpty()) throw new UnsupportedUserTypeException();
-            UserType userType = UserType.valueOf(userTypeCookie.get().getValue());
+            UserType userType = UserType.valueOf(userTypeCookie.get().getValue().toUpperCase());
 
             loginUser = this.registerUser(oAuth2UserRequest, oAuth2UserInfo, userType);
         }
@@ -93,7 +93,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
-        return OAuth2Properties.getUris().getAuthorizedRedirectUri()
+        return AuthProperties.getUris().getAuthorizedRedirectUri()
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {
                     URI authorizedURI = URI.create(authorizedRedirectUri);
@@ -105,7 +105,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private User registerUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo, UserType userType) {
-        User user = null;
+        User user;
         switch (userType) {
             case CLIENT:
                 user = clientUserRepository.save(ClientUser.builder()
@@ -129,7 +129,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         socialAuthRepository.save(SocialAuth.builder()
                 .user_id(user.getId())
                 .providerId(oAuth2UserInfo.getId())
-                .provider(SocialProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
+                .provider(SocialProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()))
                 .email(oAuth2UserInfo.getEmail())
                 .name(oAuth2UserInfo.getName())
                 .profileImage(oAuth2UserInfo.getImageUrl())

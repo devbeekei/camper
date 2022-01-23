@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ParsingUtil {
 
-    @Autowired
-    private static ObjectMapper objectMapper;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String writeValueAsString(Object value) throws JsonProcessingException {
         return objectMapper.writeValueAsString(value);

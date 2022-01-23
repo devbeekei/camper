@@ -21,14 +21,6 @@ public class AuthCodeService {
     private final AuthCodeUtil authCodeUtil;
     private final AuthCodeRepository authCodeRepository;
 
-    /**
-     * 인증 코드 발급
-     * 최종 작업자 : 신봉교
-     * 최종 작업일 : 2021-11-15
-     * @param userPrincipal     인증 정보
-     * @param redirectUri       Redirect URI
-     * @return                  발급된 인증 코드
-     */
     @Transactional
     public String issueAuthCode(final UserPrincipal userPrincipal, final String redirectUri) {
         final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
@@ -53,13 +45,6 @@ public class AuthCodeService {
         return this.issueAuthCode(UserPrincipal.create(user), null);
     }
 
-    /**
-     * 인증 토큰 발급
-     * 종 작업자 : 신봉교
-     * 최종 작업일 : 2021-11-15
-     * @param code      인증 코드
-     * @return          발급된 인증 토큰
-     */
     @Transactional
     public String issueAuthToken(final String code) {
         final AuthCode authCode = authCodeRepository.findFirstByAuthCodeOrderByIdDesc(code).orElse(null);

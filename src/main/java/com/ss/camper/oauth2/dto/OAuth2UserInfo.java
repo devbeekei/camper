@@ -2,9 +2,11 @@ package com.ss.camper.oauth2.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Map;
 
+@ToString
 @Getter
 @AllArgsConstructor
 public abstract class OAuth2UserInfo {

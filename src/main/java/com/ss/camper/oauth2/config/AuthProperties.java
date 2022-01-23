@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@ConfigurationProperties(prefix = "security.oauth2")
-public class OAuth2Properties {
+@ConfigurationProperties(prefix = "auth")
+public class AuthProperties {
 
     private final Token token = new Token();
     private final Uris uris = new Uris();
@@ -27,7 +27,7 @@ public class OAuth2Properties {
         @Setter
         private String authorizedFailureRedirectUri;
         private List<String> authorizedRedirectUri = new ArrayList<>();
-        public Uris authorizedRedirectUris(List<String> authorizedRedirectUri) {
+        public Uris authorizedRedirectUri(List<String> authorizedRedirectUri) {
             this.authorizedRedirectUri = authorizedRedirectUri;
             return this;
         }

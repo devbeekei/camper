@@ -23,7 +23,12 @@ public class AuthController {
 
     @GetMapping(name = "인증 Error", value = "/error")
     public String error(@RequestParam final String message) {
-        return "error=" + message;
+        return message;
+    }
+
+    @GetMapping(name = "인증 코드", value = "/code")
+    public String code(@RequestParam final String code) {
+        return "인증 코드 : " + code + "<br/>해당 인증 코드로 인증 토큰을 발급해주세요.";
     }
 
     @PostMapping(name = "인증 토큰 발급", value = "/token")
@@ -33,9 +38,9 @@ public class AuthController {
     }
 
     @PostMapping(name = "로그인", value = "/authorization")
-    public DefaultApiResponse signIn(final @Valid @RequestBody SignInPayload.Request request) throws AuthenticationException {
+    public DataApiResponse<UserDTO> signIn(final @Valid @RequestBody SignInPayload.Request request) throws AuthenticationException {
         UserDTO userDTO = authService.signIn(request.getEmail().trim(), request.getPassword().trim());
-        return new DefaultApiResponse();
+        return new DataApiResponse<>(userDTO);
     }
 
 }

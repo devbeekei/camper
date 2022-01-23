@@ -1,15 +1,14 @@
-spring:
-  security:
-    oauth2:
-      token:
-        auth-token-expiration-time: 1209600000
-        find-password-token-expiration-time: 300
-      uris:
-        authorized-failure-redirect-uri: http://localhost:8080/auth/error
-        authorized-redirect-uri:
-          - http://localhost:8080/auth/token
-          - http://localhost:3000
+auth:
+  token:
+    token-secret: "camper-test"
+    auth-token-expiration-time: 1209600000
+    find-password-token-expiration-time: 300
+  uris:
+    authorized-failure-redirect-uri: http://localhost:8080/auth/error
+    authorized-redirect-uri:
+      - http://localhost:8080/auth/code
 
+spring:
   profiles:
     include:
       - google
@@ -24,7 +23,8 @@ spring:
       client:
         registration:
           google:
-            client-id: google
+            client-id: "53399166692-7iilcpo5kermuvhae83tu2t7tdhp3km5.apps.googleusercontent.com"
+            client-secret: "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"
             client-name: google
             redirect-uri: "{baseUrl}/auth/social/callback/{registrationId}"
             authorization-grant-type: authorization_code

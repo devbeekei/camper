@@ -1,6 +1,6 @@
 package com.ss.camper.common.util;
 
-import com.ss.camper.oauth2.config.OAuth2Properties;
+import com.ss.camper.oauth2.config.AuthProperties;
 import com.ss.camper.oauth2.dto.UserDTO;
 import com.ss.camper.oauth2.dto.UserPrincipal;
 import com.ss.camper.oauth2.exception.ExpiredTokenException;
@@ -22,15 +22,15 @@ public class JWTUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
 
-    private final OAuth2Properties OAuth2Properties;
+    private final AuthProperties AuthProperties;
 
     public String creatAuthToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        return creatToken(userPrincipal.getName(), userPrincipal.getUsername(), OAuth2Properties.getToken().getAuthTokenExpirationTime());
+        return creatToken(userPrincipal.getName(), userPrincipal.getUsername(), AuthProperties.getToken().getAuthTokenExpirationTime());
     }
 
     public String creatFindPasswordToken(final String userId, final String email) {
-        return creatToken(userId, email, OAuth2Properties.getToken().getFindPasswordTokenExpirationTime());
+        return creatToken(userId, email, AuthProperties.getToken().getFindPasswordTokenExpirationTime());
     }
 
     private String creatToken(final String userId, final String email, final long expiryTime) {
@@ -48,14 +48,14 @@ public class JWTUtil {
                 .setIssuer("Camper")
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS256, OAuth2Properties.getToken().getTokenSecret())
+                .signWith(SignatureAlgorithm.HS256, AuthProperties.getToken().getTokenSecret())
                 .compact();
     }
 
     public Claims getBody(String token) {
         this.validateToken(token);
         return Jwts.parser()
-                .setSigningKey(OAuth2Properties.getToken().getTokenSecret())
+                .setSigningKey(AuthProperties.getToken().getTokenSecret())
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -75,7 +75,7 @@ public class JWTUtil {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(OAuth2Properties.getToken().getTokenSecret()).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(AuthProperties.getToken().getTokenSecret()).parseClaimsJws(token);
             return true;
         } catch (MalformedJwtException | IllegalArgumentException e) { // 유효하지 않은 JWT 서명 | 유효하지 않은 JWT | 빈값
             throw new NotValidTokenException();

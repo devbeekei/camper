@@ -1,5 +1,6 @@
 package com.ss.camper.auth.application;
 
+import com.ss.camper.auth.application.exception.SignInFailedException;
 import com.ss.camper.oauth2.dto.UserDTO;
 import com.ss.camper.user.domain.User;
 import com.ss.camper.user.domain.UserRepository;
@@ -22,10 +23,11 @@ public class AuthService {
 
     @Transactional
     public UserDTO signIn(final String email, final String password) throws AuthenticationException {
-        final Optional<User> loginUser = userRepository.findByEmail(email);
-        if (loginUser.isEmpty()) return null;
-        if (!passwordEncoder.matches(password, loginUser.get().getPassword())) return null;
-        return modelMapper.map(loginUser.get(), UserDTO.class);
+        final User loginUser = userRepository.findByEmail(email).orElseThrow(() -> new SignInFailedException("test"));
+        if (!passwordEncoder.matches(password, loginUser.getPassword()))
+            throw new SignInFailedException("test2");
+
+        return modelMapper.map(loginUser, UserDTO.class);
     }
 
 }
