@@ -25,23 +25,23 @@ public class AuthCodeService {
     public String issueAuthCode(final UserPrincipal userPrincipal, final String redirectUri) {
         final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
         // Auth Code 생성
-        final String authCode = authCodeUtil.creatAuthCode(Long.parseLong(userPrincipal.getName()));
+        final String code = authCodeUtil.creatAuthCode(Long.parseLong(userPrincipal.getName()));
         // Token 생성
         final String token = JWTUtil.creatAuthToken(authentication);
         // Token 만료일자
         final Date expired = JWTUtil.getExpiredDate(token);
 
-        authCodeRepository.save(AuthCode.builder()
-                .authCode(authCode)
+        final AuthCode authCode = authCodeRepository.save(AuthCode.builder()
+                .authCode(code)
                 .userId(Long.parseLong(userPrincipal.getName()))
                 .token(token)
                 .expired(expired)
                 .returnUri(redirectUri)
                 .build());
 
-        return authCode;
+        return authCode.getAuthCode();
     }
-    public String issueAuthCode(UserDTO user) {
+    public String issueAuthCode(final UserDTO user) {
         return this.issueAuthCode(UserPrincipal.create(user), null);
     }
 

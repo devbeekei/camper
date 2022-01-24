@@ -31,18 +31,18 @@ public class AuthController {
         return "인증 코드 : " + code + "<br/>해당 인증 코드로 인증 토큰을 발급해주세요.";
     }
 
-    @PostMapping(name = "인증 토큰 발급", value = "/token")
-    public DataApiResponse<String> issueToken(final @Valid @RequestBody GetTokenPayload.Request request) {
-        final String token = authCodeService.issueAuthToken(request.getCode());
-        return new DataApiResponse<>(token);
-    }
-
-    @PostMapping(name = "로그인", value = "/authorization")
+    @PostMapping(name = "이메일 로그인", value = "/authorization")
     public DataApiResponse<SignInPayload.Response> signIn(final @Valid @RequestBody SignInPayload.Request request) throws AuthenticationException {
         final UserDTO userDTO = authService.signIn(request.getEmail().trim(), request.getPassword().trim());
         final String code = authCodeService.issueAuthCode(userDTO);
         final String token = authCodeService.issueAuthToken(code);
         return new DataApiResponse<>(new SignInPayload.Response(userDTO, token));
+    }
+
+    @PostMapping(name = "인증 토큰 발급", value = "/token")
+    public DataApiResponse<GetTokenPayload.Response> issueToken(final @Valid @RequestBody GetTokenPayload.Request request) {
+        final String token = authCodeService.issueAuthToken(request.getCode());
+        return new DataApiResponse<>(new GetTokenPayload.Response(token));
     }
 
 }

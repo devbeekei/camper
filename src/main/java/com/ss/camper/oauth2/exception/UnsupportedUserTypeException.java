@@ -1,10 +1,9 @@
 package com.ss.camper.oauth2.exception;
 
 import com.ss.camper.common.payload.ApiResponseType;
-import org.springframework.security.core.AuthenticationException;
 
 public class UnsupportedUserTypeException extends CustomAuthenticationException {
     public UnsupportedUserTypeException() {
-        super(ApiResponseType.UNSUPPORTED_USER_TYPE);
+        super(ApiResponseType.SOCIAL_AUTH_UNSUPPORTED_USER_TYPE);
     }
 }

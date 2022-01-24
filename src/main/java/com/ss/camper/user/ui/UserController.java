@@ -19,13 +19,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(name = "사용자 회원 회원가입", value = "client")
-    public DefaultApiResponse signUpClientUser(@Valid @RequestBody SignUpPayload.Request request) {
+    public DefaultApiResponse signUpClientUser(@Valid @RequestBody final SignUpPayload.Request request) {
         userService.signUpClientUser(request.convertUserDTO(), request.getPassword(), request.getPasswordCheck());
         return new DefaultApiResponse();
     }
 
     @PostMapping(name = "사업자 회원 회원가입", value = "business")
-    public DefaultApiResponse signUpBusinessUser(@Valid @RequestBody SignUpPayload.Request request) {
+    public DefaultApiResponse signUpBusinessUser(@Valid @RequestBody final SignUpPayload.Request request) {
         userService.signUpBusinessUser(request.convertUserDTO(), request.getPassword(), request.getPasswordCheck());
         return new DefaultApiResponse();
     }

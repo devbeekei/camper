@@ -21,11 +21,12 @@ public enum ApiResponseType {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 101, "Unauthorized"),
 
     // 소셜 인증 중 오류
-    EMPTY_SOCIAL_EMAIL(null, 101, "Empty Social email"),
-    UNSUPPORTED_REDIRECT_URI(null, 102, "Unsupported Redirect URI"),
-    UNSUPPORTED_SOCIAL_TYPE(null, 103, "Unsupported Social type"),
-    UNSUPPORTED_USER_TYPE(null, 104, "Unsupported User type"),
-    ALREADY_SIGNED_UP_SOCIAL_EMAIL(null, 105, "Already signed up Email"),
+    SOCIAL_AUTH_EMPTY_SOCIAL_EMAIL(null, 101, "Empty Social email"),
+    SOCIAL_AUTH_UNSUPPORTED_REDIRECT_URI(null, 102, "Unsupported Redirect URI"),
+    SOCIAL_AUTH_UNSUPPORTED_SOCIAL_TYPE(null, 103, "Unsupported Social type"),
+    SOCIAL_AUTH_UNSUPPORTED_USER_TYPE(null, 104, "Unsupported User type"),
+    SOCIAL_AUTH_ALREADY_SIGNED_UP_EMAIL(null, 105, "Already signed up Email"),
+    SOCIAL_AUTH_WITHDRAW_USER(null, 106, "Withdraw user"),
 
     // FORBIDDEN
     NOT_VALID_TOKEN(HttpStatus.FORBIDDEN, 101, "Not valid Token"),

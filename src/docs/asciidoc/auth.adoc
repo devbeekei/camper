@@ -9,17 +9,6 @@ include::{docsDir}/include.adoc[]
 ----
 /auth/social/authorization/google?user_type={user_type}redirect_uri={redirect_uri}
 ----
-
-== Naver 로그인
-----
-/auth/social/authorization/naver?user_type={user_type}redirect_uri={redirect_uri}
-----
-
-== Kakao 로그인
-----
-/auth/social/authorization/kakao?user_type={user_type}redirect_uri={redirect_uri}
-----
-
 |===
 |Parameter|Not Null|Description|Attribute
 |user_type|true|가입 시 가입할 회원 유형|CLIENT : 사용자 회원 / BUSINESS : 비지니스 회원
@@ -27,7 +16,38 @@ include::{docsDir}/include.adoc[]
 |===
 - Local 환경에서 redirect_uri은 http://localhost:{port}/auth/code 만 가능
 
+== Naver 로그인
+----
+/auth/social/authorization/naver?user_type={user_type}redirect_uri={redirect_uri}
+----
+|===
+|Parameter|Not Null|Description|Attribute
+|user_type|true|가입 시 가입할 회원 유형|CLIENT : 사용자 회원 / BUSINESS : 비지니스 회원
+|redirect_uri|true|인증 후 이동할 URI|인증된 URI만 접근 가능
+|===
+- Local 환경에서 redirect_uri은 http://localhost:{port}/auth/code 만 가능
+
+== Kakao 로그인
+----
+/auth/social/authorization/kakao?user_type={user_type}redirect_uri={redirect_uri}
+----
+|===
+|Parameter|Not Null|Description|Attribute
+|user_type|true|가입 시 가입할 회원 유형|CLIENT : 사용자 회원 / BUSINESS : 비지니스 회원
+|redirect_uri|true|인증 후 이동할 URI|인증된 URI만 접근 가능
+|===
+- Local 환경에서 redirect_uri은 http://localhost:{port}/auth/code 만 가능
+
+[[email-sign-in]]
 == 이메일 로그인
+include::{snippets}/auth/email-sign-in/http-request.adoc[]
+include::{snippets}/auth/email-sign-in/request-fields.adoc[]
+include::{snippets}/auth/email-sign-in/response-body.adoc[]
+include::{snippets}/auth/email-sign-in/response-fields.adoc[]
 
+[[issue-token]]
 == 인증 토큰 발급
-
+include::{snippets}/auth/issue-token/http-request.adoc[]
+include::{snippets}/auth/issue-token/request-fields.adoc[]
+include::{snippets}/auth/issue-token/response-body.adoc[]
+include::{snippets}/auth/issue-token/response-fields.adoc[]

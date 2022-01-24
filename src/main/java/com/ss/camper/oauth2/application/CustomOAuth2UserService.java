@@ -1,16 +1,12 @@
 package com.ss.camper.oauth2.application;
 
-import com.ss.camper.auth.application.exception.SignInFailedException;
 import com.ss.camper.common.payload.ApiResponseType;
 import com.ss.camper.common.util.CookieUtil;
 import com.ss.camper.oauth2.config.AuthProperties;
 import com.ss.camper.oauth2.dto.OAuth2UserInfo;
 import com.ss.camper.oauth2.dto.OAuth2UserInfoFactory;
 import com.ss.camper.oauth2.dto.UserPrincipal;
-import com.ss.camper.oauth2.exception.AlreadySignUpSocialEmailException;
-import com.ss.camper.oauth2.exception.EmptySocialEmailException;
-import com.ss.camper.oauth2.exception.UnsupportedRedirectUriException;
-import com.ss.camper.oauth2.exception.UnsupportedUserTypeException;
+import com.ss.camper.oauth2.exception.*;
 import com.ss.camper.user.domain.BusinessUser;
 import com.ss.camper.user.domain.BusinessUserRepository;
 import com.ss.camper.user.domain.ClientUser;
@@ -44,8 +40,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Transactional
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
+    public OAuth2User loadUser(final OAuth2UserRequest oAuth2UserRequest) throws AuthenticationException {
+        final OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
         try {
             return processOAuth2User(oAuth2UserRequest, oAuth2User);
         } catch (AuthenticationException e) {
@@ -53,9 +49,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
     }
 
-    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
+    private OAuth2User processOAuth2User(final OAuth2UserRequest oAuth2UserRequest, final OAuth2User oAuth2User) {
         // 소셜 회원 정보
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
+        final OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
             oAuth2UserRequest.getClientRegistration().getRegistrationId(),
             oAuth2User.getAttributes()
         );
@@ -65,15 +61,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new EmptySocialEmailException();
 
         // redirect uri 확인
-        Optional<Cookie> redirectUriCookie = CookieUtil.getCookie(REDIRECT_URI_PARAM_COOKIE_NAME);
+        final Optional<Cookie> redirectUriCookie = CookieUtil.getCookie(REDIRECT_URI_PARAM_COOKIE_NAME);
         if (redirectUriCookie.isEmpty() || !this.isAuthorizedRedirectUri(redirectUriCookie.get().getValue()))
             throw new UnsupportedRedirectUriException();
 
         // 로그인 하려는 소셜
-        SocialProvider loginProvider = SocialProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
+        final SocialProvider loginProvider = SocialProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
 
         // 이메일로 회원 조회
-        Optional<User> user = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        final Optional<User> user = userRepository.findByEmail(oAuth2UserInfo.getEmail());
         User loginUser;
 
         if (user.isPresent()) { // 회원이 존재할때
@@ -82,14 +78,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 throw new AlreadySignUpSocialEmailException();
             // 탈퇴한 회원
             if (user.get().isWithdraw())
-                throw new SignInFailedException(ApiResponseType.WITHDRAW_USER);
+                throw new SocialSingInWithdrawUserException();
 
             loginUser = this.updateUser(user.get(), oAuth2UserInfo);
         } else { // 회원 가입
             // user_type 확인
-            Optional<Cookie> userTypeCookie = CookieUtil.getCookie(USER_TYPE_COOKIE_NAME);
+            final Optional<Cookie> userTypeCookie = CookieUtil.getCookie(USER_TYPE_COOKIE_NAME);
             if (userTypeCookie.isEmpty()) throw new UnsupportedUserTypeException();
-            UserType userType = UserType.valueOf(userTypeCookie.get().getValue().toUpperCase());
+            final UserType userType = UserType.valueOf(userTypeCookie.get().getValue().toUpperCase());
 
             loginUser = this.registerUser(oAuth2UserRequest, oAuth2UserInfo, userType);
         }
@@ -97,12 +93,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return UserPrincipal.create(loginUser);
     }
 
-    private boolean isAuthorizedRedirectUri(String uri) {
-        URI clientRedirectUri = URI.create(uri);
+    private boolean isAuthorizedRedirectUri(final String uri) {
+        final URI clientRedirectUri = URI.create(uri);
         return AuthProperties.getUris().getAuthorizedRedirectUri()
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {
-                    URI authorizedURI = URI.create(authorizedRedirectUri);
+                    final URI authorizedURI = URI.create(authorizedRedirectUri);
                     if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) && authorizedURI.getPort() == clientRedirectUri.getPort() && authorizedURI.getPath().equals(clientRedirectUri.getPath())) {
                         return true;
                     }
@@ -110,7 +106,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 });
     }
 
-    private User registerUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo, UserType userType) {
+    private User registerUser(final OAuth2UserRequest oAuth2UserRequest, final OAuth2UserInfo oAuth2UserInfo, final UserType userType) {
         User user;
         switch (userType) {
             case CLIENT:
@@ -144,7 +140,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return user;
     }
 
-    private User updateUser(User user, OAuth2UserInfo oAuth2UserInfo) {
+    private User updateUser(final User user, final OAuth2UserInfo oAuth2UserInfo) {
         user.getSocialAuth().infoUpdate(
                 oAuth2UserInfo.getName(),
                 oAuth2UserInfo.getPhone(),

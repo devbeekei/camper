@@ -47,9 +47,6 @@ public class AuthCode {
     @Embedded
     private DateRecord dateRecord;
 
-    /**
-     * 토큰 발급 처리(한번 발급한 토큰은 다시 발급되지 않음)
-     */
     public String issueToken() {
         this.authCode = "[ISSUED]" + this.authCode;
         this.issued = new Date();

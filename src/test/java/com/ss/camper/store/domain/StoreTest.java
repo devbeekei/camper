@@ -14,8 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StoreTest {
 
     @Test
-    @DisplayName("매장 정보 업데이트")
-    public void updateInfo() {
+    public void 매장_정보_업데이트() {
         // Given
         final Store store = initStore(1L, null);
 
@@ -32,8 +31,7 @@ public class StoreTest {
     }
 
     @Test
-    @DisplayName("매장 태그 업데이트")
-    public void updateTags() {
+    public void 매장_태그_업데이트() {
         // Given
         final Store store = initStore(1L, new LinkedHashSet<>(){{
             add(initStoreTag(1L, TAG_TITLE1));

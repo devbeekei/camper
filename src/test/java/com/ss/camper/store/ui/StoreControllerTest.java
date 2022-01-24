@@ -1,6 +1,7 @@
 package com.ss.camper.store.ui;
 
 import com.ss.camper.common.ControllerTest;
+import com.ss.camper.common.WithMockCustomUser;
 import com.ss.camper.common.payload.PageDTO;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
@@ -36,6 +37,7 @@ class StoreControllerTest extends ControllerTest {
     private StoreService storeService;
 
     @Test
+    @WithMockCustomUser
     void 매장_정보_조회() throws Exception {
         // Given
         final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{
@@ -83,6 +85,7 @@ class StoreControllerTest extends ControllerTest {
     }
 
     @Test
+    @WithMockCustomUser
     void 매장_목록_조회() throws Exception {
         // Given
         final List<StoreListDTO> storeList = new ArrayList<>(){{
@@ -134,6 +137,7 @@ class StoreControllerTest extends ControllerTest {
     }
 
     @Test
+    @WithMockCustomUser
     void 매장_등록() throws Exception {
         // Given
         final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{
@@ -193,6 +197,7 @@ class StoreControllerTest extends ControllerTest {
     }
 
     @Test
+    @WithMockCustomUser
     void 매장_정보_수정() throws Exception {
         // Given
         final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{

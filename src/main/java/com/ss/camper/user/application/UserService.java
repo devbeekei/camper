@@ -30,7 +30,7 @@ public class UserService {
 
     public UserDTO signUpClientUser(final UserDTO userDTO, final String password, final String passwordCheck) {
         this.signUpValidate(userDTO, password, passwordCheck);
-        ClientUser clientUser = clientUserRepository.save(ClientUser.builder()
+        final ClientUser clientUser = clientUserRepository.save(ClientUser.builder()
             .email(userDTO.getEmail())
             .password(passwordEncoder.encode(password))
             .nickname(userDTO.getNickname())
@@ -39,9 +39,9 @@ public class UserService {
         return modelMapper.map(clientUser, UserDTO.class);
     }
 
-    public UserDTO signUpBusinessUser(UserDTO userDTO, String password, String passwordCheck) {
+    public UserDTO signUpBusinessUser(final UserDTO userDTO, final String password, final String passwordCheck) {
         this.signUpValidate(userDTO, password, passwordCheck);
-        BusinessUser businessUser = businessUserRepository.save(BusinessUser.builder()
+        final BusinessUser businessUser = businessUserRepository.save(BusinessUser.builder()
             .email(userDTO.getEmail())
             .password(passwordEncoder.encode(password))
             .nickname(userDTO.getNickname())

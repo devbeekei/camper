@@ -18,4 +18,12 @@ public class GetTokenPayload {
         private String code;
     }
 
+    @ToString
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Response {
+        private String token;
+    }
+
 }

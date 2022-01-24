@@ -4,6 +4,6 @@ import com.ss.camper.common.payload.ApiResponseType;
 
 public class AlreadySignUpSocialEmailException extends CustomAuthenticationException {
     public AlreadySignUpSocialEmailException() {
-        super(ApiResponseType.ALREADY_SIGNED_UP_SOCIAL_EMAIL);
+        super(ApiResponseType.SOCIAL_AUTH_ALREADY_SIGNED_UP_EMAIL);
     }
 }

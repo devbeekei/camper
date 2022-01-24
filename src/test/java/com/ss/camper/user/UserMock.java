@@ -25,23 +25,37 @@ public class UserMock {
 
     public static ClientUser initClientUser(Long id) {
         return ClientUser.builder()
-            .id(id)
-            .email(EMAIL)
-            .userType(UserType.CLIENT)
-            .password(PASSWORD_HASH)
-            .nickname(NICKNAME)
-            .phone(PHONE)
-            .build();
+                .id(id)
+                .email(EMAIL)
+                .userType(UserType.CLIENT)
+                .password(PASSWORD_HASH)
+                .nickname(NICKNAME)
+                .phone(PHONE)
+                .withdraw(false)
+                .build();
+    }
+
+    public static ClientUser initWithdrawClientUser(Long id) {
+        return ClientUser.builder()
+                .id(id)
+                .email(EMAIL)
+                .userType(UserType.CLIENT)
+                .password(PASSWORD_HASH)
+                .nickname(NICKNAME)
+                .phone(PHONE)
+                .withdraw(true)
+                .build();
     }
 
     public static BusinessUser initBusinessUser(Long id) {
         return BusinessUser.builder()
-            .id(id)
-            .userType(UserType.BUSINESS)
-            .email(EMAIL)
-            .password(PASSWORD_HASH)
-            .nickname(NICKNAME)
-            .phone(PHONE)
-            .build();
+                .id(id)
+                .userType(UserType.BUSINESS)
+                .email(EMAIL)
+                .password(PASSWORD_HASH)
+                .nickname(NICKNAME)
+                .phone(PHONE)
+                .withdraw(false)
+                .build();
     }
 }
