@@ -7,6 +7,7 @@ import com.ss.camper.auth.ui.payload.GetTokenPayload;
 import com.ss.camper.auth.ui.payload.SignInPayload;
 import com.ss.camper.common.ControllerTest;
 import com.ss.camper.common.payload.DataApiResponse;
+import com.ss.camper.common.util.JWTUtil;
 import com.ss.camper.common.util.ParsingUtil;
 import com.ss.camper.oauth2.dto.UserDTO;
 import com.ss.camper.user.domain.UserType;
@@ -50,8 +51,8 @@ class AuthControllerTest extends ControllerTest {
         final ResultActions result = mockMvc.perform(
                 post("/auth/authorization")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
         );
 
         result.andExpect(status().isOk())
@@ -86,8 +87,8 @@ class AuthControllerTest extends ControllerTest {
         final ResultActions result = mockMvc.perform(
                 post("/auth/token")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
         );
 
         result.andExpect(status().isOk())

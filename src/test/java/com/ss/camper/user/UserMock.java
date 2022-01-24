@@ -31,7 +31,7 @@ public class UserMock {
                 .password(PASSWORD_HASH)
                 .nickname(NICKNAME)
                 .phone(PHONE)
-                .withdraw(false)
+                .withdrawal(false)
                 .build();
     }
 
@@ -43,7 +43,7 @@ public class UserMock {
                 .password(PASSWORD_HASH)
                 .nickname(NICKNAME)
                 .phone(PHONE)
-                .withdraw(true)
+                .withdrawal(true)
                 .build();
     }
 
@@ -55,7 +55,7 @@ public class UserMock {
                 .password(PASSWORD_HASH)
                 .nickname(NICKNAME)
                 .phone(PHONE)
-                .withdraw(false)
+                .withdrawal(false)
                 .build();
     }
 }

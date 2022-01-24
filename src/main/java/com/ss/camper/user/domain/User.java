@@ -1,6 +1,7 @@
 package com.ss.camper.user.domain;
 
 import com.ss.camper.common.domain.DateRecord;
+import com.ss.camper.oauth2.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,8 +42,8 @@ public abstract class User {
     @Column(name = "phone", length = 50)
     private String phone;
 
-    @Column(name = "withdraw", columnDefinition = "TINYINT DEFAULT 0", nullable = false)
-    private boolean withdraw;
+    @Column(name = "withdrawal", columnDefinition = "TINYINT DEFAULT 0")
+    private boolean withdrawal;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
@@ -50,5 +51,14 @@ public abstract class User {
 
     @Embedded
     private DateRecord dateRecord;
+
+    public void updateInfo(String nickname, String phone) {
+        this.nickname = nickname;
+        this.phone = phone;
+    }
+
+    public void withdraw() {
+        this.withdrawal = true;
+    }
 
 }

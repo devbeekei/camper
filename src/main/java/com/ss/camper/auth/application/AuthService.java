@@ -29,7 +29,7 @@ public class AuthService {
         if (!passwordEncoder.matches(password, loginUser.getPassword()))
             throw new NotMatchedPasswordException();
 
-        if (loginUser.isWithdraw())
+        if (loginUser.isWithdrawal())
             throw new SingInWithdrawUserException();
 
         return modelMapper.map(loginUser, UserDTO.class);

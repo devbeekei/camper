@@ -43,6 +43,7 @@ public enum ApiResponseType {
     // Blog 관련 CONFLICT
     NOT_FOUND_BLOG(HttpStatus.CONFLICT, 301, "Not found blog"),
     ALREADY_BLOG_REGISTERED(HttpStatus.CONFLICT, 302, "Already blog registered"),
+
     // Store 관련 CONFLICT
     NOT_FOUND_STORE(HttpStatus.CONFLICT, 401, "Not found store"),
     NOT_SUPPLY_STORE_TYPE(HttpStatus.CONFLICT, 402, "Not supply Store type");

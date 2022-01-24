@@ -3,6 +3,7 @@ package com.ss.camper.store.ui;
 import com.ss.camper.common.ControllerTest;
 import com.ss.camper.common.WithMockCustomUser;
 import com.ss.camper.common.payload.PageDTO;
+import com.ss.camper.common.util.JWTUtil;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
@@ -49,8 +50,8 @@ class StoreControllerTest extends ControllerTest {
         // When
         final ResultActions result = mockMvc.perform(
                 get("/store/{storeId}", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
         // Then
@@ -102,8 +103,8 @@ class StoreControllerTest extends ControllerTest {
                 get("/store")
                         .param("size", String.valueOf(size))
                         .param("page", String.valueOf(page))
-                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
         // Then
@@ -166,9 +167,10 @@ class StoreControllerTest extends ControllerTest {
             .build();
         final ResultActions result = mockMvc.perform(
             post("/store")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request))
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
         // Then
@@ -225,9 +227,10 @@ class StoreControllerTest extends ControllerTest {
             .build();
         final ResultActions result = mockMvc.perform(
             put("/store/{storeId}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request))
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
         // Then

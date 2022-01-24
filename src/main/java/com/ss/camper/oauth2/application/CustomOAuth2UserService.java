@@ -1,6 +1,5 @@
 package com.ss.camper.oauth2.application;
 
-import com.ss.camper.common.payload.ApiResponseType;
 import com.ss.camper.common.util.CookieUtil;
 import com.ss.camper.oauth2.config.AuthProperties;
 import com.ss.camper.oauth2.dto.OAuth2UserInfo;
@@ -77,7 +76,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             if (user.get().getSocialAuth() == null || !user.get().getSocialAuth().getProvider().equals(loginProvider))
                 throw new AlreadySignUpSocialEmailException();
             // 탈퇴한 회원
-            if (user.get().isWithdraw())
+            if (user.get().isWithdrawal())
                 throw new SocialSingInWithdrawUserException();
 
             loginUser = this.updateUser(user.get(), oAuth2UserInfo);

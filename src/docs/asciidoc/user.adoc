@@ -18,3 +18,22 @@ include::{snippets}/user/sign-up-business/http-request.adoc[]
 include::{snippets}/user/sign-up-business/request-fields.adoc[]
 include::{snippets}/user/sign-up-business/response-body.adoc[]
 include::{snippets}/user/sign-up-business/response-fields.adoc[]
+
+[[user-info]]
+== 회원 정보 조회
+include::{snippets}/user/info/http-request.adoc[]
+include::{snippets}/user/info/response-body.adoc[]
+include::{snippets}/user/info/response-fields.adoc[]
+
+[[update-user-info]]
+== 사용자 회원 회원가입
+include::{snippets}/user/update-info/http-request.adoc[]
+include::{snippets}/user/update-info/request-fields.adoc[]
+include::{snippets}/user/update-info/response-body.adoc[]
+include::{snippets}/user/update-info/response-fields.adoc[]
+
+[[withdraw-user]]
+== 회원 탈퇴
+include::{snippets}/user/withdraw/http-request.adoc[]
+include::{snippets}/user/withdraw/response-body.adoc[]
+include::{snippets}/user/withdraw/response-fields.adoc[]
