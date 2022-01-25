@@ -5,20 +5,17 @@ import com.ss.camper.auth.domain.AuthCodeRepository;
 import com.ss.camper.common.util.AuthCodeUtil;
 import com.ss.camper.common.util.JWTUtil;
 import com.ss.camper.oauth2.dto.UserPrincipal;
-import com.ss.camper.user.domain.UserType;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import java.util.Date;
 import java.util.Optional;
 
-import static com.ss.camper.user.UserMock.initUserDTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -48,7 +45,7 @@ class AuthCodeServiceTest {
         given(JWTUtil.getExpiredDate(anyString())).willReturn(expiredDate);
         given(authCodeRepository.save(any(AuthCode.class))).willReturn(AuthCode.builder().authCode(code).token(token).build());
 
-        final UserPrincipal userPrincipal = UserPrincipal.create(initUserDTO(1L, UserType.CLIENT));
+        final UserPrincipal userPrincipal = UserPrincipal.create(UserInfoDTO.builder().id(1L).email("camper@gmail.com").build());
         final String result = authCodeService.issueAuthCode(userPrincipal, null);
 
         assertThat(result).isEqualTo(code);

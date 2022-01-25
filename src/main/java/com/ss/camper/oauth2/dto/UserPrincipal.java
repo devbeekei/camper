@@ -1,5 +1,6 @@
 package com.ss.camper.oauth2.dto;
 
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.User;
 import com.ss.camper.user.domain.UserRole;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     private String email;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public static UserPrincipal create(UserDTO user) {
+    public static UserPrincipal create(UserInfoDTO user) {
         return new UserPrincipal(
                 user.getId(),
                 user.getEmail(),
@@ -28,7 +29,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     }
 
     public static UserPrincipal create(User user) {
-        return UserPrincipal.create(UserDTO.builder()
+        return UserPrincipal.create(UserInfoDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .build()

@@ -1,8 +1,8 @@
 package com.ss.camper.common;
 
 
-import com.ss.camper.oauth2.dto.UserDTO;
 import com.ss.camper.oauth2.dto.UserPrincipal;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -14,7 +14,7 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
     @Override
     public SecurityContext createSecurityContext(WithMockCustomUser annotation) {
         final SecurityContext context = SecurityContextHolder.createEmptyContext();
-        final UserPrincipal userPrincipal = UserPrincipal.create(UserDTO.builder().id(Long.parseLong(annotation.name())).email(annotation.username()).build());
+        final UserPrincipal userPrincipal = UserPrincipal.create(UserInfoDTO.builder().id(Long.parseLong(annotation.name())).email(annotation.username()).build());
         final Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
         context.setAuthentication(auth);
         return context;

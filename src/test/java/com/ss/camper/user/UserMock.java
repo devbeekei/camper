@@ -1,9 +1,12 @@
 package com.ss.camper.user;
 
-import com.ss.camper.oauth2.dto.UserDTO;
+import com.ss.camper.user.application.dto.AgreeTermsHistoryDTO;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.BusinessUser;
 import com.ss.camper.user.domain.ClientUser;
 import com.ss.camper.user.domain.UserType;
+
+import java.util.Date;
 
 public class UserMock {
 
@@ -13,14 +16,24 @@ public class UserMock {
     public static final String NICKNAME = "김캠퍼";
     public static final String PHONE = "01012345678";
 
-    public static UserDTO initUserDTO(Long id, UserType userType) {
-        return UserDTO.builder()
-            .id(id)
-            .email(EMAIL)
-            .userType(userType)
-            .nickname(NICKNAME)
-            .phone(PHONE)
-            .build();
+    public static UserInfoDTO initUserInfoDTO(Long id, UserType userType) {
+        return UserInfoDTO.builder()
+                .id(id)
+                .email(EMAIL)
+                .userType(userType)
+                .nickname(NICKNAME)
+                .phone(PHONE)
+                .withdrawal(false)
+                .dateRecordCreated(new Date())
+                .useAgreeTerms(AgreeTermsHistoryDTO.builder()
+                        .id(1L)
+                        .agree(true)
+                        .dateRecordCreated(new Date()).build())
+                .privacyPolicyAgreeTerms(AgreeTermsHistoryDTO.builder()
+                        .id(2L)
+                        .agree(true)
+                        .dateRecordCreated(new Date()).build())
+                .build();
     }
 
     public static ClientUser initClientUser(Long id) {

@@ -1,9 +1,14 @@
 package com.ss.camper.common.domain;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Date;
 
+@ToString
+@Getter
 @Embeddable
 public class DateRecord {
 

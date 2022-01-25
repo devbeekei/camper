@@ -1,6 +1,7 @@
 package com.ss.camper.common;
 
 import com.ss.camper.store.domain.StoreType;
+import com.ss.camper.user.domain.TermsType;
 import com.ss.camper.user.domain.UserType;
 import org.springframework.restdocs.snippet.Attributes;
 
@@ -16,6 +17,14 @@ public class ApiDocumentAttributes {
         StringBuilder value = new StringBuilder();
         for (UserType userType : UserType.values()) {
             value.append(userType).append(" : ").append(userType.getName()).append(" / ");
+        }
+        return attribute(value.substring(0, value.length() - 3));
+    }
+
+    public static Attributes.Attribute termsTypeAttribute() {
+        StringBuilder value = new StringBuilder();
+        for (TermsType termsType : TermsType.values()) {
+            value.append(termsType).append(" : ").append(termsType.getName()).append(" / ");
         }
         return attribute(value.substring(0, value.length() - 3));
     }

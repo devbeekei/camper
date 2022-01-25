@@ -5,8 +5,7 @@ import com.ss.camper.auth.application.AuthService;
 import com.ss.camper.auth.ui.payload.GetTokenPayload;
 import com.ss.camper.auth.ui.payload.SignInPayload;
 import com.ss.camper.common.payload.DataApiResponse;
-import com.ss.camper.common.payload.DefaultApiResponse;
-import com.ss.camper.oauth2.dto.UserDTO;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +32,10 @@ public class AuthController {
 
     @PostMapping(name = "이메일 로그인", value = "/authorization")
     public DataApiResponse<SignInPayload.Response> signIn(final @Valid @RequestBody SignInPayload.Request request) throws AuthenticationException {
-        final UserDTO userDTO = authService.signIn(request.getEmail().trim(), request.getPassword().trim());
-        final String code = authCodeService.issueAuthCode(userDTO);
+        final UserInfoDTO userInfoDTO = authService.signIn(request.getEmail().trim(), request.getPassword().trim());
+        final String code = authCodeService.issueAuthCode(userInfoDTO);
         final String token = authCodeService.issueAuthToken(code);
-        return new DataApiResponse<>(new SignInPayload.Response(userDTO, token));
+        return new DataApiResponse<>(new SignInPayload.Response(userInfoDTO, token));
     }
 
     @PostMapping(name = "인증 토큰 발급", value = "/token")

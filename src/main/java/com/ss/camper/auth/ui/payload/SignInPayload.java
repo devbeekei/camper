@@ -1,6 +1,6 @@
 package com.ss.camper.auth.ui.payload;
 
-import com.ss.camper.oauth2.dto.UserDTO;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +28,7 @@ public class SignInPayload {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response {
-        private UserDTO user;
+        private UserInfoDTO user;
         private String token;
     }
 

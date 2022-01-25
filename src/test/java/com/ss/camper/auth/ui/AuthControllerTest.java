@@ -1,15 +1,11 @@
 package com.ss.camper.auth.ui;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ss.camper.auth.application.AuthCodeService;
 import com.ss.camper.auth.application.AuthService;
 import com.ss.camper.auth.ui.payload.GetTokenPayload;
 import com.ss.camper.auth.ui.payload.SignInPayload;
 import com.ss.camper.common.ControllerTest;
-import com.ss.camper.common.payload.DataApiResponse;
-import com.ss.camper.common.util.JWTUtil;
-import com.ss.camper.common.util.ParsingUtil;
-import com.ss.camper.oauth2.dto.UserDTO;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.UserType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,7 +23,6 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AuthController.class)
@@ -43,8 +38,8 @@ class AuthControllerTest extends ControllerTest {
     void 이메일_로그인() throws Exception {
         final String code = "1234567890_CODE";
         final String token = "1234567890_TOKEN";
-        given(authService.signIn(anyString(), anyString())).willReturn(initUserDTO(1L, UserType.CLIENT));
-        given(authCodeService.issueAuthCode(any(UserDTO.class))).willReturn(code);
+        given(authService.signIn(anyString(), anyString())).willReturn(initUserInfoDTO(1L, UserType.CLIENT));
+        given(authCodeService.issueAuthCode(any(UserInfoDTO.class))).willReturn(code);
         given(authCodeService.issueAuthToken(anyString())).willReturn(token);
 
         final SignInPayload.Request request = new SignInPayload.Request(EMAIL, PASSWORD);
@@ -70,7 +65,17 @@ class AuthControllerTest extends ControllerTest {
                                         fieldWithPath("user.userType").type(JsonFieldType.STRING).description("회원 유형").attributes(userTypeAttribute()),
                                         fieldWithPath("user.email").type(JsonFieldType.STRING).description("회원 이메일"),
                                         fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
-                                        fieldWithPath("user.phone").type(JsonFieldType.STRING).description("회원 연락처"),
+                                        fieldWithPath("user.phone").type(JsonFieldType.STRING).description("회원 연락처").optional(),
+                                        fieldWithPath("user.withdrawal").type(JsonFieldType.BOOLEAN).description("회원 탈퇴여부"),
+                                        fieldWithPath("user.created").type(JsonFieldType.STRING).description("회원 생성일자"),
+                                        fieldWithPath("user.useAgreeTerms").type(JsonFieldType.OBJECT).description("이용 약관 정보").optional(),
+                                        fieldWithPath("user.useAgreeTerms.id").type(JsonFieldType.NUMBER).description("이용 약관 정보 고유번호"),
+                                        fieldWithPath("user.useAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("이용 약관 정보 동의여부"),
+                                        fieldWithPath("user.useAgreeTerms.created").type(JsonFieldType.STRING).description("이용 약관 정보 생성일자"),
+                                        fieldWithPath("user.privacyPolicyAgreeTerms").type(JsonFieldType.OBJECT).description("개인정보 처리방침 정보").optional(),
+                                        fieldWithPath("user.privacyPolicyAgreeTerms.id").type(JsonFieldType.NUMBER).description("개인정보 처리방침 고유번호"),
+                                        fieldWithPath("user.privacyPolicyAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("개인정보 처리방침 동의여부"),
+                                        fieldWithPath("user.privacyPolicyAgreeTerms.created").type(JsonFieldType.STRING).description("개인정보 처리방침 생성일자"),
                                         fieldWithPath("token").type(JsonFieldType.STRING).description("발급된 인증 토큰")
                                 )
                         )

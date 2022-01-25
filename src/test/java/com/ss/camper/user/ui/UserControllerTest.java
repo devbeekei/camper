@@ -2,12 +2,9 @@ package com.ss.camper.user.ui;
 
 import com.ss.camper.common.ControllerTest;
 import com.ss.camper.common.WithMockCustomUser;
-import com.ss.camper.common.payload.PageDTO;
 import com.ss.camper.common.util.JWTUtil;
-import com.ss.camper.oauth2.dto.UserDTO;
-import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.user.application.UserService;
-import com.ss.camper.user.domain.ClientUser;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.UserType;
 import com.ss.camper.user.ui.payload.SignUpPayload;
 import com.ss.camper.user.ui.payload.UpdateUserInfoPayload;
@@ -18,25 +15,15 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.ss.camper.common.ApiDocumentAttributes.storeTypeAttribute;
 import static com.ss.camper.common.ApiDocumentAttributes.userTypeAttribute;
 import static com.ss.camper.common.ApiDocumentUtil.*;
-import static com.ss.camper.store.StoreMock.*;
-import static com.ss.camper.store.StoreMock.TAG_TITLE2;
 import static com.ss.camper.user.UserMock.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
@@ -48,8 +35,8 @@ class UserControllerTest extends ControllerTest {
     @Test
     void 사용자_회원_회원가입() throws Exception {
         // Given
-        final UserDTO userDTO = initUserDTO(1L, UserType.CLIENT);
-        given(userService.signUpClientUser(any(UserDTO.class), anyString(), anyString())).willReturn(userDTO);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(1L, UserType.CLIENT);
+        given(userService.signUpClientUser(any(UserInfoDTO.class), anyString(), anyString())).willReturn(userInfoDTO);
 
         // When
         final SignUpPayload.Request request = SignUpPayload.Request.builder()
@@ -87,8 +74,8 @@ class UserControllerTest extends ControllerTest {
     @Test
     void 사업자_회원_회원가입() throws Exception {
         // Given
-        final UserDTO userDTO = initUserDTO(1L, UserType.BUSINESS);
-        given(userService.signUpBusinessUser(any(UserDTO.class), anyString(), anyString())).willReturn(userDTO);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(1L, UserType.BUSINESS);
+        given(userService.signUpBusinessUser(any(UserInfoDTO.class), anyString(), anyString())).willReturn(userInfoDTO);
 
         // When
         final SignUpPayload.Request request = SignUpPayload.Request.builder()
@@ -127,8 +114,8 @@ class UserControllerTest extends ControllerTest {
     @WithMockCustomUser
     void 회원_정보_조회() throws Exception {
         // Given
-        final UserDTO userDTO = initUserDTO(1L, UserType.CLIENT);
-        given(userService.getUserInfo(anyLong())).willReturn(userDTO);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(1L, UserType.CLIENT);
+        given(userService.getUserInfo(anyLong())).willReturn(userInfoDTO);
 
         // When
         final ResultActions result = mockMvc.perform(
@@ -148,7 +135,17 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("userType").type(JsonFieldType.STRING).description("회원 유형").attributes(userTypeAttribute()),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
-                                        fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 연락처").optional()
+                                        fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 연락처").optional(),
+                                        fieldWithPath("withdrawal").type(JsonFieldType.BOOLEAN).description("회원 탈퇴여부"),
+                                        fieldWithPath("created").type(JsonFieldType.STRING).description("회원 생성일자"),
+                                        fieldWithPath("useAgreeTerms").type(JsonFieldType.OBJECT).description("이용 약관 정보").optional(),
+                                        fieldWithPath("useAgreeTerms.id").type(JsonFieldType.NUMBER).description("이용 약관 정보 고유번호"),
+                                        fieldWithPath("useAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("이용 약관 정보 동의여부"),
+                                        fieldWithPath("useAgreeTerms.created").type(JsonFieldType.STRING).description("이용 약관 정보 생성일자"),
+                                        fieldWithPath("privacyPolicyAgreeTerms").type(JsonFieldType.OBJECT).description("개인정보 처리방침 정보").optional(),
+                                        fieldWithPath("privacyPolicyAgreeTerms.id").type(JsonFieldType.NUMBER).description("개인정보 처리방침 고유번호"),
+                                        fieldWithPath("privacyPolicyAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("개인정보 처리방침 동의여부"),
+                                        fieldWithPath("privacyPolicyAgreeTerms.created").type(JsonFieldType.STRING).description("개인정보 처리방침 생성일자")
                                 )
                         )
                 ));
@@ -158,8 +155,8 @@ class UserControllerTest extends ControllerTest {
     @WithMockCustomUser
     void 회원_정보_수정() throws Exception {
         // Given
-        final UserDTO userDTO = initUserDTO(1L, UserType.BUSINESS);
-        given(userService.updateUserInfo(anyLong(), any(UserDTO.class))).willReturn(userDTO);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(1L, UserType.BUSINESS);
+        given(userService.updateUserInfo(anyLong(), any(UserInfoDTO.class))).willReturn(userInfoDTO);
 
         // When
         final UpdateUserInfoPayload.Request request = UpdateUserInfoPayload.Request.builder()
@@ -189,7 +186,17 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("userType").type(JsonFieldType.STRING).description("회원 유형").attributes(userTypeAttribute()),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
-                                        fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 연락처").optional()
+                                        fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 연락처").optional(),
+                                        fieldWithPath("withdrawal").type(JsonFieldType.BOOLEAN).description("회원 탈퇴여부"),
+                                        fieldWithPath("created").type(JsonFieldType.STRING).description("회원 생성일자"),
+                                        fieldWithPath("useAgreeTerms").type(JsonFieldType.OBJECT).description("이용 약관 정보").optional(),
+                                        fieldWithPath("useAgreeTerms.id").type(JsonFieldType.NUMBER).description("이용 약관 정보 고유번호"),
+                                        fieldWithPath("useAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("이용 약관 정보 동의여부"),
+                                        fieldWithPath("useAgreeTerms.created").type(JsonFieldType.STRING).description("이용 약관 정보 생성일자"),
+                                        fieldWithPath("privacyPolicyAgreeTerms").type(JsonFieldType.OBJECT).description("개인정보 처리방침 정보").optional(),
+                                        fieldWithPath("privacyPolicyAgreeTerms.id").type(JsonFieldType.NUMBER).description("개인정보 처리방침 고유번호"),
+                                        fieldWithPath("privacyPolicyAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("개인정보 처리방침 동의여부"),
+                                        fieldWithPath("privacyPolicyAgreeTerms.created").type(JsonFieldType.STRING).description("개인정보 처리방침 생성일자")
                                 )
                         )
                 ));

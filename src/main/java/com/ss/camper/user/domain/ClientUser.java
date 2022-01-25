@@ -2,12 +2,14 @@ package com.ss.camper.user.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 
+@ToString
 @Getter
 @SuperBuilder
 @Entity

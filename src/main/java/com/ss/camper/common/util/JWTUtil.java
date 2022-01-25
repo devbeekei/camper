@@ -1,11 +1,11 @@
 package com.ss.camper.common.util;
 
 import com.ss.camper.oauth2.config.AuthProperties;
-import com.ss.camper.oauth2.dto.UserDTO;
 import com.ss.camper.oauth2.dto.UserPrincipal;
 import com.ss.camper.oauth2.exception.ExpiredTokenException;
 import com.ss.camper.oauth2.exception.NotValidTokenException;
 import com.ss.camper.oauth2.exception.UnsupportedTokenException;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -63,7 +63,7 @@ public class JWTUtil {
 
     public UserPrincipal getPrincipal(String token) {
         Claims claims = getBody(token);
-        return UserPrincipal.create(UserDTO.builder()
+        return UserPrincipal.create(UserInfoDTO.builder()
                 .id(Long.parseLong(claims.getSubject()))
                 .email(String.valueOf(claims.get("username")))
                 .build());

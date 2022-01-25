@@ -1,6 +1,6 @@
 package com.ss.camper.user.application;
 
-import com.ss.camper.oauth2.dto.UserDTO;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.application.exception.AlreadySignUpEmailException;
 import com.ss.camper.user.application.exception.NotFoundUserException;
 import com.ss.camper.user.application.exception.NotMatchedPasswordException;
@@ -49,34 +49,34 @@ class UserServiceTest {
         given(userRepository.countByEmail(anyString())).willReturn(0L);
         given(clientUserRepository.save(any(ClientUser.class))).willReturn(clientUser);
 
-        final UserDTO userDTO = initUserDTO(null, UserType.CLIENT);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(null, UserType.CLIENT);
         final String password = "1234";
         final String passwordCheck = "1234";
-        UserDTO result = userService.signUpClientUser(userDTO, password, passwordCheck);
+        UserInfoDTO result = userService.signUpClientUser(userInfoDTO, password, passwordCheck);
 
         assertThat(result.getId()).isEqualTo(clientUser.getId());
-        assertThat(result.getUserType()).isEqualTo(userDTO.getUserType());
-        assertThat(result.getEmail()).isEqualTo(userDTO.getEmail());
-        assertThat(result.getNickname()).isEqualTo(userDTO.getNickname());
-        assertThat(result.getPhone()).isEqualTo(userDTO.getPhone());
+        assertThat(result.getUserType()).isEqualTo(userInfoDTO.getUserType());
+        assertThat(result.getEmail()).isEqualTo(userInfoDTO.getEmail());
+        assertThat(result.getNickname()).isEqualTo(userInfoDTO.getNickname());
+        assertThat(result.getPhone()).isEqualTo(userInfoDTO.getPhone());
     }
 
     @Test
     void 사용자_회원_회원가입_비밀번호_확인_불일치() {
-        final UserDTO userDTO = initUserDTO(null, UserType.CLIENT);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(null, UserType.CLIENT);
         final String password = "1234";
         final String passwordCheck = "12345";
-        assertThrows(NotMatchedPasswordException.class, () -> userService.signUpClientUser(userDTO, password, passwordCheck));
+        assertThrows(NotMatchedPasswordException.class, () -> userService.signUpClientUser(userInfoDTO, password, passwordCheck));
     }
 
     @Test
     void 사용자_회원_회원가입_이미_가입된_이메일() {
         given(userRepository.countByEmail(anyString())).willReturn(1L);
 
-        final UserDTO userDTO = initUserDTO(null, UserType.CLIENT);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(null, UserType.CLIENT);
         final String password = "1234";
         final String passwordCheck = "1234";
-        assertThrows(AlreadySignUpEmailException.class, () -> userService.signUpClientUser(userDTO, password, passwordCheck));
+        assertThrows(AlreadySignUpEmailException.class, () -> userService.signUpClientUser(userInfoDTO, password, passwordCheck));
     }
 
     @Test
@@ -85,34 +85,33 @@ class UserServiceTest {
         given(userRepository.countByEmail(anyString())).willReturn(0L);
         given(businessUserRepository.save(any(BusinessUser.class))).willReturn(businessUser);
 
-        final UserDTO userDTO = initUserDTO(null, UserType.BUSINESS);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(null, UserType.BUSINESS);
         final String password = "1234";
         final String passwordCheck = "1234";
-        UserDTO result = userService.signUpBusinessUser(userDTO, password, passwordCheck);
+        UserInfoDTO result = userService.signUpBusinessUser(userInfoDTO, password, passwordCheck);
 
         assertThat(result.getId()).isEqualTo(businessUser.getId());
-        assertThat(result.getUserType()).isEqualTo(userDTO.getUserType());
-        assertThat(result.getEmail()).isEqualTo(userDTO.getEmail());
-        assertThat(result.getNickname()).isEqualTo(userDTO.getNickname());
-        assertThat(result.getPhone()).isEqualTo(userDTO.getPhone());
+        assertThat(result.getUserType()).isEqualTo(userInfoDTO.getUserType());
+        assertThat(result.getEmail()).isEqualTo(userInfoDTO.getEmail());
+        assertThat(result.getNickname()).isEqualTo(userInfoDTO.getNickname());
+        assertThat(result.getPhone()).isEqualTo(userInfoDTO.getPhone());
     }
 
     @Test
     void 사업자_회원_회원가입_비밀번호_확인_불일치() {
-        final UserDTO userDTO = initUserDTO(null, UserType.BUSINESS);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(null, UserType.BUSINESS);
         final String password = "1234";
         final String passwordCheck = "12345";
-        assertThrows(NotMatchedPasswordException.class, () -> userService.signUpBusinessUser(userDTO, password, passwordCheck));
+        assertThrows(NotMatchedPasswordException.class, () -> userService.signUpBusinessUser(userInfoDTO, password, passwordCheck));
     }
 
     @Test
     void 사업자_회원_회원가입_이미_가입된_이메일() {
         given(userRepository.countByEmail(anyString())).willReturn(1L);
-
-        final UserDTO userDTO = initUserDTO(null, UserType.BUSINESS);
+        final UserInfoDTO userInfoDTO = initUserInfoDTO(null, UserType.BUSINESS);
         final String password = "1234";
         final String passwordCheck = "1234";
-        assertThrows(AlreadySignUpEmailException.class, () -> userService.signUpBusinessUser(userDTO, password, passwordCheck));
+        assertThrows(AlreadySignUpEmailException.class, () -> userService.signUpBusinessUser(userInfoDTO, password, passwordCheck));
     }
 
     @Test
@@ -121,7 +120,7 @@ class UserServiceTest {
         final ClientUser clientUser = initClientUser(userId);
         given(userRepository.findById(anyLong())).willReturn(Optional.of(clientUser));
 
-        final UserDTO result = userService.getUserInfo(userId);
+        final UserInfoDTO result = userService.getUserInfo(userId);
 
         assertThat(result.getId()).isEqualTo(userId);
         assertThat(result.getUserType()).isEqualTo(clientUser.getUserType());
@@ -144,12 +143,12 @@ class UserServiceTest {
         final ClientUser clientUser = initClientUser(userId);
         given(userRepository.findById(anyLong())).willReturn(Optional.of(clientUser));
 
-        final UserDTO userDTO = UserDTO.builder().nickname("김킴퍼2").phone("01022222222").build();
-        final UserDTO result = userService.updateUserInfo(userId, userDTO);
+        final UserInfoDTO userInfoDTO = UserInfoDTO.builder().nickname("김킴퍼2").phone("01022222222").build();
+        final UserInfoDTO result = userService.updateUserInfo(userId, userInfoDTO);
 
         assertThat(result.getId()).isEqualTo(userId);
-        assertThat(result.getNickname()).isEqualTo(userDTO.getNickname());
-        assertThat(result.getPhone()).isEqualTo(userDTO.getPhone());
+        assertThat(result.getNickname()).isEqualTo(userInfoDTO.getNickname());
+        assertThat(result.getPhone()).isEqualTo(userInfoDTO.getPhone());
     }
 
     @Test
@@ -157,8 +156,8 @@ class UserServiceTest {
         given(userRepository.findById(anyLong())).willReturn(Optional.empty());
 
         final long userId = 1;
-        final UserDTO userDTO = UserDTO.builder().nickname("김킴퍼2").phone("01022222222").build();
-        assertThrows(NotFoundUserException.class, () -> userService.updateUserInfo(userId, userDTO));
+        final UserInfoDTO userInfoDTO = UserInfoDTO.builder().nickname("김킴퍼2").phone("01022222222").build();
+        assertThrows(NotFoundUserException.class, () -> userService.updateUserInfo(userId, userInfoDTO));
     }
 
     @Test

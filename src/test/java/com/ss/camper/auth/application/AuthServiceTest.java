@@ -3,7 +3,7 @@ package com.ss.camper.auth.application;
 import com.ss.camper.auth.application.exception.NotMatchedPasswordException;
 import com.ss.camper.auth.application.exception.NotSignedUpEmailException;
 import com.ss.camper.auth.application.exception.SingInWithdrawUserException;
-import com.ss.camper.oauth2.dto.UserDTO;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.User;
 import com.ss.camper.user.domain.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class AuthServiceTest {
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
-        final UserDTO result = authService.signIn(EMAIL, PASSWORD);
+        final UserInfoDTO result = authService.signIn(EMAIL, PASSWORD);
 
         assertThat(result.getId()).isEqualTo(user.getId());
         assertThat(result.getUserType()).isEqualTo(user.getUserType());

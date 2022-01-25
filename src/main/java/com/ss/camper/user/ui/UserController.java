@@ -3,8 +3,8 @@ package com.ss.camper.user.ui;
 import com.ss.camper.common.payload.DataApiResponse;
 import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.util.SecurityUtil;
-import com.ss.camper.oauth2.dto.UserDTO;
 import com.ss.camper.user.application.UserService;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.ui.payload.SignUpPayload;
 import com.ss.camper.user.ui.payload.UpdateUserInfoPayload;
 import lombok.RequiredArgsConstructor;
@@ -21,28 +21,28 @@ public class UserController {
 
     @PostMapping(name = "사용자 회원 회원가입", value = "client")
     public DefaultApiResponse signUpClientUser(@Valid @RequestBody final SignUpPayload.Request request) {
-        userService.signUpClientUser(request.convertUserDTO(), request.getPassword(), request.getPasswordCheck());
+        userService.signUpClientUser(request.convertUserInfoDTO(), request.getPassword(), request.getPasswordCheck());
         return new DefaultApiResponse();
     }
 
     @PostMapping(name = "사업자 회원 회원가입", value = "business")
     public DefaultApiResponse signUpBusinessUser(@Valid @RequestBody final SignUpPayload.Request request) {
-        userService.signUpBusinessUser(request.convertUserDTO(), request.getPassword(), request.getPasswordCheck());
+        userService.signUpBusinessUser(request.convertUserInfoDTO(), request.getPassword(), request.getPasswordCheck());
         return new DefaultApiResponse();
     }
 
     @GetMapping(name = "회원 정보 조회")
-    public DataApiResponse<UserDTO> getUserInfo() {
+    public DataApiResponse<UserInfoDTO> getUserInfo() {
         final long userId = SecurityUtil.getUserId();
-        final UserDTO userDTO = userService.getUserInfo(userId);
-        return new DataApiResponse<>(userDTO);
+        final UserInfoDTO userInfoDTO = userService.getUserInfo(userId);
+        return new DataApiResponse<>(userInfoDTO);
     }
 
     @PutMapping(name = "회원 정보 수정")
-    public DataApiResponse<UserDTO> updateUserInfo(@Valid @RequestBody final UpdateUserInfoPayload.Request request) {
+    public DataApiResponse<UserInfoDTO> updateUserInfo(@Valid @RequestBody final UpdateUserInfoPayload.Request request) {
         final long userId = SecurityUtil.getUserId();
-        final UserDTO userDTO = userService.updateUserInfo(userId, request.convertUserDTO());
-        return new DataApiResponse<>(userDTO);
+        final UserInfoDTO userInfoDTO = userService.updateUserInfo(userId, request.convertUserInfoDTO());
+        return new DataApiResponse<>(userInfoDTO);
     }
 
     @DeleteMapping(name = "회원 탈퇴")

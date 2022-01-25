@@ -1,7 +1,6 @@
 package com.ss.camper.user.domain;
 
 import com.ss.camper.common.domain.DateRecord;
-import com.ss.camper.oauth2.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Getter
 @SuperBuilder
@@ -48,6 +48,29 @@ public abstract class User {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private SocialAuth socialAuth;
+
+    @OrderBy(value = "id DESC")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_id")
+    private List<AgreeTermsHistory> agreeTermsHistories;
+
+    @Transient
+    private AgreeTermsHistory useAgreeTerms;
+    public AgreeTermsHistory getUseAgreeTerms() {
+        if (this.agreeTermsHistories == null) return null;
+        Optional<AgreeTermsHistory> agreeTermsHistory = this.agreeTermsHistories.stream()
+                .filter(a -> a.getTermsType().equals(TermsType.USE)).findFirst();
+        return agreeTermsHistory.orElse(null);
+    }
+
+    @Transient
+    private AgreeTermsHistory privacyPolicyAgreeTerms;
+    public AgreeTermsHistory getPrivacyPolicyAgreeTerms() {
+        if (this.agreeTermsHistories == null) return null;
+        Optional<AgreeTermsHistory> agreeTermsHistory = this.agreeTermsHistories.stream()
+                .filter(a -> a.getTermsType().equals(TermsType.PRIVACY_POLICY)).findFirst();
+        return agreeTermsHistory.orElse(null);
+    }
 
     @Embedded
     private DateRecord dateRecord;

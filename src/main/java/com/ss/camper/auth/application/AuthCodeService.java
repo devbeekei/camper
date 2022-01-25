@@ -4,8 +4,8 @@ import com.ss.camper.auth.domain.AuthCode;
 import com.ss.camper.auth.domain.AuthCodeRepository;
 import com.ss.camper.common.util.AuthCodeUtil;
 import com.ss.camper.common.util.JWTUtil;
-import com.ss.camper.oauth2.dto.UserDTO;
 import com.ss.camper.oauth2.dto.UserPrincipal;
+import com.ss.camper.user.application.dto.UserInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,8 @@ public class AuthCodeService {
 
         return authCode.getAuthCode();
     }
-    public String issueAuthCode(final UserDTO user) {
+
+    public String issueAuthCode(final UserInfoDTO user) {
         return this.issueAuthCode(UserPrincipal.create(user), null);
     }
 
