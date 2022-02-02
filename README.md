@@ -12,6 +12,7 @@
 - Querydsl(목록 조회 기능에만 사용)
 - Spring Security + OAuth2.0 + JWT(인증)
 - Spring REST Docs(API 문서)
+- 2차 캐시를 사용(READ_WRITE)하고 낙관적 Lock(@Version)을 사용합니다.
 
 ### CI/CD
 - Jenkins, Docker, CodeBuilder, CodeDeploy를 활용한 CI/CD 구축(자동화 배포)
