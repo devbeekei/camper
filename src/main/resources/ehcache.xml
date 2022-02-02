@@ -1,9 +1,15 @@
 <ehcache>
+<!--    maxElementsInMemory : 메모리에 캐싱 되어질 객체의 최대수 -->
+<!--    eternal : 시간설정에 대한 무시 설정 (boolean), true 면 모든 timeout 설정은 모두 무시 되고 Element에서 캐시가 삭제 되지 않음 -->
+<!--    timeToIdleSeconds : 다음 시간 동안 유휴상태(Idle) 후 갱신 할 지 설정(default: 0) -->
+<!--    timeToLiveSeconds : 다음 갱신 하기 까지 캐쉬가 유지 되는 시간 (0이면 만료시간을 지정하지 않는다고 보고 유지 되지 않음, default: 0) -->
+<!--    diskExpiryThreadIntervalSeconds : 디스크에 저장된 캐시들에 대해 만료된 항목를 제거하기 위한 쓰레드를 실행 할 주기 설정 -->
+<!--    memoryStoreEvictionPolicy : 객체의 갯수가 설정된 maxElementsInMemory에 도달 했을 경우 메모리에서 객체들을 어떤게 제거 할지 에 대한 제거 알고리즘 -->
     <defaultCache
             maxElementsInMemory="10000"
             eternal="false"
-            timeToIdleSeconds="1200"
-            timeToLiveSeconds="1200"
-            diskExpiryThreadIntervalSeconds="1200"
+            timeToIdleSeconds="2400"
+            timeToLiveSeconds="2400"
+            diskExpiryThreadIntervalSeconds="2400"
             memoryStoreEvictionPolicy="LRU"/>
 </ehcache>
