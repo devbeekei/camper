@@ -3,6 +3,7 @@ package com.ss.camper.store.ui;
 import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.payload.DataApiResponse;
 import com.ss.camper.common.payload.PageDTO;
+import com.ss.camper.common.util.SecurityUtil;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
@@ -34,13 +35,15 @@ public class StoreController {
 
     @PostMapping(name = "매장 등록")
     public DefaultApiResponse registerStore(@Valid @RequestBody final RegisterStorePayload.Request request) {
-        storeService.registerStore(request.convertStoreDTO());
+        final long userId = SecurityUtil.getUserId();
+        storeService.registerStore(userId, request.convertStoreDTO());
         return new DefaultApiResponse();
     }
 
     @PutMapping(name = "매장 정보 수정", value = "{storeId}")
     public DefaultApiResponse modifyStore(@PathVariable final long storeId, @Valid @RequestBody final ModifyStorePayload.Request request) {
-        storeService.modifyStore(storeId, request.convertStoreDTO());
+        final long userId = SecurityUtil.getUserId();
+        storeService.modifyStore(userId, storeId, request.convertStoreDTO());
         return new DefaultApiResponse();
     }
 

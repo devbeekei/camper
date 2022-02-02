@@ -1,12 +1,15 @@
 package com.ss.camper.store.domain;
 
-import com.ss.camper.common.domain.DateRecord;
 import lombok.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Set;
 
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @ToString
 @Getter
 @Builder
@@ -19,36 +22,48 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AUTO_INCREMENT")
     @Column(name = "store_id")
-    protected Long id;
+    private Long id;
+
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "store_name", length = 100, nullable = false)
-    protected String storeName;
+    private String storeName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "store_type", length = 30, nullable = false)
-    protected StoreType storeType;
+    private StoreType storeType;
 
     @Embedded
-    protected Address address;
+    private Address address;
 
     @Column(name = "tel", length = 20)
-    protected String tel;
+    private String tel;
 
     @Column(name = "homepage_url", columnDefinition = "TEXT")
-    protected String homepageUrl;
+    private String homepageUrl;
 
     @Column(name = "reservation_url", columnDefinition = "TEXT")
-    protected String reservationUrl;
+    private String reservationUrl;
 
     @Column(name = "introduction", columnDefinition = "TEXT")
-    protected String introduction;
+    private String introduction;
 
-    @Embedded
-    protected DateRecord dateRecord;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created", nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date created;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP")
+    private Date modified;
+
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinTable(name = "tag_of_store", joinColumns = @JoinColumn(name = "store_id"), inverseJoinColumns = @JoinColumn(name = "store_tag_id"))
     private Set<StoreTag> tags;
+
+    @Version
+    private Long ver;
 
     public void updateInfo(String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
         this.storeName = storeName;

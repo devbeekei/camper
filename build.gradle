@@ -95,6 +95,9 @@ dependencies {
     implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.querydsl:querydsl-apt'
     annotationProcessor 'com.querydsl:querydsl-apt'
+
+    // ehcache
+    implementation group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.4.27.Final'
 }
 
 // Querydsl Plugin 설정

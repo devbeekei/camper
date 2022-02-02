@@ -145,7 +145,7 @@ class StoreControllerTest extends ControllerTest {
             add(initStoreTagDTO(1L, TAG_TITLE1));
             add(initStoreTagDTO(2L, TAG_TITLE2));
         }});
-        given(storeService.registerStore(any(StoreDTO.class))).willReturn(storeDTO);
+        given(storeService.registerStore(anyLong(), any(StoreDTO.class))).willReturn(storeDTO);
 
         // When
         final RegisterStorePayload.Request request = RegisterStorePayload.Request.builder()
@@ -206,7 +206,7 @@ class StoreControllerTest extends ControllerTest {
             add(initStoreTagDTO(1L, TAG_TITLE1));
             add(initStoreTagDTO(2L, TAG_TITLE2));
         }});
-        given(storeService.modifyStore(anyLong(), any(StoreDTO.class))).willReturn(storeDTO);
+        given(storeService.modifyStore(anyLong(), anyLong(), any(StoreDTO.class))).willReturn(storeDTO);
 
         // When
         final ModifyStorePayload.Request request = ModifyStorePayload.Request.builder()

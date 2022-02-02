@@ -5,6 +5,7 @@ import com.ss.camper.common.WithMockCustomUser;
 import com.ss.camper.common.util.JWTUtil;
 import com.ss.camper.user.application.UserService;
 import com.ss.camper.user.application.dto.UserInfoDTO;
+import com.ss.camper.user.domain.TermsType;
 import com.ss.camper.user.domain.UserType;
 import com.ss.camper.user.ui.payload.SignUpPayload;
 import com.ss.camper.user.ui.payload.UpdateUserInfoPayload;
@@ -14,6 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.ss.camper.common.ApiDocumentAttributes.userTypeAttribute;
 import static com.ss.camper.common.ApiDocumentUtil.*;
@@ -224,5 +228,36 @@ class UserControllerTest extends ControllerTest {
                                 defaultResponseFields()
                         )
                 ));
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 약관_동의() throws Exception {
+        // Given
+        willDoNothing().given(userService).agreeTerms(anyLong(), anyMap());
+
+        // When
+        final Map<TermsType, Boolean> request = new HashMap<>(){{ put(TermsType.USE, true); put(TermsType.PRIVACY_POLICY, true); }};
+        final ResultActions result = mockMvc.perform(
+            post("/user/agree-terms")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .accept(MediaType.APPLICATION_JSON)
+                .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        // Then
+        result.andExpect(status().isOk())
+            .andDo(document("user/agree-terms",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                    fieldWithPath(String.valueOf(TermsType.USE)).type(JsonFieldType.BOOLEAN).description(TermsType.USE.getName() + " 동의 여부").optional(),
+                    fieldWithPath(String.valueOf(TermsType.PRIVACY_POLICY)).type(JsonFieldType.BOOLEAN).description(TermsType.PRIVACY_POLICY.getName() + " 동의 여부").optional()
+                ),
+                responseFields(
+                    defaultResponseFields()
+                )
+            ));
     }
 }

@@ -5,4 +5,5 @@ import java.util.Optional;
 public interface StoreRepository {
     Store save(Store store);
     Optional<Store> findById(long id);
+    Optional<Store> findByUserIdAndId(long userId, long storeId);
 }

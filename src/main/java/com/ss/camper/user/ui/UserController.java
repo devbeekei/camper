@@ -5,12 +5,15 @@ import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.util.SecurityUtil;
 import com.ss.camper.user.application.UserService;
 import com.ss.camper.user.application.dto.UserInfoDTO;
+import com.ss.camper.user.domain.TermsType;
 import com.ss.camper.user.ui.payload.SignUpPayload;
 import com.ss.camper.user.ui.payload.UpdateUserInfoPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,6 +52,13 @@ public class UserController {
     public DefaultApiResponse withdrawUser() {
         final long userId = SecurityUtil.getUserId();
         userService.withdrawUser(userId);
+        return new DefaultApiResponse();
+    }
+
+    @PostMapping(name = "약관 동의", value = "agree-terms")
+    public DefaultApiResponse agreeTerms(@Valid @RequestBody @NotNull final Map<TermsType, Boolean> request) {
+        final long userId = SecurityUtil.getUserId();
+        userService.agreeTerms(userId, request);
         return new DefaultApiResponse();
     }
 

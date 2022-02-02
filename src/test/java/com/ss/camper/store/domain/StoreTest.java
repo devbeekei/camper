@@ -16,7 +16,7 @@ public class StoreTest {
     @Test
     public void 매장_정보_업데이트() {
         // Given
-        final Store store = initStore(1L, null);
+        final Store store = initStore(1L, 2L, null);
 
         // When
         store.updateInfo(STORE_NAME, ADDRESS, TEL, HOMEPAGE_URL, RESERVATION_URL, INTRODUCTION);
@@ -33,7 +33,7 @@ public class StoreTest {
     @Test
     public void 매장_태그_업데이트() {
         // Given
-        final Store store = initStore(1L, new LinkedHashSet<>(){{
+        final Store store = initStore(1L, 2L, new LinkedHashSet<>(){{
             add(initStoreTag(1L, TAG_TITLE1));
             add(initStoreTag(2L, TAG_TITLE2));
             add(initStoreTag(3L, TAG_TITLE3));

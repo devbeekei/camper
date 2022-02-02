@@ -32,9 +32,10 @@ public class StoreMock {
         return StoreTagDTO.builder().id(id).title(title).build();
     }
 
-    public static Store initStore(Long id, Set<StoreTag> tags) {
+    public static Store initStore(Long userId, Long storeId, Set<StoreTag> tags) {
             return Store.builder()
-                .id(id)
+                .id(storeId)
+                .userId(userId)
                 .storeType(STORE_TYPE)
                 .storeName(STORE_NAME)
                 .address(ADDRESS)

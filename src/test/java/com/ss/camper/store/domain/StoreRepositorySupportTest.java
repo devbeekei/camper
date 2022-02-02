@@ -33,11 +33,11 @@ class StoreRepositorySupportTest {
     @Transactional
     void getStoreListPage() {
         // Given
-        Store savedStore1 = storeRepository.save(initStore(null, new HashSet<>(){{
+        Store savedStore1 = storeRepository.save(initStore(null, null, new HashSet<>(){{
             add(initStoreTag(null, TAG_TITLE1));
             add(initStoreTag(null, TAG_TITLE2));
         }}));
-        Store savedStore2 = storeRepository.save(initStore(null, new HashSet<>(){{
+        Store savedStore2 = storeRepository.save(initStore(null, null, new HashSet<>(){{
             add(initStoreTag(null, TAG_TITLE3));
             add(initStoreTag(null, TAG_TITLE4));
         }}));

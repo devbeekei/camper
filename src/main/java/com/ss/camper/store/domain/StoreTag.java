@@ -1,9 +1,13 @@
 package com.ss.camper.store.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
+
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @ToString
 @Getter
 @Builder

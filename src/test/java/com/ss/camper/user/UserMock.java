@@ -24,15 +24,15 @@ public class UserMock {
                 .nickname(NICKNAME)
                 .phone(PHONE)
                 .withdrawal(false)
-                .dateRecordCreated(new Date())
+                .created(new Date())
                 .useAgreeTerms(AgreeTermsHistoryDTO.builder()
                         .id(1L)
                         .agree(true)
-                        .dateRecordCreated(new Date()).build())
+                        .created(new Date()).build())
                 .privacyPolicyAgreeTerms(AgreeTermsHistoryDTO.builder()
                         .id(2L)
                         .agree(true)
-                        .dateRecordCreated(new Date()).build())
+                        .created(new Date()).build())
                 .build();
     }
 

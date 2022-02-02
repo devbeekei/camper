@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.ss.camper.user.UserMock.*;
@@ -132,9 +134,7 @@ class UserServiceTest {
     @Test
     void 존재하지_않는_회원_정보_조회() {
         given(userRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        final long userId = 1;
-        assertThrows(NotFoundUserException.class, () -> userService.getUserInfo(userId));
+        assertThrows(NotFoundUserException.class, () -> userService.getUserInfo(anyLong()));
     }
 
     @Test
@@ -154,10 +154,7 @@ class UserServiceTest {
     @Test
     void 존재하지_않는_회원_정보_수정() {
         given(userRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        final long userId = 1;
-        final UserInfoDTO userInfoDTO = UserInfoDTO.builder().nickname("김킴퍼2").phone("01022222222").build();
-        assertThrows(NotFoundUserException.class, () -> userService.updateUserInfo(userId, userInfoDTO));
+        assertThrows(NotFoundUserException.class, () -> userService.updateUserInfo(1L, any(UserInfoDTO.class)));
     }
 
     @Test
@@ -174,9 +171,27 @@ class UserServiceTest {
     @Test
     void 존재하지_않는_회원_탈퇴() {
         given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+        assertThrows(NotFoundUserException.class, () -> userService.withdrawUser(anyLong()));
+    }
 
+    @Test
+    void 약관_동의() {
         final long userId = 1;
-        assertThrows(NotFoundUserException.class, () -> userService.withdrawUser(userId));
+        final ClientUser clientUser = initClientUser(userId);
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(clientUser));
+
+        final Map<TermsType, Boolean> terms = new HashMap<>(){{ put(TermsType.USE, true); put(TermsType.PRIVACY_POLICY, true); }};
+        userService.agreeTerms(userId, terms);
+
+        assertThat(clientUser.getAgreeTermsHistories().size()).isEqualTo(2);
+        assertThat(clientUser.getUseAgreeTerms().isAgree()).isTrue();
+        assertThat(clientUser.getPrivacyPolicyAgreeTerms().isAgree()).isTrue();
+    }
+
+    @Test
+    void 존재하지_않는_회원_약관_동의() {
+        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+        assertThrows(NotFoundUserException.class, () -> userService.agreeTerms(1L, anyMap()));
     }
 
 }

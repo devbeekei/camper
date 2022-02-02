@@ -30,4 +30,15 @@ public class UserTest {
         assertThat(clientUser.isWithdrawal()).isTrue();
     }
 
+    @Test
+    public void 약관_동의() {
+        final ClientUser clientUser = initClientUser(1L);
+        clientUser.agreeTerms(TermsType.USE, true);
+        clientUser.agreeTerms(TermsType.PRIVACY_POLICY, true);
+
+        assertThat(clientUser.getAgreeTermsHistories().size()).isEqualTo(2);
+        assertThat(clientUser.getUseAgreeTerms().isAgree()).isTrue();
+        assertThat(clientUser.getPrivacyPolicyAgreeTerms().isAgree()).isTrue();
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.ss.camper.auth.domain;
 
-import com.ss.camper.common.domain.DateRecord;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,8 +43,9 @@ public class AuthCode {
     @Column(name = "issued")
     private Date issued;
 
-    @Embedded
-    private DateRecord dateRecord;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created", nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date created;
 
     public String issueToken() {
         this.authCode = "[ISSUED]" + this.authCode;

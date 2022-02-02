@@ -47,7 +47,9 @@ class StoreServiceTest {
     @Test
     void 매장_등록() {
         // Given
-        final Store store = initStore(1L, null);
+        final long userId = 1;
+        final long storeId = 2;
+        final Store store = initStore(userId, storeId, null);
         given(storeRepository.save(any(Store.class))).willReturn(store);
 
         final StoreTag storeTag1 = initStoreTag(1L, TAG_TITLE1);
@@ -62,7 +64,7 @@ class StoreServiceTest {
             add(initStoreTagDTO(null, TAG_TITLE2));
             add(initStoreTagDTO(null, TAG_TITLE3));
         }});
-        final StoreDTO result = storeService.registerStore(storeDTO);
+        final StoreDTO result = storeService.registerStore(userId, storeDTO);
 
         // Then
         assertThat(result.getId()).isEqualTo(store.getId());
@@ -80,9 +82,10 @@ class StoreServiceTest {
     @Test
     void 매장_정보_수정() {
         // Given
-        final long storeId = 1;
-        final Store store = initStore(storeId, null);
-        given(storeRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(store));
+        final long userId = 1;
+        final long storeId = 2;
+        final Store store = initStore(userId, storeId, null);
+        given(storeRepository.findByUserIdAndId(anyLong(), anyLong())).willReturn(Optional.ofNullable(store));
 
         final StoreTag storeTag1 = initStoreTag(1L, TAG_TITLE1);
         final StoreTag storeTag2 = initStoreTag(2L, TAG_TITLE2);
@@ -96,7 +99,7 @@ class StoreServiceTest {
             add(initStoreTagDTO(null, TAG_TITLE2));
             add(initStoreTagDTO(null, TAG_TITLE3));
         }});
-        final StoreDTO result = storeService.modifyStore(storeId, storeDTO);
+        final StoreDTO result = storeService.modifyStore(userId, storeId, storeDTO);
 
         // Then
         assertThat(result.getId()).isEqualTo(storeId);
@@ -114,19 +117,21 @@ class StoreServiceTest {
     @Test()
     void 존재하지_않는_매장_정보_수정() {
         // Given
-        given(storeRepository.findById(any(Long.class))).willReturn(Optional.empty());
+        given(storeRepository.findByUserIdAndId(anyLong(), anyLong())).willReturn(Optional.empty());
 
         // When, Then
-        final long storeId = 1;
+        final long userId = 1;
+        final long storeId = 2;
         final StoreDTO storeDTO = initStoreDTO(null, null);
-        assertThrows(NotFoundStoreException.class, () -> storeService.modifyStore(storeId, storeDTO));
+        assertThrows(NotFoundStoreException.class, () -> storeService.modifyStore(userId, storeId, storeDTO));
     }
 
     @Test
     void 매장_정보_조회() {
         // Given
-        final long storeId = 1;
-        final Store store = initStore(storeId, new LinkedHashSet<>(){{
+        final long userId = 1;
+        final long storeId = 2;
+        final Store store = initStore(userId, storeId, new LinkedHashSet<>(){{
             add(initStoreTag(1L, TAG_TITLE1));
             add(initStoreTag(2L, TAG_TITLE2));
             add(initStoreTag(3L, TAG_TITLE3));

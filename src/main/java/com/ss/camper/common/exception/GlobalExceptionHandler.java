@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoHandlerFoundException.class})
     public ResponseEntity<DefaultApiResponse> HandlerExecutionChain(NoHandlerFoundException e) {
         final DefaultApiResponse response = DefaultApiResponse.error(ApiResponseType.NOT_FOUND);
+        e.printStackTrace();
         return new ResponseEntity<>(response, ApiResponseType.NOT_FOUND.getStatus());
     }
 
@@ -31,6 +32,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<DefaultApiResponse> MethodArgumentNotValidException(HttpRequestMethodNotSupportedException e) {
         final DefaultApiResponse response = DefaultApiResponse.error(ApiResponseType.REQUEST_METHOD_NOT_SUPPORT);
+        e.printStackTrace();
         return new ResponseEntity<>(response, ApiResponseType.REQUEST_METHOD_NOT_SUPPORT.getStatus());
     }
 
@@ -43,6 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
     public ResponseEntity<DefaultApiResponse> NotValidException(Exception e) {
         final DefaultApiResponse response = DefaultApiResponse.error(ApiResponseType.REQUEST_NOT_VALID);
+        e.printStackTrace();
         return new ResponseEntity<>(response, ApiResponseType.REQUEST_NOT_VALID.getStatus());
     }
 
@@ -52,6 +55,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<DefaultApiResponse> ConflictException(ConflictException e) {
         final DefaultApiResponse response = DefaultApiResponse.error(e.getApiResponseType());
+        e.printStackTrace();
         return new ResponseEntity<>(response, e.getApiResponseType().getStatus());
     }
 

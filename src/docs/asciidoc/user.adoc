@@ -40,7 +40,7 @@ include::{snippets}/user/withdraw/response-fields.adoc[]
 
 [[agree-terms]]
 == 약관 동의
-include::{snippets}/agree-terms/register/http-request.adoc[]
-include::{snippets}/agree-terms/register/request-fields.adoc[]
-include::{snippets}/agree-terms/register/response-body.adoc[]
-include::{snippets}/agree-terms/register/response-fields.adoc[]
+include::{snippets}/user/agree-terms/http-request.adoc[]
+include::{snippets}/user/agree-terms/request-fields.adoc[]
+include::{snippets}/user/agree-terms/response-body.adoc[]
+include::{snippets}/user/agree-terms/response-fields.adoc[]

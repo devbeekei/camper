@@ -35,7 +35,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final ClientUserRepository clientUserRepository;
     private final BusinessUserRepository businessUserRepository;
-    private final SocialAuthRepository socialAuthRepository;
 
     @Transactional
     @Override
@@ -110,32 +109,39 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         switch (userType) {
             case CLIENT:
                 user = clientUserRepository.save(ClientUser.builder()
+                    .email(oAuth2UserInfo.getEmail())
+                    .password("")
+                    .nickname(oAuth2UserInfo.getName())
+                    .phone(oAuth2UserInfo.getPhone())
+                    .socialAuth(SocialAuth.builder()
+                        .providerId(oAuth2UserInfo.getId())
+                        .provider(SocialProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()))
                         .email(oAuth2UserInfo.getEmail())
-                        .password("")
-                        .nickname(oAuth2UserInfo.getName())
-                        .phone(oAuth2UserInfo.getPhone())
-                        .build());
+                        .name(oAuth2UserInfo.getName())
+                        .profileImage(oAuth2UserInfo.getImageUrl())
+                        .birthday(oAuth2UserInfo.getBirthday())
+                        .build())
+                    .build());
                 break;
             case BUSINESS:
                 user = businessUserRepository.save(BusinessUser.builder()
+                    .email(oAuth2UserInfo.getEmail())
+                    .password("")
+                    .nickname(oAuth2UserInfo.getName())
+                    .phone(oAuth2UserInfo.getPhone())
+                    .socialAuth(SocialAuth.builder()
+                        .providerId(oAuth2UserInfo.getId())
+                        .provider(SocialProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()))
                         .email(oAuth2UserInfo.getEmail())
-                        .password("")
-                        .nickname(oAuth2UserInfo.getName())
-                        .phone(oAuth2UserInfo.getPhone())
-                        .build());
+                        .name(oAuth2UserInfo.getName())
+                        .profileImage(oAuth2UserInfo.getImageUrl())
+                        .birthday(oAuth2UserInfo.getBirthday())
+                        .build())
+                    .build());
                 break;
             default:
                 throw new UnsupportedUserTypeException();
         }
-        socialAuthRepository.save(SocialAuth.builder()
-                .user_id(user.getId())
-                .providerId(oAuth2UserInfo.getId())
-                .provider(SocialProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()))
-                .email(oAuth2UserInfo.getEmail())
-                .name(oAuth2UserInfo.getName())
-                .profileImage(oAuth2UserInfo.getImageUrl())
-                .birthday(oAuth2UserInfo.getBirthday())
-                .build());
         return user;
     }
 

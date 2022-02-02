@@ -27,8 +27,9 @@ public class StoreService {
     private final StoreRepositorySupport storeRepositorySupport;
 
     @Transactional
-    public StoreDTO registerStore(final StoreDTO storeDTO) {
+    public StoreDTO registerStore(final long userId, final StoreDTO storeDTO) {
         final Store store = storeRepository.save(Store.builder()
+                .userId(userId)
                 .storeType(storeDTO.getStoreType())
                 .storeName(storeDTO.getStoreName())
                 .address(storeDTO.getAddress())
@@ -42,8 +43,8 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreDTO modifyStore(final long storeId, final StoreDTO storeDTO) {
-        final Store store = storeRepository.findById(storeId).orElseThrow(NotFoundStoreException::new);
+    public StoreDTO modifyStore(final long userId, final long storeId, final StoreDTO storeDTO) {
+        final Store store = storeRepository.findByUserIdAndId(userId, storeId).orElseThrow(NotFoundStoreException::new);
         store.updateInfo(
             storeDTO.getStoreName(),
             storeDTO.getAddress(),

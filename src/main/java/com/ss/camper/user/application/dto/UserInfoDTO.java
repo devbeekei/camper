@@ -22,6 +22,5 @@ public class UserInfoDTO {
     private AgreeTermsHistoryDTO useAgreeTerms;
     private AgreeTermsHistoryDTO privacyPolicyAgreeTerms;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonProperty(value = "created")
-    private Date dateRecordCreated;
+    private Date created;
 }

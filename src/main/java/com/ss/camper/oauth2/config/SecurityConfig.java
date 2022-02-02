@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String[] GET_WHITELIST = {
         "/auth/**",
+        "/store/**"
     };
 
     public static final String[] POST_WHITELIST = {
