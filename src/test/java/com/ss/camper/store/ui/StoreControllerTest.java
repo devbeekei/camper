@@ -7,6 +7,7 @@ import com.ss.camper.common.util.JWTUtil;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
+import com.ss.camper.store.domain.StoreStatus;
 import com.ss.camper.store.ui.payload.ModifyStorePayload;
 import com.ss.camper.store.ui.payload.RegisterStorePayload;
 import org.junit.jupiter.api.Test;
@@ -20,11 +21,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.ss.camper.common.ApiDocumentAttributes.storeStatusAttribute;
 import static com.ss.camper.common.ApiDocumentAttributes.storeTypeAttribute;
 import static com.ss.camper.common.ApiDocumentUtil.*;
 import static com.ss.camper.store.StoreMock.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -65,6 +68,7 @@ class StoreControllerTest extends ControllerTest {
                                 dataResponseFields(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("매장 고유번호"),
                                         fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
+                                        fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
                                         fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
                                         fieldWithPath("address").type(JsonFieldType.OBJECT).description("매장 주소 정보"),
                                         fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편 번호"),
@@ -121,6 +125,7 @@ class StoreControllerTest extends ControllerTest {
                                 pagingResponseFields(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("매장 고유번호"),
                                         fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
+                                        fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
                                         fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
                                         fieldWithPath("address").type(JsonFieldType.OBJECT).description("매장 주소 정보"),
                                         fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편 번호"),
@@ -150,53 +155,55 @@ class StoreControllerTest extends ControllerTest {
 
         // When
         final RegisterStorePayload.Request request = RegisterStorePayload.Request.builder()
-            .storeType(STORE_TYPE)
-            .storeName(STORE_NAME)
-            .zipCode(ADDRESS.getZipCode())
-            .defaultAddress(ADDRESS.getDefaultAddress())
-            .detailAddress(ADDRESS.getDetailAddress())
-            .latitude(ADDRESS.getLatitude())
-            .longitude(ADDRESS.getLongitude())
-            .tel(TEL)
-            .homepageUrl(HOMEPAGE_URL)
-            .reservationUrl(RESERVATION_URL)
-            .introduction(INTRODUCTION)
-            .tags(new HashSet<>(){{
-                add(TAG_TITLE1);
-                add(TAG_TITLE2);
-            }})
-            .build();
+                .storeStatus(STORE_STATUS)
+                .storeType(STORE_TYPE)
+                .storeName(STORE_NAME)
+                .zipCode(ADDRESS.getZipCode())
+                .defaultAddress(ADDRESS.getDefaultAddress())
+                .detailAddress(ADDRESS.getDetailAddress())
+                .latitude(ADDRESS.getLatitude())
+                .longitude(ADDRESS.getLongitude())
+                .tel(TEL)
+                .homepageUrl(HOMEPAGE_URL)
+                .reservationUrl(RESERVATION_URL)
+                .introduction(INTRODUCTION)
+                .tags(new HashSet<>(){{
+                    add(TAG_TITLE1);
+                    add(TAG_TITLE2);
+                }})
+                .build();
         final ResultActions result = mockMvc.perform(
-            post("/store")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(request))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+                post("/store")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
         // Then
         result.andExpect(status().isOk())
-            .andDo(document("store/register",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestFields(
-                    fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
-                    fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
-                    fieldWithPath("zipCode").type(JsonFieldType.STRING).description("우편 번호"),
-                    fieldWithPath("defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
-                    fieldWithPath("detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
-                    fieldWithPath("latitude").type(JsonFieldType.NUMBER).description("위도"),
-                    fieldWithPath("longitude").type(JsonFieldType.NUMBER).description("경도"),
-                    fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
-                    fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
-                    fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
-                    fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
-                    fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그")
-                ),
-                responseFields(
-                    defaultResponseFields()
-                )
-            ));
+                .andDo(document("store/register",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
+                                fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
+                                fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
+                                fieldWithPath("zipCode").type(JsonFieldType.STRING).description("우편 번호"),
+                                fieldWithPath("defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
+                                fieldWithPath("detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
+                                fieldWithPath("latitude").type(JsonFieldType.NUMBER).description("위도"),
+                                fieldWithPath("longitude").type(JsonFieldType.NUMBER).description("경도"),
+                                fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
+                                fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
+                                fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
+                                fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
+                                fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그")
+                        ),
+                        responseFields(
+                                defaultResponseFields()
+                        )
+                ));
     }
 
     @Test
@@ -211,51 +218,83 @@ class StoreControllerTest extends ControllerTest {
 
         // When
         final ModifyStorePayload.Request request = ModifyStorePayload.Request.builder()
-            .storeName(STORE_NAME)
-            .zipCode(ADDRESS.getZipCode())
-            .defaultAddress(ADDRESS.getDefaultAddress())
-            .detailAddress(ADDRESS.getDetailAddress())
-            .latitude(ADDRESS.getLatitude())
-            .longitude(ADDRESS.getLongitude())
-            .tel(TEL)
-            .homepageUrl(HOMEPAGE_URL)
-            .reservationUrl(RESERVATION_URL)
-            .introduction(INTRODUCTION)
-            .tags(new HashSet<>(){{
-                add(TAG_TITLE1);
-                add(TAG_TITLE2);
-            }})
-            .build();
+                .storeStatus(STORE_STATUS)
+                .storeName(STORE_NAME)
+                .zipCode(ADDRESS.getZipCode())
+                .defaultAddress(ADDRESS.getDefaultAddress())
+                .detailAddress(ADDRESS.getDetailAddress())
+                .latitude(ADDRESS.getLatitude())
+                .longitude(ADDRESS.getLongitude())
+                .tel(TEL)
+                .homepageUrl(HOMEPAGE_URL)
+                .reservationUrl(RESERVATION_URL)
+                .introduction(INTRODUCTION)
+                .tags(new HashSet<>(){{
+                    add(TAG_TITLE1);
+                    add(TAG_TITLE2);
+                }})
+                .build();
         final ResultActions result = mockMvc.perform(
-            put("/store/{storeId}", 1)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(request))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+                put("/store/{storeId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
         // Then
         result.andExpect(status().isOk())
-            .andDo(document("store/modify",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestFields(
-                    fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
-                    fieldWithPath("zipCode").type(JsonFieldType.STRING).description("우편 번호"),
-                    fieldWithPath("defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
-                    fieldWithPath("detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
-                    fieldWithPath("latitude").type(JsonFieldType.NUMBER).description("위도"),
-                    fieldWithPath("longitude").type(JsonFieldType.NUMBER).description("경도"),
-                    fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
-                    fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
-                    fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
-                    fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
-                    fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그")
-                ),
-                responseFields(
-                    defaultResponseFields()
-                )
-            ));
+                .andDo(document("store/modify",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("storeId").description("매장 고유번호")
+                        ),
+                        requestFields(
+                                fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
+                                fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
+                                fieldWithPath("zipCode").type(JsonFieldType.STRING).description("우편 번호"),
+                                fieldWithPath("defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
+                                fieldWithPath("detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
+                                fieldWithPath("latitude").type(JsonFieldType.NUMBER).description("위도"),
+                                fieldWithPath("longitude").type(JsonFieldType.NUMBER).description("경도"),
+                                fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
+                                fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
+                                fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
+                                fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
+                                fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그")
+                        ),
+                        responseFields(
+                                defaultResponseFields()
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 매장_삭제() throws Exception {
+        // Given
+        willDoNothing().given(storeService).deleteStore(anyLong(), anyLong());
+
+        // When
+        final ResultActions result = mockMvc.perform(
+                delete("/store/{storeId}", 1)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(document("store/delete",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("storeId").description("매장 고유번호")
+                        ),
+                        responseFields(
+                                defaultResponseFields()
+                        )
+                ));
     }
 
 }

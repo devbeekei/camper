@@ -1,6 +1,7 @@
 package com.ss.camper.store.application.dto;
 
 import com.ss.camper.store.domain.Address;
+import com.ss.camper.store.domain.StoreStatus;
 import com.ss.camper.store.domain.StoreType;
 import lombok.*;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 public class StoreDTO {
     private Long id;
     private StoreType storeType;
+    private StoreStatus storeStatus;
     private String storeName;
     private Address address;
     private String tel;

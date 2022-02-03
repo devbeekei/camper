@@ -29,6 +29,14 @@ include::{snippets}/store/register/response-fields.adoc[]
 [[modify-store]]
 == 매장 정보 수정
 include::{snippets}/store/modify/http-request.adoc[]
+include::{snippets}/store/modify/path-parameters.adoc[]
 include::{snippets}/store/modify/request-fields.adoc[]
 include::{snippets}/store/modify/response-body.adoc[]
 include::{snippets}/store/modify/response-fields.adoc[]
+
+[[delete-store]]
+== 매장 삭제
+include::{snippets}/store/delete/http-request.adoc[]
+include::{snippets}/store/delete/path-parameters.adoc[]
+include::{snippets}/store/delete/response-body.adoc[]
+include::{snippets}/store/delete/response-fields.adoc[]

@@ -32,6 +32,7 @@ public class StoreService {
                 .userId(userId)
                 .storeType(storeDTO.getStoreType())
                 .storeName(storeDTO.getStoreName())
+                .storeStatus(storeDTO.getStoreStatus())
                 .address(storeDTO.getAddress())
                 .tel(storeDTO.getTel())
                 .homepageUrl(storeDTO.getHomepageUrl())
@@ -46,6 +47,7 @@ public class StoreService {
     public StoreDTO modifyStore(final long userId, final long storeId, final StoreDTO storeDTO) {
         final Store store = storeRepository.findByUserIdAndId(userId, storeId).orElseThrow(NotFoundStoreException::new);
         store.updateInfo(
+            storeDTO.getStoreStatus(),
             storeDTO.getStoreName(),
             storeDTO.getAddress(),
             storeDTO.getTel(),
@@ -55,6 +57,12 @@ public class StoreService {
         );
         updateTags(store, new LinkedHashSet<>(storeDTO.getTags()));
         return modelMapper.map(store, StoreDTO.class);
+    }
+
+    @Transactional
+    public void deleteStore(long userId, long storeId) {
+        final Store store = storeRepository.findByUserIdAndId(userId, storeId).orElseThrow(NotFoundStoreException::new);
+        store.delete();
     }
 
     @Transactional(readOnly = true)

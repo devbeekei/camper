@@ -3,6 +3,7 @@ package com.ss.camper.store.ui.payload;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
 import com.ss.camper.store.domain.Address;
+import com.ss.camper.store.domain.StoreStatus;
 import com.ss.camper.store.domain.StoreType;
 import lombok.*;
 
@@ -20,36 +21,27 @@ public class RegisterStorePayload {
     @NoArgsConstructor
     public static class Request {
         @NotNull
+        private StoreStatus storeStatus;
+        @NotNull
         private StoreType storeType;
-
         @NotBlank
         private String storeName;
-
         @NotBlank
         private String zipCode;
-
         @NotBlank
         private String defaultAddress;
-
         private String detailAddress;
-
         @NotNull
         @Positive
         private Float latitude;
-
         @NotNull
         @Positive
         private Float longitude;
-
         @NotBlank
         private String tel;
-
         private String homepageUrl;
-
         private String reservationUrl;
-
         private String introduction;
-
         private Set<String> tags;
 
         public StoreDTO convertStoreDTO() {
@@ -61,6 +53,7 @@ public class RegisterStorePayload {
             }
             return StoreDTO.builder()
                 .storeType(storeType)
+                .storeStatus(storeStatus)
                 .storeName(storeName)
                 .address(new Address(zipCode, defaultAddress, detailAddress, latitude, longitude))
                 .tel(tel)

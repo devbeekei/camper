@@ -30,7 +30,7 @@ public class StoreRepositorySupport extends QuerydslRepositorySupport {
 
         QueryResults<StoreListDTO> result = queryFactory
                 .select(Projections.constructor(StoreListDTO.class,
-                        store.id, store.storeType, store.storeName, store.address, store.tel,
+                        store.id, store.storeType, store.storeStatus, store.storeName, store.address, store.tel,
                         store.homepageUrl, store.reservationUrl, store.introduction,
                         Expressions.stringTemplate("group_concat({0})", storeTag.title)
                 ))

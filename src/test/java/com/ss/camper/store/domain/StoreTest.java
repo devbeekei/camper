@@ -19,9 +19,10 @@ public class StoreTest {
         final Store store = initStore(1L, 2L, null);
 
         // When
-        store.updateInfo(STORE_NAME, ADDRESS, TEL, HOMEPAGE_URL, RESERVATION_URL, INTRODUCTION);
+        store.updateInfo(STORE_STATUS, STORE_NAME, ADDRESS, TEL, HOMEPAGE_URL, RESERVATION_URL, INTRODUCTION);
 
         // Then
+        assertThat(store.getStoreStatus()).isEqualTo(STORE_STATUS);
         assertThat(store.getStoreName()).isEqualTo(STORE_NAME);
         assertThat(store.getAddress()).isEqualTo(ADDRESS);
         assertThat(store.getTel()).isEqualTo(TEL);
@@ -50,6 +51,15 @@ public class StoreTest {
 
         // Then
         assertThat(store.getTags().size()).isEqualTo(updateTags.size());
+    }
+
+    @Test
+    public void 매장_삭제() {
+        final Store store = initStore(1L, 2L, null);
+
+        store.delete();
+
+        assertThat(store.getDeleted()).isNotNull();
     }
 
 }

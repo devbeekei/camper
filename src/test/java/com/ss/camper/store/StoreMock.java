@@ -3,15 +3,13 @@ package com.ss.camper.store;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
-import com.ss.camper.store.domain.Address;
-import com.ss.camper.store.domain.Store;
-import com.ss.camper.store.domain.StoreTag;
-import com.ss.camper.store.domain.StoreType;
+import com.ss.camper.store.domain.*;
 
 import java.util.Set;
 
 public class StoreMock {
 
+    public static final StoreStatus STORE_STATUS = StoreStatus.OPEN;
     public static final StoreType STORE_TYPE = StoreType.CAMP_GROUND;
     public static final String STORE_NAME = "하늘 캠핑장";
     public static final Address ADDRESS = new Address("11516", "경기 양주시 백석읍 양주산성로737번길", "114", 111.11f, 222.22f);
@@ -37,6 +35,7 @@ public class StoreMock {
                 .id(storeId)
                 .userId(userId)
                 .storeType(STORE_TYPE)
+                .storeStatus(STORE_STATUS)
                 .storeName(STORE_NAME)
                 .address(ADDRESS)
                 .tel(TEL)
@@ -51,6 +50,7 @@ public class StoreMock {
         return StoreDTO.builder()
                 .id(id)
                 .storeType(STORE_TYPE)
+                .storeStatus(STORE_STATUS)
                 .storeName(STORE_NAME)
                 .address(ADDRESS)
                 .tel(TEL)
@@ -65,6 +65,7 @@ public class StoreMock {
         return StoreListDTO.builder()
                 .id(storeId)
                 .storeType(STORE_TYPE)
+                .storeStatus(STORE_STATUS)
                 .storeName(STORE_NAME)
                 .address(ADDRESS)
                 .tel(TEL)

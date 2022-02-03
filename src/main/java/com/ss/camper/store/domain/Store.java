@@ -3,6 +3,7 @@ package com.ss.camper.store.domain;
 import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "store")
+@Where(clause = "deleted IS NULL")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store {
@@ -33,6 +35,10 @@ public class Store {
     @Enumerated(EnumType.STRING)
     @Column(name = "store_type", length = 30, nullable = false)
     private StoreType storeType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "store_status", length = 30, nullable = false, columnDefinition = "VARCHAR(30) NOT NULL DEFAULT 'OPEN'")
+    private StoreStatus storeStatus;
 
     @Embedded
     private Address address;
@@ -57,6 +63,10 @@ public class Store {
     @Column(name = "modified", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP")
     private Date modified;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "deleted", columnDefinition = "DATETIME DEFAULT NULL")
+    private Date deleted;
+
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinTable(name = "tag_of_store", joinColumns = @JoinColumn(name = "store_id"), inverseJoinColumns = @JoinColumn(name = "store_tag_id"))
@@ -65,7 +75,8 @@ public class Store {
     @Version
     private Long ver;
 
-    public void updateInfo(String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
+    public void updateInfo(StoreStatus storeStatus, String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
+        this.storeStatus = storeStatus;
         this.storeName = storeName;
         this.address = address;
         this.tel = tel;
@@ -80,6 +91,10 @@ public class Store {
             StoreTag[] titles = updateTags.toArray(StoreTag[]::new);
             tags.removeIf(tag -> !Arrays.asList(titles).contains(tag));
         }
+    }
+
+    public void delete() {
+        this.deleted = new Date();
     }
 
 }

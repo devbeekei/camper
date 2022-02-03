@@ -126,6 +126,25 @@ class StoreServiceTest {
     }
 
     @Test
+    void 매장_삭제() {
+        // Given
+        final long userId = 1;
+        final long storeId = 2;
+        final Store store = initStore(userId, storeId, null);
+        given(storeRepository.findByUserIdAndId(anyLong(), anyLong())).willReturn(Optional.ofNullable(store));
+
+        storeService.deleteStore(userId, storeId);
+        
+        assertThat(store != null ? store.getDeleted() : null).isNotNull();
+    }
+
+    @Test
+    void 존재하지_않는_매장_삭제() {
+        given(storeRepository.findByUserIdAndId(anyLong(), anyLong())).willReturn(Optional.empty());
+        assertThrows(NotFoundStoreException.class, () -> storeService.deleteStore(anyLong(), anyLong()));
+    }
+    
+    @Test
     void 매장_정보_조회() {
         // Given
         final long userId = 1;

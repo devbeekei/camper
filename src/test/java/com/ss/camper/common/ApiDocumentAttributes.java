@@ -1,5 +1,6 @@
 package com.ss.camper.common;
 
+import com.ss.camper.store.domain.StoreStatus;
 import com.ss.camper.store.domain.StoreType;
 import com.ss.camper.user.domain.TermsType;
 import com.ss.camper.user.domain.UserType;
@@ -33,6 +34,13 @@ public class ApiDocumentAttributes {
         StringBuilder value = new StringBuilder();
         for (StoreType storeType : StoreType.values()) {
             value.append(storeType).append(" : ").append(storeType.getName()).append(" / ");
+        }
+        return attribute(value.substring(0, value.length() - 3));
+    }
+    public static Attributes.Attribute storeStatusAttribute() {
+        StringBuilder value = new StringBuilder();
+        for (StoreStatus storeStatus : StoreStatus.values()) {
+            value.append(storeStatus).append(" : ").append(storeStatus.getName()).append(" / ");
         }
         return attribute(value.substring(0, value.length() - 3));
     }

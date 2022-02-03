@@ -28,7 +28,9 @@ public class StoreController {
     }
 
     @GetMapping(name = "회원 별 매장 목록 조회")
-    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListPage(@RequestParam final long userId, @RequestParam final int size, @RequestParam final int page) {
+    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListPage(@RequestParam final long userId,
+                                                                   @RequestParam final int size,
+                                                                   @RequestParam final int page) {
         final PageDTO<StoreListDTO> storeList = storeService.getStoreListByUserId(userId, size, page);
         return new DataApiResponse<>(storeList);
     }
@@ -44,6 +46,13 @@ public class StoreController {
     public DefaultApiResponse modifyStore(@PathVariable final long storeId, @Valid @RequestBody final ModifyStorePayload.Request request) {
         final long userId = SecurityUtil.getUserId();
         storeService.modifyStore(userId, storeId, request.convertStoreDTO());
+        return new DefaultApiResponse();
+    }
+
+    @DeleteMapping(name = "매장 삭제", value = "{storeId}")
+    public DefaultApiResponse deleteStore(@PathVariable final long storeId) {
+        final long userId = SecurityUtil.getUserId();
+        storeService.deleteStore(userId, storeId);
         return new DefaultApiResponse();
     }
 
