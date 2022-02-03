@@ -5,9 +5,7 @@ import com.ss.camper.store.application.dto.StoreListDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -29,15 +27,15 @@ class StoreRepositorySupportTest {
     private StoreRepositorySupport storeRepositorySupport;
 
     @Test
-    @DisplayName("매장 목록 조회")
     @Transactional
-    void getStoreListPage() {
+    void 회원_별_매장_목록_조회() {
         // Given
-        Store savedStore1 = storeRepository.save(initStore(null, null, new HashSet<>(){{
+        final long userId = 1;
+        Store savedStore1 = storeRepository.save(initStore(userId, null, new HashSet<>(){{
             add(initStoreTag(null, TAG_TITLE1));
             add(initStoreTag(null, TAG_TITLE2));
         }}));
-        Store savedStore2 = storeRepository.save(initStore(null, null, new HashSet<>(){{
+        Store savedStore2 = storeRepository.save(initStore(userId, null, new HashSet<>(){{
             add(initStoreTag(null, TAG_TITLE3));
             add(initStoreTag(null, TAG_TITLE4));
         }}));
@@ -46,7 +44,7 @@ class StoreRepositorySupportTest {
         final int size = 10;
         final int page = 1;
         PagingRequest pagingRequest = new PagingRequest(10, 1);
-        Page<StoreListDTO> result = storeRepositorySupport.getStoreListPage(pagingRequest);
+        Page<StoreListDTO> result = storeRepositorySupport.getStoreListByUserId(userId, pagingRequest);
 
         // Then
         assertThat(result.getSize()).isEqualTo(size);

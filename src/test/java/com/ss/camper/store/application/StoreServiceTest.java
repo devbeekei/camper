@@ -7,7 +7,6 @@ import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.domain.*;
 import com.ss.camper.store.application.exception.NotFoundStoreException;
 import com.ss.camper.store.domain.StoreRepository;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -168,19 +167,20 @@ class StoreServiceTest {
     }
 
     @Test
-    void 매장_목록_조회() {
+    void 회원_별_매장_목록_조회() {
         // Given
         List<StoreListDTO> storeList = new ArrayList<>(){{
             add(initStoreListDTO(1L, new String[]{TAG_TITLE1, TAG_TITLE2}));
             add(initStoreListDTO(2L, new String[]{TAG_TITLE1, TAG_TITLE2}));
         }};
         Page<StoreListDTO> storeListPage = new PageImpl<>(storeList);
-        given(storeRepositorySupport.getStoreListPage(any(PagingRequest.class))).willReturn(storeListPage);
+        given(storeRepositorySupport.getStoreListByUserId(anyLong(), any(PagingRequest.class))).willReturn(storeListPage);
 
         // When
+        final long userId = 1;
         final int size = 10;
         final int page = 1;
-        final PageDTO<StoreListDTO> result = storeService.getStoreListPage(size, page);
+        final PageDTO<StoreListDTO> result = storeService.getStoreListByUserId(userId, size, page);
 
         // Then
         assertThat(result.getContent()).isEqualTo(storeListPage.getContent());

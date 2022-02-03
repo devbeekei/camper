@@ -12,12 +12,12 @@ include::{snippets}/store/info/path-parameters.adoc[]
 include::{snippets}/store/info/response-body.adoc[]
 include::{snippets}/store/info/response-fields.adoc[]
 
-[[store-list]]
-== 매장 목록 조회
-include::{snippets}/store/list/http-request.adoc[]
-include::{snippets}/store/list/request-parameters.adoc[]
-include::{snippets}/store/list/response-body.adoc[]
-include::{snippets}/store/list/response-fields.adoc[]
+[[store-list-by-user]]
+== 회원 별 매장 목록 조회
+include::{snippets}/store/list-by-uesr/http-request.adoc[]
+include::{snippets}/store/list-by-uesr/request-parameters.adoc[]
+include::{snippets}/store/list-by-uesr/response-body.adoc[]
+include::{snippets}/store/list-by-uesr/response-fields.adoc[]
 
 [[register-store]]
 == 매장 등록

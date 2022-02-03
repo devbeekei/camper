@@ -64,9 +64,9 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public PageDTO<StoreListDTO> getStoreListPage(final int size, final int page) {
+    public PageDTO<StoreListDTO> getStoreListByUserId(final long userId, final int size, final int page) {
         final PagingRequest pagingRequest = new PagingRequest(size, page);
-        final Page<StoreListDTO> storeList = storeRepositorySupport.getStoreListPage(pagingRequest);
+        final Page<StoreListDTO> storeList = storeRepositorySupport.getStoreListByUserId(userId, pagingRequest);
         return modelMapper.map(storeList, PageDTO.class);
     }
 

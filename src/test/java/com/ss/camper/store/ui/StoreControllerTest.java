@@ -38,7 +38,6 @@ class StoreControllerTest extends ControllerTest {
     private StoreService storeService;
 
     @Test
-    @WithMockCustomUser
     void 매장_정보_조회() throws Exception {
         // Given
         final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{
@@ -86,21 +85,22 @@ class StoreControllerTest extends ControllerTest {
     }
 
     @Test
-    @WithMockCustomUser
-    void 매장_목록_조회() throws Exception {
+    void 회원_별_매장_목록_조회() throws Exception {
         // Given
+        final int size = 10;
+        final int page = 1;
         final List<StoreListDTO> storeList = new ArrayList<>(){{
             add(initStoreListDTO(1L, new String[]{TAG_TITLE1, TAG_TITLE2}));
             add(initStoreListDTO(2L, new String[]{TAG_TITLE1, TAG_TITLE2}));
         }};
-        final long size = 10;
-        final long page = 1;
         PageDTO<StoreListDTO> storeListPage = new PageDTO<>(storeList, storeList.size(), size, page, 1);
-        given(storeService.getStoreListPage(anyInt(), anyInt())).willReturn(storeListPage);
+        given(storeService.getStoreListByUserId(anyLong(), anyInt(), anyInt())).willReturn(storeListPage);
 
         // When
+        final long userId = 1;
         final ResultActions result = mockMvc.perform(
                 get("/store")
+                        .param("userId", String.valueOf(userId))
                         .param("size", String.valueOf(size))
                         .param("page", String.valueOf(page))
                         .accept(MediaType.APPLICATION_JSON)
@@ -109,10 +109,11 @@ class StoreControllerTest extends ControllerTest {
 
         // Then
         result.andExpect(status().isOk())
-                .andDo(document("store/list",
+                .andDo(document("store/list-by-uesr",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
+                                parameterWithName("userId").description("회원 고유번호"),
                                 parameterWithName("size").description("한 페이지에 보일 데이터 수"),
                                 parameterWithName("page").description("조회할 페이지")
                         ),

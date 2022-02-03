@@ -61,9 +61,9 @@ public class StoreMock {
                 .build();
     }
 
-    public static StoreListDTO initStoreListDTO(Long id, String[] tags) {
+    public static StoreListDTO initStoreListDTO(Long storeId, String[] tags) {
         return StoreListDTO.builder()
-                .id(id)
+                .id(storeId)
                 .storeType(STORE_TYPE)
                 .storeName(STORE_NAME)
                 .address(ADDRESS)

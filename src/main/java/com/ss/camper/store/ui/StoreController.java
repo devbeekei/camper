@@ -27,9 +27,9 @@ public class StoreController {
         return new DataApiResponse<>(storeDTO);
     }
 
-    @GetMapping(name = "매장 목록 조회")
-    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListPage(@RequestParam final int size, @RequestParam final int page) {
-        final PageDTO<StoreListDTO> storeList = storeService.getStoreListPage(size, page);
+    @GetMapping(name = "회원 별 매장 목록 조회")
+    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListPage(@RequestParam final long userId, @RequestParam final int size, @RequestParam final int page) {
+        final PageDTO<StoreListDTO> storeList = storeService.getStoreListByUserId(userId, size, page);
         return new DataApiResponse<>(storeList);
     }
 

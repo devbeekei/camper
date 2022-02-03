@@ -13,7 +13,7 @@ include::{snippets}/user/sign-up-client/response-body.adoc[]
 include::{snippets}/user/sign-up-client/response-fields.adoc[]
 
 [[sign-up-business-user]]
-== 사용자 회원 회원가입
+== 비지니스 회원 회원가입
 include::{snippets}/user/sign-up-business/http-request.adoc[]
 include::{snippets}/user/sign-up-business/request-fields.adoc[]
 include::{snippets}/user/sign-up-business/response-body.adoc[]
