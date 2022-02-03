@@ -67,7 +67,7 @@ public class StoreService {
 
     @Transactional(readOnly = true)
     public StoreDTO getStoreInfo(final long id) {
-        final Store store = storeRepository.findById(id).orElse(null);
+        final Store store = storeRepository.findByIdAndDeletedIsNull(id).orElse(null);
         return store == null ? null : modelMapper.map(store, StoreDTO.class);
     }
 

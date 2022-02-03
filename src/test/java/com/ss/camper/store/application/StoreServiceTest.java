@@ -154,7 +154,7 @@ class StoreServiceTest {
             add(initStoreTag(2L, TAG_TITLE2));
             add(initStoreTag(3L, TAG_TITLE3));
         }});
-        given(storeRepository.findById(anyLong())).willReturn(Optional.ofNullable(store));
+        given(storeRepository.findByIdAndDeletedIsNull(anyLong())).willReturn(Optional.ofNullable(store));
 
         // When
         final StoreDTO result = storeService.getStoreInfo(storeId);
@@ -175,7 +175,7 @@ class StoreServiceTest {
     @Test
     void 존재하지_않는_매장_정보_조회() {
         // Given
-        given(storeRepository.findById(anyLong())).willReturn(Optional.empty());
+        given(storeRepository.findByIdAndDeletedIsNull(anyLong())).willReturn(Optional.empty());
 
         // When
         final long storeId = 1;
