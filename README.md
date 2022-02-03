@@ -1,4 +1,4 @@
-# Project Camper
+# Camping Community
 
 ### 프로젝트 개요
 캠핑장, 캠핑용품을 공유하고 추천할 수 있는 캠핑 관련 커뮤니티 애플리케이션
