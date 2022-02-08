@@ -7,6 +7,7 @@ import com.ss.camper.common.util.SecurityUtil;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
+import com.ss.camper.store.domain.StoreType;
 import com.ss.camper.store.ui.payload.ModifyStorePayload;
 import com.ss.camper.store.ui.payload.RegisterStorePayload;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,15 @@ public class StoreController {
         return new DataApiResponse<>(storeDTO);
     }
 
-    @GetMapping(name = "회원 별 매장 목록 조회")
-    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListPage(@RequestParam final long userId,
-                                                                   @RequestParam final int size,
-                                                                   @RequestParam final int page) {
+    @GetMapping(name = "회원 별 매장 목록 조회", value = "user/{userId}")
+    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListByUserId(@PathVariable final long userId, @RequestParam final int size, @RequestParam final int page) {
         final PageDTO<StoreListDTO> storeList = storeService.getStoreListByUserId(userId, size, page);
+        return new DataApiResponse<>(storeList);
+    }
+
+    @GetMapping(name = "매장 유형 별 매장 목록 조회", value = "type/{type}")
+    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListByType(@PathVariable final StoreType type, @RequestParam final int size, @RequestParam final int page) {
+        final PageDTO<StoreListDTO> storeList = storeService.getStoreListByType(type, size, page);
         return new DataApiResponse<>(storeList);
     }
 

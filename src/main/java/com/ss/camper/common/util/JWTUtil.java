@@ -42,7 +42,8 @@ public class JWTUtil {
         payloads.put("username", email);
 
         return Jwts.builder()
-                .setSubject(userId)
+                .setId(userId)
+                .setSubject(email)
                 .setClaims(payloads)
                 .setHeaderParam("typ", "JWT")
                 .setIssuer("Camper")

@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface StoreRepository {
     Store save(Store store);
-
     Optional<Store> findByUserIdAndId(long userId, long storeId);
+    void deleteAll();
 
     @Query(value = "select s from Store s where s.id = :id")
     @QueryHints(value = @QueryHint(name = "org.hibernate.cacheable", value = "true"))

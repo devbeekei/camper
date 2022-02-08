@@ -1,4 +1,4 @@
-package com.ss.camper.config;
+package com.ss.camper.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.snippet.Attributes.key;
 
 public class ApiDocumentUtil {
 
@@ -26,8 +27,8 @@ public class ApiDocumentUtil {
 
     public static FieldDescriptor[] defaultResponseFields() {
         return new FieldDescriptor[] {
-            fieldWithPath("code").type(JsonFieldType.NUMBER).description("결과 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메시지")
+                fieldWithPath("code").type(JsonFieldType.NUMBER).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메시지")
         };
     }
 
@@ -40,7 +41,14 @@ public class ApiDocumentUtil {
             int idx = responseFields.length;
             newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME).type(JsonFieldType.OBJECT).description("결과 데이터");
             for (FieldDescriptor descriptor : fieldDescriptors) {
-                newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME + "." + descriptor.getPath()).type(descriptor.getType()).description(descriptor.getDescription());
+                FieldDescriptor newField = fieldWithPath(RESULT_FILED_NAME + "." + descriptor.getPath()).type(descriptor.getType()).description(descriptor.getDescription());
+                if (descriptor.isOptional()) newField.optional();
+                if (descriptor.getAttributes() != null) {
+                    for (String key : descriptor.getAttributes().keySet()) {
+                        newField.attributes(key(key).value(descriptor.getAttributes().get(key)));
+                    }
+                }
+                newResponseFields[idx++] = newField;
             }
             responseFields = newResponseFields;
         }
@@ -54,9 +62,16 @@ public class ApiDocumentUtil {
                     Arrays.copyOf(responseFields, (responseFields.length + fieldDescriptors.length + 1));
 
             int idx = responseFields.length;
-            newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME + "[]").type(JsonFieldType.OBJECT).description("결과 데이터");
+            newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME + "[]").type(JsonFieldType.ARRAY).description("결과 데이터");
             for (FieldDescriptor descriptor : fieldDescriptors) {
-                newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME + "[]." + descriptor.getPath()).type(descriptor.getType()).description(descriptor.getDescription());
+                FieldDescriptor newField = fieldWithPath(RESULT_FILED_NAME + "[]." + descriptor.getPath()).type(descriptor.getType()).description(descriptor.getDescription());
+                if (descriptor.isOptional()) newField.optional();
+                if (descriptor.getAttributes() != null) {
+                    for (String key : descriptor.getAttributes().keySet()) {
+                        newField.attributes(key(key).value(descriptor.getAttributes().get(key)));
+                    }
+                }
+                newResponseFields[idx++] = newField;
             }
             responseFields = newResponseFields;
         }
@@ -66,14 +81,20 @@ public class ApiDocumentUtil {
     public static FieldDescriptor[] pagingResponseFields(FieldDescriptor ... fieldDescriptors) {
         FieldDescriptor[] responseFields = defaultResponseFields();
         if (fieldDescriptors.length > 0) {
-            FieldDescriptor[] newResponseFields =
-                    Arrays.copyOf(responseFields, (responseFields.length + fieldDescriptors.length + 6));
+            FieldDescriptor[] newResponseFields = Arrays.copyOf(responseFields, (responseFields.length + fieldDescriptors.length + 6));
 
             int idx = responseFields.length;
             newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME).type(JsonFieldType.OBJECT).description("결과 데이터");
             newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME + ".content[]").type(JsonFieldType.ARRAY).description("데이터 목록");
             for (FieldDescriptor descriptor : fieldDescriptors) {
-                newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME + ".content[]." + descriptor.getPath()).type(descriptor.getType()).description(descriptor.getDescription());
+                FieldDescriptor newField = fieldWithPath(RESULT_FILED_NAME + ".content[]." + descriptor.getPath()).type(descriptor.getType()).description(descriptor.getDescription());
+                if (descriptor.isOptional()) newField.optional();
+                if (descriptor.getAttributes() != null) {
+                    for (String key : descriptor.getAttributes().keySet()) {
+                        newField.attributes(key(key).value(descriptor.getAttributes().get(key)));
+                    }
+                }
+                newResponseFields[idx++] = newField;
             }
             newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME + ".count").type(JsonFieldType.NUMBER).description("총 데이터 수");
             newResponseFields[idx++] = fieldWithPath(RESULT_FILED_NAME + ".size").type(JsonFieldType.NUMBER).description("한 페이지에 보일 데이터 수");

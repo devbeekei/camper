@@ -1,4 +1,4 @@
-package com.ss.camper.config;
+package com.ss.camper.common.config;
 
 import org.hibernate.dialect.MySQL5Dialect;
 import org.hibernate.dialect.function.StandardSQLFunction;

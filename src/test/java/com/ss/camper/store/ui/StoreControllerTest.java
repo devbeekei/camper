@@ -7,7 +7,7 @@ import com.ss.camper.common.util.JWTUtil;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
-import com.ss.camper.store.domain.StoreStatus;
+import com.ss.camper.store.domain.StoreType;
 import com.ss.camper.store.ui.payload.ModifyStorePayload;
 import com.ss.camper.store.ui.payload.RegisterStorePayload;
 import org.junit.jupiter.api.Test;
@@ -39,109 +39,6 @@ class StoreControllerTest extends ControllerTest {
 
     @MockBean
     private StoreService storeService;
-
-    @Test
-    void 매장_정보_조회() throws Exception {
-        // Given
-        final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{
-            add(initStoreTagDTO(1L, TAG_TITLE1));
-            add(initStoreTagDTO(2L, TAG_TITLE2));
-        }});
-        given(storeService.getStoreInfo(anyLong())).willReturn(storeDTO);
-
-        // When
-        final ResultActions result = mockMvc.perform(
-                get("/store/{storeId}", 1)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
-        );
-
-        // Then
-        result.andExpect(status().isOk())
-                .andDo(document("store/info",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        pathParameters(
-                                parameterWithName("storeId").description("매장 고유번호")
-                        ),
-                        responseFields(
-                                dataResponseFields(
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("매장 고유번호"),
-                                        fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
-                                        fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
-                                        fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
-                                        fieldWithPath("address").type(JsonFieldType.OBJECT).description("매장 주소 정보"),
-                                        fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편 번호"),
-                                        fieldWithPath("address.defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
-                                        fieldWithPath("address.detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
-                                        fieldWithPath("address.latitude").type(JsonFieldType.NUMBER).description("위도"),
-                                        fieldWithPath("address.longitude").type(JsonFieldType.NUMBER).description("경도"),
-                                        fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
-                                        fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
-                                        fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
-                                        fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
-                                        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그") ,
-                                        fieldWithPath("tags[].id").type(JsonFieldType.NUMBER).optional().description("태그 고유번호"),
-                                        fieldWithPath("tags[].title").type(JsonFieldType.STRING).optional().description("태그 타이틀")
-                                )
-                        )
-                ));
-    }
-
-    @Test
-    void 회원_별_매장_목록_조회() throws Exception {
-        // Given
-        final int size = 10;
-        final int page = 1;
-        final List<StoreListDTO> storeList = new ArrayList<>(){{
-            add(initStoreListDTO(1L, new String[]{TAG_TITLE1, TAG_TITLE2}));
-            add(initStoreListDTO(2L, new String[]{TAG_TITLE1, TAG_TITLE2}));
-        }};
-        PageDTO<StoreListDTO> storeListPage = new PageDTO<>(storeList, storeList.size(), size, page, 1);
-        given(storeService.getStoreListByUserId(anyLong(), anyInt(), anyInt())).willReturn(storeListPage);
-
-        // When
-        final long userId = 1;
-        final ResultActions result = mockMvc.perform(
-                get("/store")
-                        .param("userId", String.valueOf(userId))
-                        .param("size", String.valueOf(size))
-                        .param("page", String.valueOf(page))
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
-        );
-
-        // Then
-        result.andExpect(status().isOk())
-                .andDo(document("store/list-by-uesr",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestParameters(
-                                parameterWithName("userId").description("회원 고유번호"),
-                                parameterWithName("size").description("한 페이지에 보일 데이터 수"),
-                                parameterWithName("page").description("조회할 페이지")
-                        ),
-                        responseFields(
-                                pagingResponseFields(
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("매장 고유번호"),
-                                        fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
-                                        fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
-                                        fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
-                                        fieldWithPath("address").type(JsonFieldType.OBJECT).description("매장 주소 정보"),
-                                        fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편 번호"),
-                                        fieldWithPath("address.defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
-                                        fieldWithPath("address.detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
-                                        fieldWithPath("address.latitude").type(JsonFieldType.NUMBER).description("위도"),
-                                        fieldWithPath("address.longitude").type(JsonFieldType.NUMBER).description("경도"),
-                                        fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
-                                        fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
-                                        fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
-                                        fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
-                                        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그")
-                                )
-                        )
-                ));
-    }
 
     @Test
     @WithMockCustomUser
@@ -293,6 +190,166 @@ class StoreControllerTest extends ControllerTest {
                         ),
                         responseFields(
                                 defaultResponseFields()
+                        )
+                ));
+    }
+
+    @Test
+    void 매장_정보_조회() throws Exception {
+        // Given
+        final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{
+            add(initStoreTagDTO(1L, TAG_TITLE1));
+            add(initStoreTagDTO(2L, TAG_TITLE2));
+        }});
+        given(storeService.getStoreInfo(anyLong())).willReturn(storeDTO);
+
+        // When
+        final ResultActions result = mockMvc.perform(
+                get("/store/{storeId}", 1)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(document("store/info",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("storeId").description("매장 고유번호")
+                        ),
+                        responseFields(
+                                dataResponseFields(
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("매장 고유번호"),
+                                        fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
+                                        fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
+                                        fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
+                                        fieldWithPath("address").type(JsonFieldType.OBJECT).description("매장 주소 정보"),
+                                        fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편 번호"),
+                                        fieldWithPath("address.defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
+                                        fieldWithPath("address.detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
+                                        fieldWithPath("address.latitude").type(JsonFieldType.NUMBER).description("위도"),
+                                        fieldWithPath("address.longitude").type(JsonFieldType.NUMBER).description("경도"),
+                                        fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
+                                        fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
+                                        fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
+                                        fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
+                                        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그") ,
+                                        fieldWithPath("tags[].id").type(JsonFieldType.NUMBER).optional().description("태그 고유번호"),
+                                        fieldWithPath("tags[].title").type(JsonFieldType.STRING).optional().description("태그 타이틀")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    void 회원_별_매장_목록_조회() throws Exception {
+        // Given
+        final int size = 10;
+        final int page = 1;
+        final List<StoreListDTO> storeList = new ArrayList<>(){{
+            add(initStoreListDTO(1L, new String[]{TAG_TITLE1, TAG_TITLE2}));
+            add(initStoreListDTO(2L, new String[]{TAG_TITLE1, TAG_TITLE2}));
+        }};
+        PageDTO<StoreListDTO> storeListPage = new PageDTO<>(storeList, storeList.size(), size, page, 1);
+        given(storeService.getStoreListByUserId(anyLong(), anyInt(), anyInt())).willReturn(storeListPage);
+
+        // When
+        final long userId = 1;
+        final ResultActions result = mockMvc.perform(
+                get("/store/user/{userId}", 1L)
+                        .param("size", String.valueOf(size))
+                        .param("page", String.valueOf(page))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(document("store/list-user",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("userId").description("회원 고유번호")
+                        ),
+                        requestParameters(
+                                parameterWithName("size").description("한 페이지에 보일 데이터 수"),
+                                parameterWithName("page").description("조회할 페이지")
+                        ),
+                        responseFields(
+                                pagingResponseFields(
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("매장 고유번호"),
+                                        fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
+                                        fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
+                                        fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
+                                        fieldWithPath("address").type(JsonFieldType.OBJECT).description("매장 주소 정보"),
+                                        fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편 번호"),
+                                        fieldWithPath("address.defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
+                                        fieldWithPath("address.detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
+                                        fieldWithPath("address.latitude").type(JsonFieldType.NUMBER).description("위도"),
+                                        fieldWithPath("address.longitude").type(JsonFieldType.NUMBER).description("경도"),
+                                        fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
+                                        fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
+                                        fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
+                                        fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
+                                        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    void 매장_유형_별_매장_목록_조회() throws Exception {
+        // Given
+        final int size = 10;
+        final int page = 1;
+        final List<StoreListDTO> storeList = new ArrayList<>(){{
+            add(initStoreListDTO(1L, new String[]{TAG_TITLE1, TAG_TITLE2}));
+            add(initStoreListDTO(2L, new String[]{TAG_TITLE1, TAG_TITLE2}));
+        }};
+        PageDTO<StoreListDTO> storeListPage = new PageDTO<>(storeList, storeList.size(), size, page, 1);
+        given(storeService.getStoreListByType(any(StoreType.class), anyInt(), anyInt())).willReturn(storeListPage);
+
+        // When
+        final long userId = 1;
+        final ResultActions result = mockMvc.perform(
+                get("/store/type/{type}", StoreType.CAMP_GROUND)
+                        .param("size", String.valueOf(size))
+                        .param("page", String.valueOf(page))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(document("store/list-type",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("type").description("매장 유형").attributes(storeTypeAttribute())
+                        ),
+                        requestParameters(
+                                parameterWithName("size").description("한 페이지에 보일 데이터 수"),
+                                parameterWithName("page").description("조회할 페이지")
+                        ),
+                        responseFields(
+                                pagingResponseFields(
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("매장 고유번호"),
+                                        fieldWithPath("storeType").type(JsonFieldType.STRING).description("매장 유형").attributes(storeTypeAttribute()),
+                                        fieldWithPath("storeStatus").type(JsonFieldType.STRING).description("매장 상태").attributes(storeStatusAttribute()),
+                                        fieldWithPath("storeName").type(JsonFieldType.STRING).description("매장 명"),
+                                        fieldWithPath("address").type(JsonFieldType.OBJECT).description("매장 주소 정보"),
+                                        fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편 번호"),
+                                        fieldWithPath("address.defaultAddress").type(JsonFieldType.STRING).description("기본 주소"),
+                                        fieldWithPath("address.detailAddress").type(JsonFieldType.STRING).optional().description("상세 주소"),
+                                        fieldWithPath("address.latitude").type(JsonFieldType.NUMBER).description("위도"),
+                                        fieldWithPath("address.longitude").type(JsonFieldType.NUMBER).description("경도"),
+                                        fieldWithPath("tel").type(JsonFieldType.STRING).description("연락처"),
+                                        fieldWithPath("homepageUrl").type(JsonFieldType.STRING).optional().description("홈페이지 URL"),
+                                        fieldWithPath("reservationUrl").type(JsonFieldType.STRING).optional().description("예약 사이트 URL"),
+                                        fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
+                                        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그")
+                                )
                         )
                 ));
     }

@@ -54,7 +54,7 @@ configurations {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
@@ -63,6 +63,9 @@ dependencies {
 
     // MySQL
     runtimeOnly 'mysql:mysql-connector-java'
+
+    // H2 Database
+    implementation 'com.h2database:h2'
 
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'

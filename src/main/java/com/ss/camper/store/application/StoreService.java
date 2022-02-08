@@ -78,6 +78,13 @@ public class StoreService {
         return modelMapper.map(storeList, PageDTO.class);
     }
 
+    @Transactional(readOnly = true)
+    public PageDTO<StoreListDTO> getStoreListByType(StoreType type, int size, int page) {
+        final PagingRequest pagingRequest = new PagingRequest(size, page);
+        final Page<StoreListDTO> storeList = storeRepositorySupport.getStoreListByType(type, pagingRequest);
+        return modelMapper.map(storeList, PageDTO.class);
+    }
+
     private void updateTags(final Store store, final Set<StoreTagDTO> tagsDTO) {
         LinkedHashSet<StoreTag> tags = null;
         if (tagsDTO != null && !tagsDTO.isEmpty()) {
@@ -93,5 +100,6 @@ public class StoreService {
         }
         store.updateTags(tags);
     }
+
 
 }

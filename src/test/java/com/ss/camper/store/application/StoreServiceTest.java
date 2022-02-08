@@ -205,4 +205,25 @@ class StoreServiceTest {
         assertThat(result.getContent()).isEqualTo(storeListPage.getContent());
     }
 
+    @Test
+    void 매장_유형_별_매장_목록_조회() {
+        // Given
+        List<StoreListDTO> storeList = new ArrayList<>(){{
+            add(initStoreListDTO(1L, new String[]{TAG_TITLE1, TAG_TITLE2}));
+            add(initStoreListDTO(2L, new String[]{TAG_TITLE1, TAG_TITLE2}));
+        }};
+        Page<StoreListDTO> storeListPage = new PageImpl<>(storeList);
+        given(storeRepositorySupport.getStoreListByType(any(StoreType.class), any(PagingRequest.class))).willReturn(storeListPage);
+
+        // When
+        final int size = 10;
+        final int page = 1;
+        final PageDTO<StoreListDTO> result = storeService.getStoreListByType(STORE_TYPE, size, page);
+
+        // Then
+        assertThat(result.getContent()).isEqualTo(storeListPage.getContent());
+        assertThat(result.getContent().get(0).getStoreType()).isEqualTo(STORE_TYPE);
+        assertThat(result.getContent().get(1).getStoreType()).isEqualTo(STORE_TYPE);
+    }
+
 }
