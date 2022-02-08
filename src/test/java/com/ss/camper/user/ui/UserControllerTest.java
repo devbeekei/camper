@@ -3,6 +3,7 @@ package com.ss.camper.user.ui;
 import com.ss.camper.common.ControllerTest;
 import com.ss.camper.common.WithMockCustomUser;
 import com.ss.camper.common.util.JWTUtil;
+import com.ss.camper.user.application.UserAgreeTermsService;
 import com.ss.camper.user.application.UserService;
 import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.TermsType;
@@ -10,6 +11,7 @@ import com.ss.camper.user.domain.UserType;
 import com.ss.camper.user.ui.payload.SignUpPayload;
 import com.ss.camper.user.ui.payload.UpdateUserInfoPayload;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -35,6 +37,9 @@ class UserControllerTest extends ControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private UserAgreeTermsService userAgreeTermsService;
 
     @Test
     void 사용자_회원_회원가입() throws Exception {
@@ -141,7 +146,12 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
                                         fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 연락처").optional(),
                                         fieldWithPath("withdrawal").type(JsonFieldType.BOOLEAN).description("회원 탈퇴여부"),
-                                        fieldWithPath("created").type(JsonFieldType.STRING).description("회원 생성일자"),
+                                        fieldWithPath("profileImage").type(JsonFieldType.OBJECT).description("프로필 이미지 정보").optional(),
+                                        fieldWithPath("profileImage.id").type(JsonFieldType.NUMBER).description("프로필 이미지 고유번호"),
+                                        fieldWithPath("profileImage.originName").type(JsonFieldType.STRING).description("원본 프로필 이미지 파일명"),
+                                        fieldWithPath("profileImage.uploadName").type(JsonFieldType.STRING).description("업로드 프로필 이미지 파일명"),
+                                        fieldWithPath("profileImage.fullPath").type(JsonFieldType.STRING).description("프로필 이미지 전체 파일 경로"),
+                                        fieldWithPath("profileImage.path").type(JsonFieldType.STRING).description("업로드 프로필 파일 경로"),
                                         fieldWithPath("useAgreeTerms").type(JsonFieldType.OBJECT).description("이용 약관 정보").optional(),
                                         fieldWithPath("useAgreeTerms.id").type(JsonFieldType.NUMBER).description("이용 약관 정보 고유번호"),
                                         fieldWithPath("useAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("이용 약관 정보 동의여부"),
@@ -149,7 +159,8 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("privacyPolicyAgreeTerms").type(JsonFieldType.OBJECT).description("개인정보 처리방침 정보").optional(),
                                         fieldWithPath("privacyPolicyAgreeTerms.id").type(JsonFieldType.NUMBER).description("개인정보 처리방침 고유번호"),
                                         fieldWithPath("privacyPolicyAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("개인정보 처리방침 동의여부"),
-                                        fieldWithPath("privacyPolicyAgreeTerms.created").type(JsonFieldType.STRING).description("개인정보 처리방침 생성일자")
+                                        fieldWithPath("privacyPolicyAgreeTerms.created").type(JsonFieldType.STRING).description("개인정보 처리방침 생성일자"),
+                                        fieldWithPath("created").type(JsonFieldType.STRING).description("회원 생성일자")
                                 )
                         )
                 ));
@@ -192,7 +203,12 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
                                         fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 연락처").optional(),
                                         fieldWithPath("withdrawal").type(JsonFieldType.BOOLEAN).description("회원 탈퇴여부"),
-                                        fieldWithPath("created").type(JsonFieldType.STRING).description("회원 생성일자"),
+                                        fieldWithPath("profileImage").type(JsonFieldType.OBJECT).description("프로필 이미지 정보").optional(),
+                                        fieldWithPath("profileImage.id").type(JsonFieldType.NUMBER).description("프로필 이미지 고유번호"),
+                                        fieldWithPath("profileImage.originName").type(JsonFieldType.STRING).description("원본 프로필 이미지 파일명"),
+                                        fieldWithPath("profileImage.uploadName").type(JsonFieldType.STRING).description("업로드 프로필 이미지 파일명"),
+                                        fieldWithPath("profileImage.fullPath").type(JsonFieldType.STRING).description("프로필 이미지 전체 파일 경로"),
+                                        fieldWithPath("profileImage.path").type(JsonFieldType.STRING).description("업로드 프로필 파일 경로"),
                                         fieldWithPath("useAgreeTerms").type(JsonFieldType.OBJECT).description("이용 약관 정보").optional(),
                                         fieldWithPath("useAgreeTerms.id").type(JsonFieldType.NUMBER).description("이용 약관 정보 고유번호"),
                                         fieldWithPath("useAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("이용 약관 정보 동의여부"),
@@ -200,7 +216,8 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("privacyPolicyAgreeTerms").type(JsonFieldType.OBJECT).description("개인정보 처리방침 정보").optional(),
                                         fieldWithPath("privacyPolicyAgreeTerms.id").type(JsonFieldType.NUMBER).description("개인정보 처리방침 고유번호"),
                                         fieldWithPath("privacyPolicyAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("개인정보 처리방침 동의여부"),
-                                        fieldWithPath("privacyPolicyAgreeTerms.created").type(JsonFieldType.STRING).description("개인정보 처리방침 생성일자")
+                                        fieldWithPath("privacyPolicyAgreeTerms.created").type(JsonFieldType.STRING).description("개인정보 처리방침 생성일자"),
+                                        fieldWithPath("created").type(JsonFieldType.STRING).description("회원 생성일자")
                                 )
                         )
                 ));
@@ -234,7 +251,7 @@ class UserControllerTest extends ControllerTest {
     @WithMockCustomUser
     void 약관_동의() throws Exception {
         // Given
-        willDoNothing().given(userService).agreeTerms(anyLong(), anyMap());
+        willDoNothing().given(userAgreeTermsService).agreeTerms(anyLong(), anyMap());
 
         // When
         final Map<TermsType, Boolean> request = new HashMap<>(){{ put(TermsType.USE, true); put(TermsType.PRIVACY_POLICY, true); }};

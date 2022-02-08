@@ -75,13 +75,4 @@ public class UserService {
         user.withdraw();
     }
 
-    @Transactional
-    public void agreeTerms(final long userId, final Map<TermsType, Boolean> terms) {
-        final User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
-        for (TermsType termsType : terms.keySet()) {
-            final Boolean agree = terms.get(termsType);
-            user.agreeTerms(termsType, agree != null && agree);
-        }
-    }
-
 }

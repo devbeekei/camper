@@ -3,6 +3,9 @@ package com.ss.camper.user.ui;
 import com.ss.camper.common.payload.DataApiResponse;
 import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.util.SecurityUtil;
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
+import com.ss.camper.user.application.UserAgreeTermsService;
+import com.ss.camper.user.application.UserProfileImageService;
 import com.ss.camper.user.application.UserService;
 import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.TermsType;
@@ -10,6 +13,7 @@ import com.ss.camper.user.ui.payload.SignUpPayload;
 import com.ss.camper.user.ui.payload.UpdateUserInfoPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -21,6 +25,8 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final UserAgreeTermsService userAgreeTermsService;
+    private final UserProfileImageService userProfileImageService;
 
     @PostMapping(name = "사용자 회원 회원가입", value = "client")
     public DefaultApiResponse signUpClientUser(@Valid @RequestBody final SignUpPayload.Request request) {
@@ -58,8 +64,15 @@ public class UserController {
     @PostMapping(name = "약관 동의", value = "agree-terms")
     public DefaultApiResponse agreeTerms(@Valid @RequestBody @NotNull final Map<TermsType, Boolean> request) {
         final long userId = SecurityUtil.getUserId();
-        userService.agreeTerms(userId, request);
+        userAgreeTermsService.agreeTerms(userId, request);
         return new DefaultApiResponse();
+    }
+
+    @PostMapping(name = "프로필 이미지 등록", value = "profile-image")
+    public DataApiResponse<UploadFileDTO> updateProfileImage(final @RequestPart(value="file") MultipartFile multipartFile) {
+        final long userId = SecurityUtil.getUserId();
+        final UploadFileDTO uploadFileDTO = userProfileImageService.updateProfileImage(userId, multipartFile);
+        return new DataApiResponse<>(uploadFileDTO);
     }
 
 }

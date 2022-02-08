@@ -46,7 +46,10 @@ public enum ApiResponseType {
 
     // Store 관련 CONFLICT
     NOT_FOUND_STORE(HttpStatus.CONFLICT, 401, "Not found store"),
-    NOT_SUPPLY_STORE_TYPE(HttpStatus.CONFLICT, 402, "Not supply Store type");
+    NOT_SUPPLY_STORE_TYPE(HttpStatus.CONFLICT, 402, "Not supply Store type"),
+
+    // File 관련 CONFLICT
+    FILE_UPLOAD_FAILED(HttpStatus.CONFLICT, 501, "File upload Failed");
 
     private final HttpStatus status;
     private final int code;

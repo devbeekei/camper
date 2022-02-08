@@ -1,10 +1,11 @@
 package com.ss.camper.user.domain;
 
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.ss.camper.user.UserMock.initClientUser;
+import static com.ss.camper.user.UserMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +40,34 @@ public class UserTest {
         assertThat(clientUser.getAgreeTermsHistories().size()).isEqualTo(2);
         assertThat(clientUser.getUseAgreeTerms().isAgree()).isTrue();
         assertThat(clientUser.getPrivacyPolicyAgreeTerms().isAgree()).isTrue();
+    }
+
+    @Test
+    public void 프로필_이미지_삭제() {
+        final ClientUser clientUser = initClientUser(1L);
+        clientUser.clearProfileImage();
+
+        assertThat(clientUser.getProfileImage()).isNull();
+    }
+
+    @Test
+    public void 프로필_이미지_등록() {
+        final ClientUser clientUser = initClientUser(1L);
+        clientUser.updateProfileImage(UploadFileDTO.builder()
+                .originName(PROFILE_ORIGIN_FILE_NAME)
+                .uploadName(PROFILE_UPDATE_FILE_NAME)
+                .fullPath(PROFILE_FULL_PATH)
+                .path(PROFILE_PATH)
+                .size(PROFILE_SIZE)
+                .ext(PROFILE_EXT)
+                .build());
+
+        assertThat(clientUser.getProfileImage().getOriginName()).isEqualTo(PROFILE_ORIGIN_FILE_NAME);
+        assertThat(clientUser.getProfileImage().getUploadName()).isEqualTo(PROFILE_UPDATE_FILE_NAME);
+        assertThat(clientUser.getProfileImage().getFullPath()).isEqualTo(PROFILE_FULL_PATH);
+        assertThat(clientUser.getProfileImage().getPath()).isEqualTo(PROFILE_PATH);
+        assertThat(clientUser.getProfileImage().getSize()).isEqualTo(PROFILE_SIZE);
+        assertThat(clientUser.getProfileImage().getExt()).isEqualTo(PROFILE_EXT);
     }
 
 }

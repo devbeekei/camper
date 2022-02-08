@@ -1,0 +1,18 @@
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIA4AIUYZ6KJVJ2PNC6
+      secret-key: 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
+    s3:
+      bucket: camping-community
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error

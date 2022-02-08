@@ -1,5 +1,7 @@
 package com.ss.camper.user.domain;
 
+import com.ss.camper.uploadFile.domain.UploadFile;
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,6 +51,13 @@ public abstract class User {
 
     @Column(name = "withdrawal", columnDefinition = "TINYINT DEFAULT 0")
     private boolean withdrawal;
+
+//    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//    @JoinTable(name = "user_profile_image", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "user_id", insertable = false, updatable = false))
+    @JoinColumn(table = "user_profile_image", name = "user_id", referencedColumnName = "user_id")
+    private UserProfileImage profileImage;
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OrderBy(value = "id DESC")
@@ -105,6 +114,21 @@ public abstract class User {
             .termsType(termsType)
             .agree(agree)
             .build());
+    }
+
+    public void clearProfileImage() {
+        this.profileImage = null;
+    }
+
+    public void updateProfileImage(UploadFileDTO uploadFileDTO) {
+        this.profileImage = UserProfileImage.builder()
+                .originName(uploadFileDTO.getOriginName())
+                .uploadName(uploadFileDTO.getUploadName())
+                .fullPath(uploadFileDTO.getFullPath())
+                .path(uploadFileDTO.getPath())
+                .size(uploadFileDTO.getSize())
+                .ext(uploadFileDTO.getExt())
+                .build();
     }
 
 }

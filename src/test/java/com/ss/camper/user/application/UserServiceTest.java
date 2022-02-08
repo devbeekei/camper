@@ -174,24 +174,4 @@ class UserServiceTest {
         assertThrows(NotFoundUserException.class, () -> userService.withdrawUser(anyLong()));
     }
 
-    @Test
-    void 약관_동의() {
-        final long userId = 1;
-        final ClientUser clientUser = initClientUser(userId);
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(clientUser));
-
-        final Map<TermsType, Boolean> terms = new HashMap<>(){{ put(TermsType.USE, true); put(TermsType.PRIVACY_POLICY, true); }};
-        userService.agreeTerms(userId, terms);
-
-        assertThat(clientUser.getAgreeTermsHistories().size()).isEqualTo(2);
-        assertThat(clientUser.getUseAgreeTerms().isAgree()).isTrue();
-        assertThat(clientUser.getPrivacyPolicyAgreeTerms().isAgree()).isTrue();
-    }
-
-    @Test
-    void 존재하지_않는_회원_약관_동의() {
-        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
-        assertThrows(NotFoundUserException.class, () -> userService.agreeTerms(1L, anyMap()));
-    }
-
 }

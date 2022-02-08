@@ -9,6 +9,7 @@ spring:
       - connection-test
       - cache
       - oauth
+      - cloud
 
   servlet:
     multipart:

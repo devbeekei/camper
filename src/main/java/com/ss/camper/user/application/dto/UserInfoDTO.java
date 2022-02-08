@@ -19,6 +19,7 @@ public class UserInfoDTO {
     private String nickname;
     private String phone;
     private Boolean withdrawal;
+    private UserProfileImageDTO profileImage;
     private AgreeTermsHistoryDTO useAgreeTerms;
     private AgreeTermsHistoryDTO privacyPolicyAgreeTerms;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

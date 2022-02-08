@@ -1,9 +1,12 @@
 package com.ss.camper.user;
 
+import com.ss.camper.uploadFile.domain.FileType;
 import com.ss.camper.user.application.dto.AgreeTermsHistoryDTO;
 import com.ss.camper.user.application.dto.UserInfoDTO;
+import com.ss.camper.user.application.dto.UserProfileImageDTO;
 import com.ss.camper.user.domain.BusinessUser;
 import com.ss.camper.user.domain.ClientUser;
+import com.ss.camper.user.domain.UserProfileImage;
 import com.ss.camper.user.domain.UserType;
 
 import java.util.Date;
@@ -15,6 +18,12 @@ public class UserMock {
     public static final String PASSWORD_HASH = "$2a$10$Jg9o67Akrg4Oimr4OHQZh.XtUCNnki39fxvUo6dq.y9frZR1yAnN.";
     public static final String NICKNAME = "김캠퍼";
     public static final String PHONE = "01012345678";
+    public static final String PROFILE_ORIGIN_FILE_NAME = "originFileName.jpg";
+    public static final String PROFILE_UPDATE_FILE_NAME = "uploadFileName.jpg";
+    public static final String PROFILE_FULL_PATH = "https://.../uploadFileName.jpg";
+    public static final String PROFILE_PATH = ".../uploadFileName.jpg";
+    public static final long PROFILE_SIZE = 23514;
+    public static final String PROFILE_EXT = "JPG";
 
     public static UserInfoDTO initUserInfoDTO(Long id, UserType userType) {
         return UserInfoDTO.builder()
@@ -33,6 +42,13 @@ public class UserMock {
                         .id(2L)
                         .agree(true)
                         .created(new Date()).build())
+                .profileImage(UserProfileImageDTO.builder()
+                        .id(1L)
+                        .originName(PROFILE_ORIGIN_FILE_NAME)
+                        .uploadName(PROFILE_UPDATE_FILE_NAME)
+                        .fullPath(PROFILE_FULL_PATH)
+                        .path(PROFILE_PATH)
+                        .build())
                 .build();
     }
 
@@ -45,6 +61,17 @@ public class UserMock {
                 .nickname(NICKNAME)
                 .phone(PHONE)
                 .withdrawal(false)
+                .profileImage(UserProfileImage.builder()
+                        .userId(id)
+                        .id(1L)
+                        .fileType(FileType.USER_PROFILE)
+                        .originName(PROFILE_ORIGIN_FILE_NAME)
+                        .uploadName(PROFILE_UPDATE_FILE_NAME)
+                        .fullPath(PROFILE_FULL_PATH)
+                        .path(PROFILE_PATH)
+                        .size(PROFILE_SIZE)
+                        .ext(PROFILE_EXT)
+                        .build())
                 .build();
     }
 
@@ -57,6 +84,17 @@ public class UserMock {
                 .nickname(NICKNAME)
                 .phone(PHONE)
                 .withdrawal(true)
+                .profileImage(UserProfileImage.builder()
+                        .userId(id)
+                        .id(1L)
+                        .fileType(FileType.USER_PROFILE)
+                        .originName(PROFILE_ORIGIN_FILE_NAME)
+                        .uploadName(PROFILE_UPDATE_FILE_NAME)
+                        .fullPath(PROFILE_FULL_PATH)
+                        .path(PROFILE_PATH)
+                        .size(PROFILE_SIZE)
+                        .ext(PROFILE_EXT)
+                        .build())
                 .build();
     }
 
@@ -69,6 +107,17 @@ public class UserMock {
                 .nickname(NICKNAME)
                 .phone(PHONE)
                 .withdrawal(false)
+                .profileImage(UserProfileImage.builder()
+                        .userId(id)
+                        .id(1L)
+                        .fileType(FileType.USER_PROFILE)
+                        .originName(PROFILE_ORIGIN_FILE_NAME)
+                        .uploadName(PROFILE_UPDATE_FILE_NAME)
+                        .fullPath(PROFILE_FULL_PATH)
+                        .path(PROFILE_PATH)
+                        .size(PROFILE_SIZE)
+                        .ext(PROFILE_EXT)
+                        .build())
                 .build();
     }
 }

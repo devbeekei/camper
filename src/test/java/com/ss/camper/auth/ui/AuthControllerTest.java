@@ -67,7 +67,12 @@ class AuthControllerTest extends ControllerTest {
                                         fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
                                         fieldWithPath("user.phone").type(JsonFieldType.STRING).description("회원 연락처").optional(),
                                         fieldWithPath("user.withdrawal").type(JsonFieldType.BOOLEAN).description("회원 탈퇴여부"),
-                                        fieldWithPath("user.created").type(JsonFieldType.STRING).description("회원 생성일자"),
+                                        fieldWithPath("user.profileImage").type(JsonFieldType.OBJECT).description("프로필 이미지 정보").optional(),
+                                        fieldWithPath("user.profileImage.id").type(JsonFieldType.NUMBER).description("프로필 이미지 고유번호"),
+                                        fieldWithPath("user.profileImage.originName").type(JsonFieldType.STRING).description("원본 프로필 이미지 파일명"),
+                                        fieldWithPath("user.profileImage.uploadName").type(JsonFieldType.STRING).description("업로드 프로필 이미지 파일명"),
+                                        fieldWithPath("user.profileImage.fullPath").type(JsonFieldType.STRING).description("프로필 이미지 전체 파일 경로"),
+                                        fieldWithPath("user.profileImage.path").type(JsonFieldType.STRING).description("업로드 프로필 파일 경로"),
                                         fieldWithPath("user.useAgreeTerms").type(JsonFieldType.OBJECT).description("이용 약관 정보").optional(),
                                         fieldWithPath("user.useAgreeTerms.id").type(JsonFieldType.NUMBER).description("이용 약관 정보 고유번호"),
                                         fieldWithPath("user.useAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("이용 약관 정보 동의여부"),
@@ -76,6 +81,7 @@ class AuthControllerTest extends ControllerTest {
                                         fieldWithPath("user.privacyPolicyAgreeTerms.id").type(JsonFieldType.NUMBER).description("개인정보 처리방침 고유번호"),
                                         fieldWithPath("user.privacyPolicyAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("개인정보 처리방침 동의여부"),
                                         fieldWithPath("user.privacyPolicyAgreeTerms.created").type(JsonFieldType.STRING).description("개인정보 처리방침 생성일자"),
+                                        fieldWithPath("user.created").type(JsonFieldType.STRING).description("회원 생성일자"),
                                         fieldWithPath("token").type(JsonFieldType.STRING).description("발급된 인증 토큰")
                                 )
                         )
