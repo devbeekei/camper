@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UploadFileDTO {
+    private Long id;
     private String originName;
     private String uploadName;
     private String fullPath;

@@ -2,11 +2,9 @@ package com.ss.camper.user.application;
 
 import com.ss.camper.common.util.S3Util;
 import com.ss.camper.uploadFile.dto.UploadFileDTO;
-import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.ClientUser;
 import com.ss.camper.user.domain.UserProfileImage;
 import com.ss.camper.user.domain.UserRepository;
-import com.ss.camper.user.domain.UserType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 
 import static com.ss.camper.user.UserMock.initClientUser;
-import static com.ss.camper.user.UserMock.initUserInfoDTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;

@@ -3,8 +3,10 @@ package com.ss.camper.store.application.dto;
 import com.ss.camper.store.domain.Address;
 import com.ss.camper.store.domain.StoreStatus;
 import com.ss.camper.store.domain.StoreType;
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @ToString
@@ -24,4 +26,5 @@ public class StoreDTO {
     private String reservationUrl;
     private String introduction;
     private Set<StoreTagDTO> tags;
+    private List<UploadFileDTO> profileImages;
 }

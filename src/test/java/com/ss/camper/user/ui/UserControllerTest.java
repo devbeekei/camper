@@ -1,6 +1,5 @@
 package com.ss.camper.user.ui;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ss.camper.common.ControllerTest;
 import com.ss.camper.common.WithMockCustomUser;
 import com.ss.camper.common.util.JWTUtil;
@@ -14,7 +13,6 @@ import com.ss.camper.user.domain.UserType;
 import com.ss.camper.user.ui.payload.SignUpPayload;
 import com.ss.camper.user.ui.payload.UpdateUserInfoPayload;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -22,7 +20,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -159,11 +156,13 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 연락처").optional(),
                                         fieldWithPath("withdrawal").type(JsonFieldType.BOOLEAN).description("회원 탈퇴여부"),
                                         fieldWithPath("profileImage").type(JsonFieldType.OBJECT).description("프로필 이미지 정보").optional(),
-                                        fieldWithPath("profileImage.id").type(JsonFieldType.NUMBER).description("프로필 이미지 고유번호"),
-                                        fieldWithPath("profileImage.originName").type(JsonFieldType.STRING).description("원본 프로필 이미지 파일명"),
-                                        fieldWithPath("profileImage.uploadName").type(JsonFieldType.STRING).description("업로드 프로필 이미지 파일명"),
-                                        fieldWithPath("profileImage.fullPath").type(JsonFieldType.STRING).description("프로필 이미지 전체 파일 경로"),
-                                        fieldWithPath("profileImage.path").type(JsonFieldType.STRING).description("업로드 프로필 파일 경로"),
+                                        fieldWithPath("profileImage.id").type(JsonFieldType.NUMBER).description("파일 고유번호"),
+                                        fieldWithPath("profileImage.originName").type(JsonFieldType.STRING).description("원본 파일명"),
+                                        fieldWithPath("profileImage.uploadName").type(JsonFieldType.STRING).description("업로드 파일명"),
+                                        fieldWithPath("profileImage.fullPath").type(JsonFieldType.STRING).description("파일 전체 경로"),
+                                        fieldWithPath("profileImage.path").type(JsonFieldType.STRING).description("파일 경로"),
+                                        fieldWithPath("profileImage.size").type(JsonFieldType.NUMBER).description("파일 사이즈"),
+                                        fieldWithPath("profileImage.ext").type(JsonFieldType.STRING).description("파일 확장자"),
                                         fieldWithPath("useAgreeTerms").type(JsonFieldType.OBJECT).description("이용 약관 정보").optional(),
                                         fieldWithPath("useAgreeTerms.id").type(JsonFieldType.NUMBER).description("이용 약관 정보 고유번호"),
                                         fieldWithPath("useAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("이용 약관 정보 동의여부"),
@@ -181,11 +180,9 @@ class UserControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 회원_정보_수정() throws Exception {
-        // Given
         final UserInfoDTO userInfoDTO = initUserInfoDTO(1L, UserType.BUSINESS);
         given(userService.updateUserInfo(anyLong(), any(UserInfoDTO.class))).willReturn(userInfoDTO);
 
-        // When
         final UpdateUserInfoPayload.Request request = UpdateUserInfoPayload.Request.builder()
                 .nickname("김캠퍼2")
                 .phone("01022222222")
@@ -198,7 +195,6 @@ class UserControllerTest extends ControllerTest {
                         .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
                 .andDo(document("user/update-info",
                         getDocumentRequest(),
@@ -216,11 +212,13 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 연락처").optional(),
                                         fieldWithPath("withdrawal").type(JsonFieldType.BOOLEAN).description("회원 탈퇴여부"),
                                         fieldWithPath("profileImage").type(JsonFieldType.OBJECT).description("프로필 이미지 정보").optional(),
-                                        fieldWithPath("profileImage.id").type(JsonFieldType.NUMBER).description("프로필 이미지 고유번호"),
-                                        fieldWithPath("profileImage.originName").type(JsonFieldType.STRING).description("원본 프로필 이미지 파일명"),
-                                        fieldWithPath("profileImage.uploadName").type(JsonFieldType.STRING).description("업로드 프로필 이미지 파일명"),
-                                        fieldWithPath("profileImage.fullPath").type(JsonFieldType.STRING).description("프로필 이미지 전체 파일 경로"),
-                                        fieldWithPath("profileImage.path").type(JsonFieldType.STRING).description("업로드 프로필 파일 경로"),
+                                        fieldWithPath("profileImage.id").type(JsonFieldType.NUMBER).description("파일 고유번호"),
+                                        fieldWithPath("profileImage.originName").type(JsonFieldType.STRING).description("원본 파일명"),
+                                        fieldWithPath("profileImage.uploadName").type(JsonFieldType.STRING).description("업로드 파일명"),
+                                        fieldWithPath("profileImage.fullPath").type(JsonFieldType.STRING).description("파일 전체 경로"),
+                                        fieldWithPath("profileImage.path").type(JsonFieldType.STRING).description("파일 경로"),
+                                        fieldWithPath("profileImage.size").type(JsonFieldType.NUMBER).description("파일 사이즈"),
+                                        fieldWithPath("profileImage.ext").type(JsonFieldType.STRING).description("파일 확장자"),
                                         fieldWithPath("useAgreeTerms").type(JsonFieldType.OBJECT).description("이용 약관 정보").optional(),
                                         fieldWithPath("useAgreeTerms.id").type(JsonFieldType.NUMBER).description("이용 약관 정보 고유번호"),
                                         fieldWithPath("useAgreeTerms.agree").type(JsonFieldType.BOOLEAN).description("이용 약관 정보 동의여부"),
@@ -238,17 +236,14 @@ class UserControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 회원_탈퇴() throws Exception {
-        // Given
         willDoNothing().given(userService).withdrawUser(anyLong());
 
-        // When
         final ResultActions result = mockMvc.perform(
                 delete("/user")
                         .accept(MediaType.APPLICATION_JSON)
                         .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
                 .andDo(document("user/withdraw",
                         getDocumentRequest(),
@@ -262,10 +257,8 @@ class UserControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 약관_동의() throws Exception {
-        // Given
         willDoNothing().given(userAgreeTermsService).agreeTerms(anyLong(), anyMap());
 
-        // When
         final Map<TermsType, Boolean> request = new HashMap<>(){{ put(TermsType.USE, true); put(TermsType.PRIVACY_POLICY, true); }};
         final ResultActions result = mockMvc.perform(
             post("/user/agree-terms")
@@ -275,7 +268,6 @@ class UserControllerTest extends ControllerTest {
                 .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
             .andDo(document("user/agree-terms",
                 getDocumentRequest(),
@@ -294,6 +286,7 @@ class UserControllerTest extends ControllerTest {
     @WithMockCustomUser
     void 프로필_이미지_등록() throws Exception {
         final UploadFileDTO uploadFileDTO = UploadFileDTO.builder()
+                .id(1L)
                 .originName("profileImage.jpg")
                 .uploadName("upload_profileImage.jpg")
                 .path("/upload/upload_profileImage.jpg")
@@ -325,6 +318,7 @@ class UserControllerTest extends ControllerTest {
                         ),
                         responseFields(
                                 dataResponseFields(
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("파일 고유번호"),
                                         fieldWithPath("originName").type(JsonFieldType.STRING).description("원본 파일명"),
                                         fieldWithPath("uploadName").type(JsonFieldType.STRING).description("업로드 파일명"),
                                         fieldWithPath("fullPath").type(JsonFieldType.STRING).description("파일 전체 경로"),
@@ -339,17 +333,14 @@ class UserControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 프로필_이미지_삭제() throws Exception {
-        // Given
         willDoNothing().given(userProfileImageService).deleteProfileImage(anyLong());
 
-        // When
         final ResultActions result = mockMvc.perform(
                 delete("/user/profile-image")
                         .accept(MediaType.APPLICATION_JSON)
                         .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
                 .andDo(document("user/profile-image-delete",
                         getDocumentRequest(),

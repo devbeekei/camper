@@ -7,13 +7,16 @@ import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
 import com.ss.camper.store.application.exception.NotFoundStoreException;
 import com.ss.camper.store.domain.*;
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -100,6 +103,5 @@ public class StoreService {
         }
         store.updateTags(tags);
     }
-
 
 }

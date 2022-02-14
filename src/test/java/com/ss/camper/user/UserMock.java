@@ -1,9 +1,9 @@
 package com.ss.camper.user;
 
 import com.ss.camper.uploadFile.domain.FileType;
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import com.ss.camper.user.application.dto.AgreeTermsHistoryDTO;
 import com.ss.camper.user.application.dto.UserInfoDTO;
-import com.ss.camper.user.application.dto.UserProfileImageDTO;
 import com.ss.camper.user.domain.BusinessUser;
 import com.ss.camper.user.domain.ClientUser;
 import com.ss.camper.user.domain.UserProfileImage;
@@ -42,12 +42,14 @@ public class UserMock {
                         .id(2L)
                         .agree(true)
                         .created(new Date()).build())
-                .profileImage(UserProfileImageDTO.builder()
+                .profileImage(UploadFileDTO.builder()
                         .id(1L)
                         .originName(PROFILE_ORIGIN_FILE_NAME)
                         .uploadName(PROFILE_UPDATE_FILE_NAME)
                         .fullPath(PROFILE_FULL_PATH)
                         .path(PROFILE_PATH)
+                        .size(PROFILE_SIZE)
+                        .ext(PROFILE_EXT)
                         .build())
                 .build();
     }

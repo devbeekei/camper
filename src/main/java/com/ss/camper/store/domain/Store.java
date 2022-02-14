@@ -1,5 +1,6 @@
 package com.ss.camper.store.domain;
 
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import com.ss.camper.user.domain.UserProfileImage;
 import lombok.*;
 import org.hibernate.annotations.Cache;
@@ -7,10 +8,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @ToString
@@ -70,14 +69,15 @@ public class Store {
     private Date deleted;
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
     @JoinTable(name = "tag_of_store", joinColumns = @JoinColumn(name = "store_id"), inverseJoinColumns = @JoinColumn(name = "store_tag_id"))
     private Set<StoreTag> tags;
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "store_profile_image", joinColumns = @JoinColumn(name = "user_id"))
-    private List<StoreProfileImage> profileImage;
+    @OrderBy(value = "id DESC")
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
+    @JoinTable(name = "store_profile_image", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "file_id"))
+    private List<StoreProfileImage> profileImages;
 
     @Version
     private Long ver;
@@ -102,6 +102,27 @@ public class Store {
 
     public void delete() {
         this.deleted = new Date();
+    }
+
+    public void updateProfileImages(List<UploadFileDTO> uploadFileDTOList) {
+        for (UploadFileDTO uploadFileDTO : uploadFileDTOList) {
+            if (uploadFileDTO.getId() != null) continue;
+            if (this.profileImages == null) this.profileImages = new ArrayList<>();
+            this.profileImages.add(StoreProfileImage.builder()
+                    .originName(uploadFileDTO.getOriginName())
+                    .uploadName(uploadFileDTO.getUploadName())
+                    .fullPath(uploadFileDTO.getFullPath())
+                    .path(uploadFileDTO.getPath())
+                    .size(uploadFileDTO.getSize())
+                    .ext(uploadFileDTO.getExt())
+                    .build());
+        }
+    }
+
+    public void deleteProfileImages(Long[] ids) {
+        if (ids == null || ids.length == 0) return;
+        if (this.profileImages == null || this.profileImages.size() == 0) return;
+        this.profileImages.removeIf(o -> Arrays.asList(ids).contains(o.getId()));
     }
 
 }

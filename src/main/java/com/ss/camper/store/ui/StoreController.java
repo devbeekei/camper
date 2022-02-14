@@ -4,6 +4,7 @@ import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.payload.DataApiResponse;
 import com.ss.camper.common.payload.PageDTO;
 import com.ss.camper.common.util.SecurityUtil;
+import com.ss.camper.store.application.StoreProfileImageService;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 public class StoreController {
 
     private final StoreService storeService;
+    private final StoreProfileImageService storeProfileImageService;
 
     @GetMapping(name = "매장 정보 조회", value = "{storeId}")
     public DataApiResponse<StoreDTO> getStoreInfo(@PathVariable final long storeId) {

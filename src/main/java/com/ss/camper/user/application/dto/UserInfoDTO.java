@@ -2,6 +2,7 @@ package com.ss.camper.user.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import com.ss.camper.user.domain.UserType;
 import lombok.*;
 
@@ -19,7 +20,7 @@ public class UserInfoDTO {
     private String nickname;
     private String phone;
     private Boolean withdrawal;
-    private UserProfileImageDTO profileImage;
+    private UploadFileDTO profileImage;
     private AgreeTermsHistoryDTO useAgreeTerms;
     private AgreeTermsHistoryDTO privacyPolicyAgreeTerms;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

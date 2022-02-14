@@ -54,7 +54,7 @@ public abstract class User {
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "user_profile_image", joinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "user_profile_image", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "file_id"))
     private UserProfileImage profileImage;
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -119,6 +119,7 @@ public abstract class User {
     }
 
     public void updateProfileImage(UploadFileDTO uploadFileDTO) {
+        if (uploadFileDTO.getId() != null) return;
         this.profileImage = UserProfileImage.builder()
                 .originName(uploadFileDTO.getOriginName())
                 .uploadName(uploadFileDTO.getUploadName())

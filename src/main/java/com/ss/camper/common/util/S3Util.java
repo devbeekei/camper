@@ -6,7 +6,13 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import com.ss.camper.uploadFile.exception.FileUploadFailException;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.assertj.core.util.Arrays;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,40 +32,61 @@ public class S3Util {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
     private final String serverUploadDir = "src/main/resources/upload";
-
     private final AmazonS3 amazonS3;
+    private final ModelMapper modelMapper;
 
-    // S3 파일 업로드
-    public UploadFileDTO upload(String dirName, MultipartFile multipartFile) {
+    @Setter
+    @Getter
+    @Builder
+    private static class ConvertFileDTO {
+        private String originName;
+        private String uploadName;
+        private String fullPath;
+        private String path;
+        private long size;
+        private String ext;
+        private File file;
+    }
+
+    public List<UploadFileDTO> upload(String dirName, List<MultipartFile> multipartFileList) {
+        List<ConvertFileDTO> files = new ArrayList<>();
         try {
-            File file = convert(multipartFile).orElseThrow(FileUploadFailException::new);
-
-            String originFileName = multipartFile.getOriginalFilename();
-            String uploadFileName =  file.getName();
-            String path = dirName + "/" + uploadFileName;
-
-            amazonS3.putObject(new PutObjectRequest(bucket, path, file).withCannedAcl(CannedAccessControlList.PublicRead));
-            String fullPath = amazonS3.getUrl(bucket, path).toString();
-            long size = file.length();
-            String ext = originFileName != null ? originFileName.substring(originFileName.lastIndexOf(".") + 1).toUpperCase() : "";
-
+            // 파일 Convert
+            for (MultipartFile multipartFile : multipartFileList) {
+                File file = convert(multipartFile).orElseThrow(FileUploadFailException::new);
+                String originFileName = multipartFile.getOriginalFilename();
+                String uploadFileName =  file.getName();
+                String path = dirName + "/" + uploadFileName;
+                long size = file.length();
+                String ext = originFileName != null ? originFileName.substring(originFileName.lastIndexOf(".") + 1).toUpperCase() : "";
+                files.add(ConvertFileDTO.builder()
+                        .originName(originFileName).uploadName(uploadFileName)
+                        .path(path).size(size).ext(ext)
+                        .file(file).build());
+            }
+            // S3 업로드
+            if (files.size() > 0) {
+                for (ConvertFileDTO file : files) {
+                    amazonS3.putObject(new PutObjectRequest(bucket, file.getPath(), file.getFile()).withCannedAcl(CannedAccessControlList.PublicRead));
+                    file.setFullPath(amazonS3.getUrl(bucket, file.getPath()).toString());
+                }
+            }
+            // Convert 파일 삭제
             convertFileDelete();
 
-            return UploadFileDTO.builder()
-                    .originName(originFileName)
-                    .uploadName(uploadFileName)
-                    .fullPath(fullPath)
-                    .path("/" + path)
-                    .size(size)
-                    .ext(ext)
-                    .build();
-        } catch (IOException | AmazonS3Exception e) {
+            return modelMapper.map(files, new TypeToken<List<UploadFileDTO>>(){}.getType());
+        } catch (IOException e) {
             convertFileDelete();
             e.printStackTrace();
             throw new FileUploadFailException();
         }
+    }
+
+    // S3 파일 업로드
+    public UploadFileDTO upload(String dirName, MultipartFile multipartFile) {
+        List<UploadFileDTO> uploadFileDTOList = upload(dirName, new ArrayList<>(){{ add(multipartFile); }});
+        return uploadFileDTOList.get(0);
     }
 
     // S3 파일 삭제
