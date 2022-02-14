@@ -31,4 +31,10 @@ public class UserProfileImageService {
         return modelMapper.map(user.getProfileImage(), UploadFileDTO.class);
     }
 
+    @Transactional
+    public void deleteProfileImage(final long userId) {
+        final User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        user.clearProfileImage();
+    }
+
 }

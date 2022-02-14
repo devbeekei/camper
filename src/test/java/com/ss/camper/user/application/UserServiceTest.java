@@ -174,4 +174,6 @@ class UserServiceTest {
         assertThrows(NotFoundUserException.class, () -> userService.withdrawUser(anyLong()));
     }
 
+
+
 }

@@ -1,0 +1,23 @@
+POST http://localhost:8080/user/client
+Content-Type: application/json
+
+{
+  "email" : "camper@gmail.com",
+  "password" : "1234",
+  "passwordCheck" : "1234",
+  "nickname" : "김캠퍼",
+  "phone" : "01012345678"
+}
+
+###
+
+POST http://localhost:8080/auth/authorization
+Content-Type: application/json
+
+{
+"email" : "camper@gmail.com",
+"password" : "1234"
+}
+
+###
+

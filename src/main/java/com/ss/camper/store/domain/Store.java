@@ -1,5 +1,6 @@
 package com.ss.camper.store.domain;
 
+import com.ss.camper.user.domain.UserProfileImage;
 import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -71,6 +73,11 @@ public class Store {
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinTable(name = "tag_of_store", joinColumns = @JoinColumn(name = "store_id"), inverseJoinColumns = @JoinColumn(name = "store_tag_id"))
     private Set<StoreTag> tags;
+
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "store_profile_image", joinColumns = @JoinColumn(name = "user_id"))
+    private List<StoreProfileImage> profileImage;
 
     @Version
     private Long ver;

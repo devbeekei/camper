@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,7 +44,7 @@ public class S3Util {
             String ext = originFileName != null ? originFileName.substring(originFileName.lastIndexOf(".") + 1).toUpperCase() : "";
 
             convertFileDelete();
-            
+
             return UploadFileDTO.builder()
                     .originName(originFileName)
                     .uploadName(uploadFileName)

@@ -1,9 +1,12 @@
 package com.ss.camper.user.ui;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ss.camper.common.ControllerTest;
 import com.ss.camper.common.WithMockCustomUser;
 import com.ss.camper.common.util.JWTUtil;
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import com.ss.camper.user.application.UserAgreeTermsService;
+import com.ss.camper.user.application.UserProfileImageService;
 import com.ss.camper.user.application.UserService;
 import com.ss.camper.user.application.dto.UserInfoDTO;
 import com.ss.camper.user.domain.TermsType;
@@ -15,8 +18,12 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +37,8 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
@@ -40,6 +49,9 @@ class UserControllerTest extends ControllerTest {
 
     @MockBean
     private UserAgreeTermsService userAgreeTermsService;
+
+    @MockBean
+    private UserProfileImageService userProfileImageService;
 
     @Test
     void 사용자_회원_회원가입() throws Exception {
@@ -277,4 +289,75 @@ class UserControllerTest extends ControllerTest {
                 )
             ));
     }
+
+    @Test
+    @WithMockCustomUser
+    void 프로필_이미지_등록() throws Exception {
+        final UploadFileDTO uploadFileDTO = UploadFileDTO.builder()
+                .originName("profileImage.jpg")
+                .uploadName("upload_profileImage.jpg")
+                .path("/upload/upload_profileImage.jpg")
+                .fullPath("https://s3/upload/upload_profileImage.jpg")
+                .ext("JPG")
+                .size(124215)
+                .build();
+        given(userProfileImageService.updateProfileImage(anyLong(), any(MultipartFile.class))).willReturn(uploadFileDTO);
+
+        final MockMultipartFile multipartFile = new MockMultipartFile(
+                "file",
+                uploadFileDTO.getOriginName(),
+                "image/jpg",
+                "uploadFile".getBytes());
+        final ResultActions result = mockMvc.perform(
+                RestDocumentationRequestBuilders.fileUpload("/user/profile-image")
+                        .file(multipartFile)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(document("user/profile-image",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParts(
+                                partWithName("file").description("첨부 이미지")
+                        ),
+                        responseFields(
+                                dataResponseFields(
+                                        fieldWithPath("originName").type(JsonFieldType.STRING).description("원본 파일명"),
+                                        fieldWithPath("uploadName").type(JsonFieldType.STRING).description("업로드 파일명"),
+                                        fieldWithPath("fullPath").type(JsonFieldType.STRING).description("파일 전체 경로"),
+                                        fieldWithPath("path").type(JsonFieldType.STRING).description("파일 경로"),
+                                        fieldWithPath("size").type(JsonFieldType.NUMBER).description("파일 사이즈"),
+                                        fieldWithPath("ext").type(JsonFieldType.STRING).description("파일 확장자")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 프로필_이미지_삭제() throws Exception {
+        // Given
+        willDoNothing().given(userProfileImageService).deleteProfileImage(anyLong());
+
+        // When
+        final ResultActions result = mockMvc.perform(
+                delete("/user/profile-image")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(document("user/profile-image-delete",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                defaultResponseFields()
+                        )
+                ));
+    }
+
 }

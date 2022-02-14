@@ -75,4 +75,11 @@ public class UserController {
         return new DataApiResponse<>(uploadFileDTO);
     }
 
+    @DeleteMapping(name = "프로필 이미지 삭제", value = "profile-image")
+    public DefaultApiResponse updateProfileImage() {
+        final long userId = SecurityUtil.getUserId();
+        userProfileImageService.deleteProfileImage(userId);
+        return new DefaultApiResponse();
+    }
+
 }

@@ -41,7 +41,6 @@ public class UserTest {
         assertThat(clientUser.getUseAgreeTerms().isAgree()).isTrue();
         assertThat(clientUser.getPrivacyPolicyAgreeTerms().isAgree()).isTrue();
     }
-
     @Test
     public void 프로필_이미지_삭제() {
         final ClientUser clientUser = initClientUser(1L);

@@ -52,11 +52,9 @@ public abstract class User {
     @Column(name = "withdrawal", columnDefinition = "TINYINT DEFAULT 0")
     private boolean withdrawal;
 
-//    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//    @JoinTable(name = "user_profile_image", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "user_id", insertable = false, updatable = false))
-    @JoinColumn(table = "user_profile_image", name = "user_id", referencedColumnName = "user_id")
+    @JoinTable(name = "user_profile_image", joinColumns = @JoinColumn(name = "user_id"))
     private UserProfileImage profileImage;
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

@@ -8,8 +8,7 @@ import lombok.Getter;
 public enum FileType {
 
     USER_PROFILE("회원 프로필"),
-    STORE_PROFILE("매장 프로필"),
-    STORE_PHOTO("매장 사진");
+    STORE_PROFILE("매장 프로필");
 
     private String name;
 
