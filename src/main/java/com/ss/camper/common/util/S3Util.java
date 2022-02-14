@@ -44,6 +44,8 @@ public class S3Util {
             long size = file.length();
             String ext = originFileName != null ? originFileName.substring(originFileName.lastIndexOf(".") + 1).toUpperCase() : "";
 
+            convertFileDelete();
+            
             return UploadFileDTO.builder()
                     .originName(originFileName)
                     .uploadName(uploadFileName)
