@@ -74,9 +74,9 @@ public class Store {
     private Set<StoreTag> tags;
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @OrderBy(value = "id DESC")
+    @OrderBy(value = "id ASC")
     @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
-    @JoinTable(name = "store_profile_image", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "file_id"))
+    @JoinTable(name = "store_profile_image", joinColumns = @JoinColumn(name = "store_id"), inverseJoinColumns = @JoinColumn(name = "file_id"))
     private List<StoreProfileImage> profileImages;
 
     @Version

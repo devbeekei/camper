@@ -7,7 +7,6 @@ import com.ss.camper.store.domain.StoreRepository;
 import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,18 +24,16 @@ public class StoreProfileImageService {
     private final StoreRepository storeRepository;
 
     @Transactional
-    public List<UploadFileDTO> updateProfileImages(final long userId, final long storeId, final List<MultipartFile> multipartFiles) {
+    public void updateProfileImages(final long userId, final long storeId, final List<MultipartFile> multipartFiles) {
         final Store store = storeRepository.findByUserIdAndId(userId, storeId).orElseThrow(NotFoundStoreException::new);
         List<UploadFileDTO> uploadFileDTOList = s3Util.upload(DIR_NAME, multipartFiles);
         store.updateProfileImages(uploadFileDTOList);
-        return modelMapper.map(store.getProfileImages(), new TypeToken<List<UploadFileDTO>>(){}.getType());
     }
 
     @Transactional
-    public List<UploadFileDTO> deleteProfileImages(final long userId, final long storeId, final Long[] fileIds) {
+    public void deleteProfileImages(final long userId, final long storeId, final Long[] fileIds) {
         final Store store = storeRepository.findByUserIdAndId(userId, storeId).orElseThrow(NotFoundStoreException::new);
         store.deleteProfileImages(fileIds);
-        return modelMapper.map(store.getProfileImages(), new TypeToken<List<UploadFileDTO>>(){}.getType());
     }
 
 }

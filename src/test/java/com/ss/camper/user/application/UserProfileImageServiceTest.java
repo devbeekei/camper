@@ -57,7 +57,7 @@ class UserProfileImageServiceTest {
                 uploadFileDTO.getOriginName(),
                 "image/jpg",
                 "uploadFile".getBytes());
-        UploadFileDTO result = userProfileImageService.updateProfileImage(userId, multipartFile);
+        userProfileImageService.updateProfileImage(userId, multipartFile);
 
         final UserProfileImage userProfileImage = clientUser.getProfileImage();
         assertThat(userProfileImage.getOriginName()).isEqualTo(uploadFileDTO.getOriginName());

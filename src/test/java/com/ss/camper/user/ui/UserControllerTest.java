@@ -285,20 +285,11 @@ class UserControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 프로필_이미지_등록() throws Exception {
-        final UploadFileDTO uploadFileDTO = UploadFileDTO.builder()
-                .id(1L)
-                .originName("profileImage.jpg")
-                .uploadName("upload_profileImage.jpg")
-                .path("/upload/upload_profileImage.jpg")
-                .fullPath("https://s3/upload/upload_profileImage.jpg")
-                .ext("JPG")
-                .size(124215)
-                .build();
-        given(userProfileImageService.updateProfileImage(anyLong(), any(MultipartFile.class))).willReturn(uploadFileDTO);
+        willDoNothing().given(userProfileImageService).updateProfileImage(anyLong(), any(MultipartFile.class));
 
         final MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
-                uploadFileDTO.getOriginName(),
+                "profileImage.jpg",
                 "image/jpg",
                 "uploadFile".getBytes());
         final ResultActions result = mockMvc.perform(
@@ -317,15 +308,7 @@ class UserControllerTest extends ControllerTest {
                                 partWithName("file").description("첨부 이미지")
                         ),
                         responseFields(
-                                dataResponseFields(
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("파일 고유번호"),
-                                        fieldWithPath("originName").type(JsonFieldType.STRING).description("원본 파일명"),
-                                        fieldWithPath("uploadName").type(JsonFieldType.STRING).description("업로드 파일명"),
-                                        fieldWithPath("fullPath").type(JsonFieldType.STRING).description("파일 전체 경로"),
-                                        fieldWithPath("path").type(JsonFieldType.STRING).description("파일 경로"),
-                                        fieldWithPath("size").type(JsonFieldType.NUMBER).description("파일 사이즈"),
-                                        fieldWithPath("ext").type(JsonFieldType.STRING).description("파일 확장자")
-                                )
+                                defaultResponseFields()
                         )
                 ));
     }

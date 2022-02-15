@@ -69,10 +69,10 @@ public class UserController {
     }
 
     @PostMapping(name = "프로필 이미지 등록", value = "profile-image")
-    public DataApiResponse<UploadFileDTO> updateProfileImage(final @RequestPart(value="file") MultipartFile multipartFile) {
+    public DefaultApiResponse updateProfileImage(final @RequestPart(value="file") MultipartFile multipartFile) {
         final long userId = SecurityUtil.getUserId();
-        final UploadFileDTO uploadFileDTO = userProfileImageService.updateProfileImage(userId, multipartFile);
-        return new DataApiResponse<>(uploadFileDTO);
+        userProfileImageService.updateProfileImage(userId, multipartFile);
+        return new DefaultApiResponse();
     }
 
     @DeleteMapping(name = "프로필 이미지 삭제", value = "profile-image")

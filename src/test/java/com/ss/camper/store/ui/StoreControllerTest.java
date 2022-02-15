@@ -4,19 +4,26 @@ import com.ss.camper.common.ControllerTest;
 import com.ss.camper.common.WithMockCustomUser;
 import com.ss.camper.common.payload.PageDTO;
 import com.ss.camper.common.util.JWTUtil;
+import com.ss.camper.store.application.StoreProfileImageService;
 import com.ss.camper.store.application.StoreService;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.domain.StoreType;
+import com.ss.camper.store.ui.payload.DeleteStoreProfileImagesPayload;
 import com.ss.camper.store.ui.payload.ModifyStorePayload;
 import com.ss.camper.store.ui.payload.RegisterStorePayload;
+import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,17 +47,18 @@ class StoreControllerTest extends ControllerTest {
     @MockBean
     private StoreService storeService;
 
+    @MockBean
+    private StoreProfileImageService storeProfileImageService;
+
     @Test
     @WithMockCustomUser
     void 매장_등록() throws Exception {
-        // Given
         final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{
             add(initStoreTagDTO(1L, TAG_TITLE1));
             add(initStoreTagDTO(2L, TAG_TITLE2));
         }});
         given(storeService.registerStore(anyLong(), any(StoreDTO.class))).willReturn(storeDTO);
 
-        // When
         final RegisterStorePayload.Request request = RegisterStorePayload.Request.builder()
                 .storeStatus(STORE_STATUS)
                 .storeType(STORE_TYPE)
@@ -77,7 +85,6 @@ class StoreControllerTest extends ControllerTest {
                         .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
                 .andDo(document("store/register",
                         getDocumentRequest(),
@@ -106,14 +113,12 @@ class StoreControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 매장_정보_수정() throws Exception {
-        // Given
         final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{
             add(initStoreTagDTO(1L, TAG_TITLE1));
             add(initStoreTagDTO(2L, TAG_TITLE2));
         }});
         given(storeService.modifyStore(anyLong(), anyLong(), any(StoreDTO.class))).willReturn(storeDTO);
 
-        // When
         final ModifyStorePayload.Request request = ModifyStorePayload.Request.builder()
                 .storeStatus(STORE_STATUS)
                 .storeName(STORE_NAME)
@@ -139,7 +144,6 @@ class StoreControllerTest extends ControllerTest {
                         .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
                 .andDo(document("store/modify",
                         getDocumentRequest(),
@@ -170,17 +174,14 @@ class StoreControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 매장_삭제() throws Exception {
-        // Given
         willDoNothing().given(storeService).deleteStore(anyLong(), anyLong());
 
-        // When
         final ResultActions result = mockMvc.perform(
                 delete("/store/{storeId}", 1)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
                 .andDo(document("store/delete",
                         getDocumentRequest(),
@@ -196,21 +197,29 @@ class StoreControllerTest extends ControllerTest {
 
     @Test
     void 매장_정보_조회() throws Exception {
-        // Given
         final StoreDTO storeDTO = initStoreDTO(1L, new HashSet<>(){{
             add(initStoreTagDTO(1L, TAG_TITLE1));
             add(initStoreTagDTO(2L, TAG_TITLE2));
         }});
+        storeDTO.setProfileImages(new ArrayList<>(){{
+            add(UploadFileDTO.builder()
+                    .id(1L)
+                    .originName("originFileName.jpg")
+                    .uploadName("uploadFileName.jpg")
+                    .fullPath("https://s3/upload/uploadFileName.jpg")
+                    .path("/upload/uploadFileName.jpg")
+                    .size(2541)
+                    .ext("JPG")
+                    .build());
+        }});
         given(storeService.getStoreInfo(anyLong())).willReturn(storeDTO);
 
-        // When
         final ResultActions result = mockMvc.perform(
                 get("/store/{storeId}", 1)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
                 .andDo(document("store/info",
                         getDocumentRequest(),
@@ -236,7 +245,15 @@ class StoreControllerTest extends ControllerTest {
                                         fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
                                         fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그") ,
                                         fieldWithPath("tags[].id").type(JsonFieldType.NUMBER).optional().description("태그 고유번호"),
-                                        fieldWithPath("tags[].title").type(JsonFieldType.STRING).optional().description("태그 타이틀")
+                                        fieldWithPath("tags[].title").type(JsonFieldType.STRING).optional().description("태그 타이틀"),
+                                        fieldWithPath("profileImages[]").type(JsonFieldType.ARRAY).optional().description("프로필 이미지"),
+                                        fieldWithPath("profileImages[].id").type(JsonFieldType.NUMBER).optional().description("파일 고유번호"),
+                                        fieldWithPath("profileImages[].originName").type(JsonFieldType.STRING).optional().description("원본 파일명"),
+                                        fieldWithPath("profileImages[].uploadName").type(JsonFieldType.STRING).optional().description("업로드 파일명"),
+                                        fieldWithPath("profileImages[].fullPath").type(JsonFieldType.STRING).optional().description("파일 전체 경로"),
+                                        fieldWithPath("profileImages[].path").type(JsonFieldType.STRING).optional().description("파일 경로"),
+                                        fieldWithPath("profileImages[].size").type(JsonFieldType.NUMBER).optional().description("파일 사이즈"),
+                                        fieldWithPath("profileImages[].ext").type(JsonFieldType.STRING).optional().description("파일 확장자")
                                 )
                         )
                 ));
@@ -244,7 +261,6 @@ class StoreControllerTest extends ControllerTest {
 
     @Test
     void 회원_별_매장_목록_조회() throws Exception {
-        // Given
         final int size = 10;
         final int page = 1;
         final List<StoreListDTO> storeList = new ArrayList<>(){{
@@ -254,7 +270,6 @@ class StoreControllerTest extends ControllerTest {
         PageDTO<StoreListDTO> storeListPage = new PageDTO<>(storeList, storeList.size(), size, page, 1);
         given(storeService.getStoreListByUserId(anyLong(), anyInt(), anyInt())).willReturn(storeListPage);
 
-        // When
         final long userId = 1;
         final ResultActions result = mockMvc.perform(
                 get("/store/user/{userId}", 1L)
@@ -264,7 +279,6 @@ class StoreControllerTest extends ControllerTest {
                         .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
         );
 
-        // Then
         result.andExpect(status().isOk())
                 .andDo(document("store/list-user",
                         getDocumentRequest(),
@@ -300,7 +314,6 @@ class StoreControllerTest extends ControllerTest {
 
     @Test
     void 매장_유형_별_매장_목록_조회() throws Exception {
-        // Given
         final int size = 10;
         final int page = 1;
         final List<StoreListDTO> storeList = new ArrayList<>(){{
@@ -310,8 +323,6 @@ class StoreControllerTest extends ControllerTest {
         PageDTO<StoreListDTO> storeListPage = new PageDTO<>(storeList, storeList.size(), size, page, 1);
         given(storeService.getStoreListByType(any(StoreType.class), anyInt(), anyInt())).willReturn(storeListPage);
 
-        // When
-        final long userId = 1;
         final ResultActions result = mockMvc.perform(
                 get("/store/type/{type}", StoreType.CAMP_GROUND)
                         .param("size", String.valueOf(size))
@@ -350,6 +361,75 @@ class StoreControllerTest extends ControllerTest {
                                         fieldWithPath("introduction").type(JsonFieldType.STRING).optional().description("매장 소개"),
                                         fieldWithPath("tags[]").type(JsonFieldType.ARRAY).optional().description("태그")
                                 )
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 프로필_이미지_등록() throws Exception {
+        willDoNothing().given(storeProfileImageService).updateProfileImages(anyLong(), anyLong(), anyList());
+
+        MockMultipartFile multipartFile1 = new MockMultipartFile(
+                "files",
+                "profileImage1.jpg",
+                "image/jpg",
+                "uploadFile".getBytes());
+        MockMultipartFile multipartFile2 = new MockMultipartFile(
+                "files",
+                "profileImage2.jpg",
+                "image/jpg",
+                "uploadFile".getBytes());
+
+        final ResultActions result = mockMvc.perform(
+                RestDocumentationRequestBuilders.fileUpload("/store/profile-image/{storeId}", 1)
+                        .file(multipartFile1)
+                        .file(multipartFile2)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(document("store/profile-image",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("storeId").description("매장 고유번호")
+                        ),
+                        requestParts(
+                                partWithName("files").description("첨부 이미지(복수 업로드 가능)")
+                        ),
+                        responseFields(
+                                defaultResponseFields()
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 프로필_이미지_삭제() throws Exception {
+        willDoNothing().given(storeProfileImageService).deleteProfileImages(anyLong(), anyLong(), any(Long[].class));
+
+        final DeleteStoreProfileImagesPayload.Request request =
+                new DeleteStoreProfileImagesPayload.Request(new Long[] {1L, 2L});
+        final ResultActions result = mockMvc.perform(
+                delete("/store/profile-image/{storeId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(JWTUtil.AUTHORIZATION_HEADER, JWTUtil.BEARER_PREFIX + "{token}")
+        );
+
+        result.andExpect(status().isOk())
+                .andDo(document("store/profile-image-delete",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("fileIds[]").type(JsonFieldType.ARRAY).description("삭제할 파일 고유번호")
+                        ),
+                        responseFields(
+                                defaultResponseFields()
                         )
                 ));
     }

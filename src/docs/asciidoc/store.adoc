@@ -49,3 +49,19 @@ include::{snippets}/store/list-type/path-parameters.adoc[]
 include::{snippets}/store/list-type/request-parameters.adoc[]
 include::{snippets}/store/list-type/response-body.adoc[]
 include::{snippets}/store/list-type/response-fields.adoc[]
+
+[[store-profile-image]]
+== 프로필 이미지 등록
+include::{snippets}/store/profile-image/http-request.adoc[]
+include::{snippets}/store/profile-image/path-parameters.adoc[]
+include::{snippets}/store/profile-image/request-parts.adoc[]
+include::{snippets}/store/profile-image/response-body.adoc[]
+include::{snippets}/store/profile-image/response-fields.adoc[]
+
+[[store-profile-image-delete]]
+== 프로필 이미지 삭제
+include::{snippets}/store/profile-image-delete/http-request.adoc[]
+include::{snippets}/store/profile-image/path-parameters.adoc[]
+include::{snippets}/store/profile-image-delete/request-fields.adoc[]
+include::{snippets}/store/profile-image-delete/response-body.adoc[]
+include::{snippets}/store/profile-image-delete/response-fields.adoc[]

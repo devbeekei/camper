@@ -77,10 +77,10 @@ class StoreProfileImageServiceTest {
                     "image/jpg",
                     "uploadFile".getBytes()));
         }};
-        List<UploadFileDTO> result = storeProfileImageService.updateProfileImages(userId, userId, multipartFileList);
+        storeProfileImageService.updateProfileImages(userId, userId, multipartFileList);
 
-        assertThat(result.get(0).getOriginName()).isEqualTo(multipartFileList.get(0).getOriginalFilename());
-        assertThat(result.get(1).getOriginName()).isEqualTo(multipartFileList.get(1).getOriginalFilename());
+        assertThat(store.getProfileImages().get(0).getOriginName()).isEqualTo(multipartFileList.get(0).getOriginalFilename());
+        assertThat(store.getProfileImages().get(1).getOriginName()).isEqualTo(multipartFileList.get(1).getOriginalFilename());
     }
 
     @Test

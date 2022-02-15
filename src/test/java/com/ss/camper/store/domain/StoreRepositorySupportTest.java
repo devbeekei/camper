@@ -23,11 +23,15 @@ class StoreRepositorySupportTest {
     private StoreRepository storeRepository;
 
     @Autowired
+    private StoreTagRepository storeTagRepository;
+
+    @Autowired
     private StoreRepositorySupport storeRepositorySupport;
 
     @AfterEach
     void init() {
         storeRepository.deleteAll();
+        storeTagRepository.deleteAll();
     }
 
     @Test

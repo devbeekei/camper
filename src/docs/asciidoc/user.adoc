@@ -45,7 +45,7 @@ include::{snippets}/user/agree-terms/request-fields.adoc[]
 include::{snippets}/user/agree-terms/response-body.adoc[]
 include::{snippets}/user/agree-terms/response-fields.adoc[]
 
-[[profile-image]]
+[[user-profile-image]]
 == 프로필 이미지 등록
 include::{snippets}/user/profile-image/http-request.adoc[]
 include::{snippets}/user/profile-image/request-parts.adoc[]
@@ -53,7 +53,7 @@ include::{snippets}/user/profile-image/response-body.adoc[]
 include::{snippets}/user/profile-image/response-fields.adoc[]
 
 
-[[profile-image-delete]]
+[[user-profile-image-delete]]
 == 프로필 이미지 삭제
 include::{snippets}/user/profile-image-delete/http-request.adoc[]
 include::{snippets}/user/profile-image-delete/response-body.adoc[]

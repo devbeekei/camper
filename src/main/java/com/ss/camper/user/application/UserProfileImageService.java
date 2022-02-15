@@ -23,12 +23,11 @@ public class UserProfileImageService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UploadFileDTO updateProfileImage(final long userId, final MultipartFile multipartFile) {
+    public void updateProfileImage(final long userId, final MultipartFile multipartFile) {
         final User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
         final UploadFileDTO uploadFileDTO = s3Util.upload(DIR_NAME, multipartFile);
         user.clearProfileImage();
         user.updateProfileImage(uploadFileDTO);
-        return modelMapper.map(user.getProfileImage(), UploadFileDTO.class);
     }
 
     @Transactional
