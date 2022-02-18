@@ -13,5 +13,7 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      enabled: true
+      file-size-threshold: 1MB # 파일이 메모리에 기록되는 임계값 (default: 0)
+      max-file-size: 1MB # 파일의 최대 사이즈 (default: 1MB)
+      max-request-size: 10MB # 요청의 최대 사이즈 (default: 10MB)

@@ -5,6 +5,9 @@ import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
 import com.ss.camper.store.domain.*;
 
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
+import java.util.HashSet;
 import java.util.Set;
 
 public class StoreMock {
@@ -17,6 +20,9 @@ public class StoreMock {
     public static final String HOMEPAGE_URL = "https://cafe.naver.com/skycp2004";
     public static final String RESERVATION_URL = "http://r.camperstory.com/resMain.hbb?reserve_path=RP&campseq=3658";
     public static final String INTRODUCTION = "안녕하세요. 하늘 캠핑장입니다..";
+    public static final Set<DayOfWeek> OPENING_DAYS = new HashSet<>() {{ add(DayOfWeek.MONDAY); add(DayOfWeek.THURSDAY); }};
+    public static final Timestamp OPEN_TIME = Timestamp.valueOf("2022-02-18 09:00:00");
+    public static final Timestamp CLOSE_TIME = Timestamp.valueOf("2022-02-18 21:00:00");
     public static final String TAG_TITLE1 = "TEST_가족캠핑";
     public static final String TAG_TITLE2 = "TEST_연인캠핑";
     public static final String TAG_TITLE3 = "TEST_솔로캠핑";
@@ -42,23 +48,29 @@ public class StoreMock {
                 .homepageUrl(HOMEPAGE_URL)
                 .reservationUrl(RESERVATION_URL)
                 .introduction(INTRODUCTION)
+                .openingDays(OPENING_DAYS)
+                .openTime(OPEN_TIME)
+                .closeTime(CLOSE_TIME)
                 .tags(tags)
                 .build();
     }
 
     public static StoreDTO initStoreDTO(Long id, Set<StoreTagDTO> tags) {
         return StoreDTO.builder()
-                .id(id)
-                .storeType(STORE_TYPE)
-                .storeStatus(STORE_STATUS)
-                .storeName(STORE_NAME)
-                .address(ADDRESS)
-                .tel(TEL)
-                .homepageUrl(HOMEPAGE_URL)
-                .reservationUrl(RESERVATION_URL)
-                .introduction(INTRODUCTION)
-                .tags(tags)
-                .build();
+            .id(id)
+            .storeType(STORE_TYPE)
+            .storeStatus(STORE_STATUS)
+            .storeName(STORE_NAME)
+            .address(ADDRESS)
+            .tel(TEL)
+            .homepageUrl(HOMEPAGE_URL)
+            .reservationUrl(RESERVATION_URL)
+            .introduction(INTRODUCTION)
+            .openingDays(OPENING_DAYS)
+            .openTime(OPEN_TIME)
+            .closeTime(CLOSE_TIME)
+            .tags(tags)
+            .build();
     }
 
     public static StoreListDTO initStoreListDTO(Long storeId, String[] tags) {

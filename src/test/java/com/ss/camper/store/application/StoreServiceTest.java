@@ -45,7 +45,6 @@ class StoreServiceTest {
 
     @Test
     void 매장_등록() {
-        // Given
         final long userId = 1;
         final long storeId = 2;
         final Store store = initStore(userId, storeId, null);
@@ -57,7 +56,6 @@ class StoreServiceTest {
         given(storeTagRepository.findByStoreTypeAndTitle(any(StoreType.class), anyString())).willReturn(Optional.empty());
         given(storeTagRepository.save(any(StoreTag.class))).willReturn(storeTag1, storeTag2, storeTag3);
 
-        // When
         final StoreDTO storeDTO = initStoreDTO(null, new HashSet<>(){{
             add(initStoreTagDTO(null, TAG_TITLE1));
             add(initStoreTagDTO(null, TAG_TITLE2));
@@ -65,22 +63,23 @@ class StoreServiceTest {
         }});
         final StoreDTO result = storeService.registerStore(userId, storeDTO);
 
-        // Then
         assertThat(result.getId()).isEqualTo(store.getId());
-        assertThat(result.getStoreType()).isEqualTo(store.getStoreType());
-        assertThat(result.getStoreName()).isEqualTo(store.getStoreName());
-        assertThat(result.getAddress()).isEqualTo(store.getAddress());
-        assertThat(result.getTel()).isEqualTo(store.getTel());
-        assertThat(result.getHomepageUrl()).isEqualTo(store.getHomepageUrl());
-        assertThat(result.getReservationUrl()).isEqualTo(store.getReservationUrl());
-        assertThat(result.getIntroduction()).isEqualTo(store.getIntroduction());
-        assertThat(result.getReservationUrl()).isEqualTo(store.getReservationUrl());
-        assertThat(result.getTags().size()).isEqualTo(store.getTags().size());
+        assertThat(result.getStoreType()).isEqualTo(storeDTO.getStoreType());
+        assertThat(result.getStoreName()).isEqualTo(storeDTO.getStoreName());
+        assertThat(result.getAddress()).isEqualTo(storeDTO.getAddress());
+        assertThat(result.getTel()).isEqualTo(storeDTO.getTel());
+        assertThat(result.getHomepageUrl()).isEqualTo(storeDTO.getHomepageUrl());
+        assertThat(result.getReservationUrl()).isEqualTo(storeDTO.getReservationUrl());
+        assertThat(result.getIntroduction()).isEqualTo(storeDTO.getIntroduction());
+        assertThat(result.getReservationUrl()).isEqualTo(storeDTO.getReservationUrl());
+        assertThat(result.getOpeningDays()).isEqualTo(storeDTO.getOpeningDays());
+        assertThat(result.getOpenTime()).isEqualTo(storeDTO.getOpenTime());
+        assertThat(result.getCloseTime()).isEqualTo(storeDTO.getCloseTime());
+        assertThat(result.getTags().size()).isEqualTo(storeDTO.getTags().size());
     }
 
     @Test
     void 매장_정보_수정() {
-        // Given
         final long userId = 1;
         final long storeId = 2;
         final Store store = initStore(userId, storeId, null);
@@ -92,7 +91,6 @@ class StoreServiceTest {
         given(storeTagRepository.findByStoreTypeAndTitle(any(StoreType.class), anyString())).willReturn(Optional.empty());
         given(storeTagRepository.save(any(StoreTag.class))).willReturn(storeTag1, storeTag2, storeTag3);
 
-        // When
         final StoreDTO storeDTO = initStoreDTO(null, new HashSet<>(){{
             add(initStoreTagDTO(null, TAG_TITLE1));
             add(initStoreTagDTO(null, TAG_TITLE2));
@@ -100,17 +98,19 @@ class StoreServiceTest {
         }});
         final StoreDTO result = storeService.modifyStore(userId, storeId, storeDTO);
 
-        // Then
         assertThat(result.getId()).isEqualTo(storeId);
-        assertThat(result.getStoreType()).isEqualTo(store.getStoreType());
-        assertThat(result.getStoreName()).isEqualTo(store.getStoreName());
-        assertThat(result.getAddress()).isEqualTo(store.getAddress());
-        assertThat(result.getTel()).isEqualTo(store.getTel());
-        assertThat(result.getHomepageUrl()).isEqualTo(store.getHomepageUrl());
-        assertThat(result.getReservationUrl()).isEqualTo(store.getReservationUrl());
-        assertThat(result.getIntroduction()).isEqualTo(store.getIntroduction());
-        assertThat(result.getReservationUrl()).isEqualTo(store.getReservationUrl());
-        assertThat(result.getTags().size()).isEqualTo(store.getTags().size());
+        assertThat(result.getStoreType()).isEqualTo(storeDTO.getStoreType());
+        assertThat(result.getStoreName()).isEqualTo(storeDTO.getStoreName());
+        assertThat(result.getAddress()).isEqualTo(storeDTO.getAddress());
+        assertThat(result.getTel()).isEqualTo(storeDTO.getTel());
+        assertThat(result.getHomepageUrl()).isEqualTo(storeDTO.getHomepageUrl());
+        assertThat(result.getReservationUrl()).isEqualTo(storeDTO.getReservationUrl());
+        assertThat(result.getIntroduction()).isEqualTo(storeDTO.getIntroduction());
+        assertThat(result.getReservationUrl()).isEqualTo(storeDTO.getReservationUrl());
+        assertThat(result.getOpeningDays()).isEqualTo(storeDTO.getOpeningDays());
+        assertThat(result.getOpenTime()).isEqualTo(storeDTO.getOpenTime());
+        assertThat(result.getCloseTime()).isEqualTo(storeDTO.getCloseTime());
+        assertThat(result.getTags().size()).isEqualTo(storeDTO.getTags().size());
     }
 
     @Test()

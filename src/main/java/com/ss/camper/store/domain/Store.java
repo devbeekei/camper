@@ -1,15 +1,14 @@
 package com.ss.camper.store.domain;
 
 import com.ss.camper.uploadFile.dto.UploadFileDTO;
-import com.ss.camper.user.domain.UserProfileImage;
 import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @ToString
@@ -56,6 +55,18 @@ public class Store {
     @Column(name = "introduction", columnDefinition = "TEXT")
     private String introduction;
 
+    @Convert(converter = StoreOpeningDaysConverter.class)
+    @Column(name = "opening_days")
+    private Set<DayOfWeek> openingDays;
+
+    @Temporal(TemporalType.TIME)
+    @Column(name = "open_time", columnDefinition = "TIME DEFAULT NULL")
+    private Date openTime;
+
+    @Temporal(TemporalType.TIME)
+    @Column(name = "close_time", columnDefinition = "TIME DEFAULT NULL")
+    private Date closeTime;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created", nullable = false, insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date created;
@@ -82,7 +93,7 @@ public class Store {
     @Version
     private Long ver;
 
-    public void updateInfo(StoreStatus storeStatus, String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction) {
+    public void updateInfo(StoreStatus storeStatus, String storeName, Address address, String tel, String homepageUrl, String reservationUrl, String introduction, Set<DayOfWeek> openingDays, Date openTime, Date closeTime) {
         this.storeStatus = storeStatus;
         this.storeName = storeName;
         this.address = address;
@@ -90,6 +101,9 @@ public class Store {
         this.homepageUrl = homepageUrl;
         this.reservationUrl = reservationUrl;
         this.introduction = introduction;
+        this.openingDays = openingDays;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
     }
 
     public void updateTags(Set<StoreTag> updateTags) {

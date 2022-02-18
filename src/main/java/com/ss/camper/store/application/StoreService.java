@@ -7,16 +7,13 @@ import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
 import com.ss.camper.store.application.exception.NotFoundStoreException;
 import com.ss.camper.store.domain.*;
-import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,16 +29,19 @@ public class StoreService {
     @Transactional
     public StoreDTO registerStore(final long userId, final StoreDTO storeDTO) {
         final Store store = storeRepository.save(Store.builder()
-                .userId(userId)
-                .storeType(storeDTO.getStoreType())
-                .storeName(storeDTO.getStoreName())
-                .storeStatus(storeDTO.getStoreStatus())
-                .address(storeDTO.getAddress())
-                .tel(storeDTO.getTel())
-                .homepageUrl(storeDTO.getHomepageUrl())
-                .reservationUrl(storeDTO.getReservationUrl())
-                .introduction(storeDTO.getIntroduction())
-                .build());
+            .userId(userId)
+            .storeType(storeDTO.getStoreType())
+            .storeName(storeDTO.getStoreName())
+            .storeStatus(storeDTO.getStoreStatus())
+            .address(storeDTO.getAddress())
+            .tel(storeDTO.getTel())
+            .homepageUrl(storeDTO.getHomepageUrl())
+            .reservationUrl(storeDTO.getReservationUrl())
+            .introduction(storeDTO.getIntroduction())
+            .openingDays(storeDTO.getOpeningDays())
+            .openTime(storeDTO.getOpenTime())
+            .closeTime(storeDTO.getCloseTime())
+            .build());
         updateTags(store, new LinkedHashSet<>(storeDTO.getTags()));
         return modelMapper.map(store, StoreDTO.class);
     }
@@ -56,7 +56,10 @@ public class StoreService {
             storeDTO.getTel(),
             storeDTO.getHomepageUrl(),
             storeDTO.getReservationUrl(),
-            storeDTO.getIntroduction()
+            storeDTO.getIntroduction(),
+            storeDTO.getOpeningDays(),
+            storeDTO.getOpenTime(),
+            storeDTO.getCloseTime()
         );
         updateTags(store, new LinkedHashSet<>(storeDTO.getTags()));
         return modelMapper.map(store, StoreDTO.class);

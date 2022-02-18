@@ -2,7 +2,6 @@ package com.ss.camper.store.domain;
 
 import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -22,7 +21,7 @@ public class StoreTest {
         final Store store = initStore(1L, 2L, null);
 
         // When
-        store.updateInfo(STORE_STATUS, STORE_NAME, ADDRESS, TEL, HOMEPAGE_URL, RESERVATION_URL, INTRODUCTION);
+        store.updateInfo(STORE_STATUS, STORE_NAME, ADDRESS, TEL, HOMEPAGE_URL, RESERVATION_URL, INTRODUCTION, OPENING_DAYS, OPEN_TIME, CLOSE_TIME);
 
         // Then
         assertThat(store.getStoreStatus()).isEqualTo(STORE_STATUS);
@@ -32,6 +31,9 @@ public class StoreTest {
         assertThat(store.getHomepageUrl()).isEqualTo(HOMEPAGE_URL);
         assertThat(store.getReservationUrl()).isEqualTo(RESERVATION_URL);
         assertThat(store.getIntroduction()).isEqualTo(INTRODUCTION);
+        assertThat(store.getOpeningDays()).isEqualTo(OPENING_DAYS);
+        assertThat(store.getOpenTime()).isEqualTo(OPEN_TIME);
+        assertThat(store.getCloseTime()).isEqualTo(CLOSE_TIME);
     }
 
     @Test

@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Arrays;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -54,6 +55,8 @@ public class S3Util {
         try {
             // 파일 Convert
             for (MultipartFile multipartFile : multipartFileList) {
+                if (StringUtils.isBlank(multipartFile.getOriginalFilename()))
+                    throw new FileUploadFailException();
                 File file = convert(multipartFile).orElseThrow(FileUploadFailException::new);
                 String originFileName = multipartFile.getOriginalFilename();
                 String uploadFileName =  file.getName();

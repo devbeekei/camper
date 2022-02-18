@@ -6,6 +6,8 @@ import com.ss.camper.user.domain.TermsType;
 import com.ss.camper.user.domain.UserType;
 import org.springframework.restdocs.snippet.Attributes;
 
+import java.time.DayOfWeek;
+
 import static org.springframework.restdocs.snippet.Attributes.key;
 
 public class ApiDocumentAttributes {
@@ -22,10 +24,10 @@ public class ApiDocumentAttributes {
         return attribute(value.substring(0, value.length() - 3));
     }
 
-    public static Attributes.Attribute termsTypeAttribute() {
+    public static Attributes.Attribute openingDaysAttribute() {
         StringBuilder value = new StringBuilder();
-        for (TermsType termsType : TermsType.values()) {
-            value.append(termsType).append(" : ").append(termsType.getName()).append(" / ");
+        for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
+            value.append(dayOfWeek).append(" / ");
         }
         return attribute(value.substring(0, value.length() - 3));
     }

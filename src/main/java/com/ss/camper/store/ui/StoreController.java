@@ -11,14 +11,19 @@ import com.ss.camper.store.application.dto.StoreListDTO;
 import com.ss.camper.store.domain.StoreType;
 import com.ss.camper.store.ui.payload.DeleteStoreProfileImagesPayload;
 import com.ss.camper.store.ui.payload.ModifyStorePayload;
+import com.ss.camper.store.ui.payload.MultipartFileCountValid;
 import com.ss.camper.store.ui.payload.RegisterStorePayload;
 import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.List;
+
+import static com.ss.camper.common.payload.ApiResponseType.REQUEST_NOT_VALID;
 
 @RestController
 @RequestMapping(value = "store")
@@ -36,7 +41,8 @@ public class StoreController {
     }
 
     @PutMapping(name = "매장 정보 수정", value = "{storeId}")
-    public DefaultApiResponse modifyStore(@PathVariable final long storeId, @Valid @RequestBody final ModifyStorePayload.Request request) {
+    public DefaultApiResponse modifyStore(@PathVariable final long storeId,
+                                          @Valid @RequestBody final ModifyStorePayload.Request request) {
         final long userId = SecurityUtil.getUserId();
         storeService.modifyStore(userId, storeId, request.convertStoreDTO());
         return new DefaultApiResponse();
@@ -56,20 +62,24 @@ public class StoreController {
     }
 
     @GetMapping(name = "회원 별 매장 목록 조회", value = "user/{userId}")
-    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListByUserId(@PathVariable final long userId, @RequestParam final int size, @RequestParam final int page) {
+    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListByUserId(@PathVariable final long userId,
+                                                                       @RequestParam final int size,
+                                                                       @RequestParam final int page) {
         final PageDTO<StoreListDTO> storeList = storeService.getStoreListByUserId(userId, size, page);
         return new DataApiResponse<>(storeList);
     }
 
     @GetMapping(name = "매장 유형 별 매장 목록 조회", value = "type/{type}")
-    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListByType(@PathVariable final StoreType type, @RequestParam final int size, @RequestParam final int page) {
+    public DataApiResponse<PageDTO<StoreListDTO>> getStoreListByType(@PathVariable final StoreType type,
+                                                                     @RequestParam final int size,
+                                                                     @RequestParam final int page) {
         final PageDTO<StoreListDTO> storeList = storeService.getStoreListByType(type, size, page);
         return new DataApiResponse<>(storeList);
     }
 
     @PostMapping(name = "프로필 이미지 등록", value = "profile-image/{storeId}")
     public DefaultApiResponse updateProfileImage(@PathVariable final long storeId,
-                                                 @RequestPart(value="files") final List<MultipartFile> multipartFiles) {
+                                                 @RequestPart(value="files") @Valid @MultipartFileCountValid(max = 10) final List<MultipartFile> multipartFiles) {
         final long userId = SecurityUtil.getUserId();
         storeProfileImageService.updateProfileImages(userId, storeId, multipartFiles);
         return new DefaultApiResponse();

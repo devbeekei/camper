@@ -1,5 +1,6 @@
 package com.ss.camper.store.ui.payload;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ss.camper.store.application.dto.StoreDTO;
 import com.ss.camper.store.application.dto.StoreTagDTO;
 import com.ss.camper.store.domain.Address;
@@ -9,6 +10,8 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
 import java.util.*;
 
 public class ModifyStorePayload {
@@ -39,6 +42,11 @@ public class ModifyStorePayload {
         private String homepageUrl;
         private String reservationUrl;
         private String introduction;
+        private Set<DayOfWeek> openingDays;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
+        private Date openTime;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
+        private Date closeTime;
         private Set<String> tags;
 
         public StoreDTO convertStoreDTO() {
@@ -56,6 +64,9 @@ public class ModifyStorePayload {
                 .homepageUrl(homepageUrl)
                 .reservationUrl(reservationUrl)
                 .introduction(introduction)
+                .openingDays(openingDays)
+                .openTime(openTime)
+                .closeTime(closeTime)
                 .tags(tags)
                 .build();
         }

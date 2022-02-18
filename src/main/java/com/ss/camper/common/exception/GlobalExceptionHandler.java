@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RestControllerAdvice
@@ -39,10 +40,16 @@ public class GlobalExceptionHandler {
     /**
      * Controller Request 유효성 검증 실패
      * HttpMessageNotReadableException : Request가 null일때 발생
-     * MethodArgumentNotValidException : Request가 @Valid 조건에 맞지 않을때 발생
-     * MissingServletRequestParameterException : Request Parameter가  조건에 맞지 않을때 발생
+     * MethodArgumentNotValidException : @Valid 조건에 맞지 않을때 발생
+     * MissingServletRequestParameterException : @RequestParam 조건에 맞지 않을때 발생
+     * MultipartException : @RequestPart 조건에 맞지 않을때 발생
      */
-    @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
+    @ExceptionHandler({
+        HttpMessageNotReadableException.class,
+        MethodArgumentNotValidException.class,
+        MissingServletRequestParameterException.class,
+        MultipartException.class
+    })
     public ResponseEntity<DefaultApiResponse> NotValidException(Exception e) {
         final DefaultApiResponse response = DefaultApiResponse.error(ApiResponseType.REQUEST_NOT_VALID);
         e.printStackTrace();
