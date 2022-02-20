@@ -1,7 +1,7 @@
 package com.ss.camper.store.ui;
 
-import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.payload.DataApiResponse;
+import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.payload.PageDTO;
 import com.ss.camper.common.util.SecurityUtil;
 import com.ss.camper.store.application.StoreProfileImageService;
@@ -13,18 +13,15 @@ import com.ss.camper.store.ui.payload.DeleteStoreProfileImagesPayload;
 import com.ss.camper.store.ui.payload.ModifyStorePayload;
 import com.ss.camper.store.ui.payload.MultipartFileCountValid;
 import com.ss.camper.store.ui.payload.RegisterStorePayload;
-import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.List;
 
-import static com.ss.camper.common.payload.ApiResponseType.REQUEST_NOT_VALID;
-
+@Validated
 @RestController
 @RequestMapping(value = "store")
 @RequiredArgsConstructor
@@ -79,7 +76,8 @@ public class StoreController {
 
     @PostMapping(name = "프로필 이미지 등록", value = "profile-image/{storeId}")
     public DefaultApiResponse updateProfileImage(@PathVariable final long storeId,
-                                                 @RequestPart(value="files") @Valid @MultipartFileCountValid(max = 10) final List<MultipartFile> multipartFiles) {
+                                                 @RequestPart(value="files", required = false)
+                                                 @MultipartFileCountValid(max = 10) final List<MultipartFile> multipartFiles) {
         final long userId = SecurityUtil.getUserId();
         storeProfileImageService.updateProfileImages(userId, storeId, multipartFiles);
         return new DefaultApiResponse();

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -43,12 +45,14 @@ public class GlobalExceptionHandler {
      * MethodArgumentNotValidException : @Valid 조건에 맞지 않을때 발생
      * MissingServletRequestParameterException : @RequestParam 조건에 맞지 않을때 발생
      * MultipartException : @RequestPart 조건에 맞지 않을때 발생
+     * ConstraintViolationException : 커스텀 Validation 조건에 맞지 않을때 발생
      */
     @ExceptionHandler({
         HttpMessageNotReadableException.class,
         MethodArgumentNotValidException.class,
         MissingServletRequestParameterException.class,
-        MultipartException.class
+        MultipartException.class,
+        ConstraintViolationException.class
     })
     public ResponseEntity<DefaultApiResponse> NotValidException(Exception e) {
         final DefaultApiResponse response = DefaultApiResponse.error(ApiResponseType.REQUEST_NOT_VALID);

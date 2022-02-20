@@ -3,7 +3,7 @@ package com.ss.camper.user.ui;
 import com.ss.camper.common.payload.DataApiResponse;
 import com.ss.camper.common.payload.DefaultApiResponse;
 import com.ss.camper.common.util.SecurityUtil;
-import com.ss.camper.uploadFile.dto.UploadFileDTO;
+import com.ss.camper.store.ui.payload.MultipartFileCountValid;
 import com.ss.camper.user.application.UserAgreeTermsService;
 import com.ss.camper.user.application.UserProfileImageService;
 import com.ss.camper.user.application.UserService;
@@ -12,13 +12,16 @@ import com.ss.camper.user.domain.TermsType;
 import com.ss.camper.user.ui.payload.SignUpPayload;
 import com.ss.camper.user.ui.payload.UpdateUserInfoPayload;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "user")
@@ -69,9 +72,10 @@ public class UserController {
     }
 
     @PostMapping(name = "프로필 이미지 등록", value = "profile-image")
-    public DefaultApiResponse updateProfileImage(final @RequestPart(value="file") MultipartFile multipartFile) {
+    public DefaultApiResponse updateProfileImage(@RequestPart(value="file")
+                                                 @MultipartFileCountValid(max = 1) final List<MultipartFile> multipartFile) {
         final long userId = SecurityUtil.getUserId();
-        userProfileImageService.updateProfileImage(userId, multipartFile);
+        userProfileImageService.updateProfileImage(userId, multipartFile.get(0));
         return new DefaultApiResponse();
     }
 

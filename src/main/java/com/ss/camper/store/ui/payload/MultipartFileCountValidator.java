@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 @Component
 public class MultipartFileCountValidator implements ConstraintValidator<MultipartFileCountValid, List<MultipartFile>> {
 
-    private static final String ERROR_MESSAGE = "Files too many.";
-
     private int min = 1;
     private int max = 0;
 
@@ -29,9 +27,7 @@ public class MultipartFileCountValidator implements ConstraintValidator<Multipar
 
     @Override
     public boolean isValid(final List<MultipartFile> values, final ConstraintValidatorContext context) {
-        context.buildConstraintViolationWithTemplate(ERROR_MESSAGE).addConstraintViolation();
         int fileCount = filterMultipartFiles(values).size();
-        System.out.println("isValid : " + (fileCount >= min && (max <= 0 || fileCount <= max)));
         return fileCount >= min && (max <= 0 || fileCount <= max);
     }
 

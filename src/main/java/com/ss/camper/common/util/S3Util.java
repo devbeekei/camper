@@ -1,9 +1,7 @@
 package com.ss.camper.common.util;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.ss.camper.uploadFile.dto.UploadFileDTO;
 import com.ss.camper.uploadFile.exception.FileUploadFailException;
 import lombok.Builder;
@@ -33,7 +31,7 @@ public class S3Util {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    private final String serverUploadDir = "src/main/resources/upload";
+    private final String serverUploadDir = "src/main/resources/uploads";
     private final AmazonS3 amazonS3;
     private final ModelMapper modelMapper;
 
@@ -71,7 +69,7 @@ public class S3Util {
             // S3 업로드
             if (files.size() > 0) {
                 for (ConvertFileDTO file : files) {
-                    amazonS3.putObject(new PutObjectRequest(bucket, file.getPath(), file.getFile()).withCannedAcl(CannedAccessControlList.PublicRead));
+                    amazonS3.putObject(new PutObjectRequest(bucket, file.getPath(), file.getFile()));
                     file.setFullPath(amazonS3.getUrl(bucket, file.getPath()).toString());
                 }
             }
@@ -94,7 +92,9 @@ public class S3Util {
 
     // S3 파일 삭제
     public void delete(String path) {
-        amazonS3.deleteObject(bucket, path);
+        if (amazonS3.doesObjectExist(bucket, path)) {
+            amazonS3.deleteObject(bucket, path);
+        }
     }
 
     // 서버에 convert file 업로드

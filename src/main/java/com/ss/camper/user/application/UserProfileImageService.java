@@ -18,7 +18,6 @@ public class UserProfileImageService {
 
     private final static String DIR_NAME = "UserProfileImage";
 
-    private final ModelMapper modelMapper;
     private final S3Util s3Util;
     private final UserRepository userRepository;
 
@@ -26,7 +25,11 @@ public class UserProfileImageService {
     public void updateProfileImage(final long userId, final MultipartFile multipartFile) {
         final User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
         final UploadFileDTO uploadFileDTO = s3Util.upload(DIR_NAME, multipartFile);
-        user.clearProfileImage();
+        if (user.getProfileImage() != null) {
+            String path = user.getProfileImage().getPath();
+            user.clearProfileImage();
+            s3Util.delete(path);
+        }
         user.updateProfileImage(uploadFileDTO);
     }
 
